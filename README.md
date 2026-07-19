@@ -18,7 +18,7 @@ PYTHONPATH=backend .venv/bin/uvicorn app.main:app        # API op :8000
 ## Evals
 
 ```bash
-PYTHONPATH=backend .venv/bin/python evals/run_evals.py   # golden set (10 cases)
+PYTHONPATH=backend:. .venv/bin/python evals/run_evals.py # golden set (10 cases)
 .venv/bin/pytest                                         # unit- en integratietests
 ```
 

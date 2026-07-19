@@ -1539,7 +1539,7 @@ def score_abstentie(moet_abstineren: bool, antwoord: str) -> bool:
 - id: actualiteit-watermerken
   categorie: actualiteit
   vraag: "Wanneer moeten bestaande AI-systemen voldoen aan de transparantie- en watermerkverplichtingen van artikel 50?"
-  retrieval_refs: ["Artikel 50", "Artikel 113"]
+  retrieval_refs: ["Artikel 50", "Artikel 113", "Digital Omnibus"]
   grounding_markers: ["2 december 2026"]
   verboden_markers: []
   abstentie: false
@@ -1734,7 +1734,7 @@ Verwacht: een NL-antwoord met bijlage III/hoog risico en minstens één citaat-r
 - [ ] **Step 3: Draai de eval-suite**
 
 ```bash
-PYTHONPATH=backend .venv/bin/python evals/run_evals.py
+PYTHONPATH=backend:. .venv/bin/python evals/run_evals.py
 ```
 
 Verwacht: scorekaart met 10 cases. **Bij falende cases**: eerst per case vaststellen wáár de fout zit (retrieval? grounding? eval zelf?) — lees het opgeslagen antwoord in `evals/results/`. Marker- of ref-aanpassingen in de golden set mogen alleen als de handmatige lezing aantoont dat de *eval* fout zat, niet om het systeem groen te krijgen; systeemfouten zijn bevindingen en mogen (gedocumenteerd) rood blijven staan als de oorzaak buiten deze bouwsteen ligt.
@@ -1779,7 +1779,7 @@ PYTHONPATH=backend .venv/bin/uvicorn app.main:app        # API op :8000
 ## Evals
 
 ```bash
-PYTHONPATH=backend .venv/bin/python evals/run_evals.py   # golden set (10 cases)
+PYTHONPATH=backend:. .venv/bin/python evals/run_evals.py   # golden set (10 cases)
 .venv/bin/pytest                                         # unit- en integratietests
 ```
 
