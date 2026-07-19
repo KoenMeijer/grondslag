@@ -34,6 +34,11 @@ BIJLAGE = re.compile(r"^BIJLAGE ([IVXLC]+)$")
 # group(2) kan dus leeg zijn — de volgende regel(s) worden dan als los element
 # toegevoegd en komen bij het uiteindelijke parsen alsnog na de kop terecht.
 LID = re.compile(r"^(\d+)\.\s*(.*)$")
+# Definitie-/wijzigingspunten: "3)" op een eigen regel (art. 3 en art. 108).
+# Elk punt wordt een eigen chunk: één 19KB-definitieblok verdunt het
+# embeddingsignaal zodanig dat definitievragen artikel 3 niet ophalen
+# (eval-gedreven vastgesteld; zie evals/results en docs/rag-aanpak.md).
+DEFINITIEPUNT = re.compile(r"^(\d+)\)$")
 OVERWEGING = re.compile(r"^\((\d+)\)$")
 STRUCTUURKOP = re.compile(r"^(HOOFDSTUK|AFDELING)\b")
 EINDE_PREAMBULE = "HEBBEN DE VOLGENDE VERORDENING VASTGESTELD"
@@ -99,6 +104,10 @@ def _verwerk_lichaam(regels: list[str], kop_label: str) -> list[str]:
         elif verwacht_kop:
             delen[-1] += f" — {r}"
             verwacht_kop = False
+        elif actief and (m := DEFINITIEPUNT.match(r)):
+            # Altijd "Punt" (juridische verwijzing: "artikel 3, punt 3"),
+            # ongeacht het kop_label van de omringende structuur.
+            delen.append(f"\n### Punt {m.group(1)}")
         elif actief and (m := LID.match(r)):
             inhoud = m.group(2)
             kop = f"\n### {kop_label} {m.group(1)}"
@@ -188,6 +197,11 @@ def main() -> None:
     # Sanity-checks: falen hard, want een stil half corpus is erger dan geen corpus
     assert n_art == 113, f"verwacht 113 artikelen, kreeg {n_art}"
     assert n_ov >= 150, f"verwacht ≥150 overwegingen, kreeg {n_ov}"
+    # Experiment 1 (retrieval-granulariteit): artikel 3 moet per definitie chunken
+    art3 = (Path("corpus/verordening-2024-1689/artikelen.md").read_text()
+            .split("## Artikel 3 ")[1].split("## Artikel 4 ")[0])
+    n_def = art3.count("### Punt ")
+    assert n_def == 68, f"verwacht 68 definitiepunten in art. 3, kreeg {n_def}"
     tekst = (doel / "bijlagen.md").read_text()
     assert "## Bijlage III" in tekst, "bijlage III ontbreekt"
 
