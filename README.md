@@ -15,6 +15,17 @@ PYTHONPATH=backend .venv/bin/python -m app.ingest        # corpus indexeren
 PYTHONPATH=backend .venv/bin/uvicorn app.main:app        # API op :8000
 ```
 
+## Frontend
+
+```bash
+cd frontend && npm install
+npm run dev            # UI op :3000, praat via /api met de backend op :8000
+npm run test           # componenttests (vitest)
+npm run lint
+```
+
+Ontwerp-tokens en signatuur-element: `docs/design-brief.md`.
+
 ## Evals
 
 ```bash

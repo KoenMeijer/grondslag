@@ -1,10 +1,9 @@
 import { createPinia, setActivePinia } from 'pinia'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-
-vi.mock('ofetch', () => ({ $fetch: vi.fn() }))
-
 import { $fetch } from 'ofetch'
 import { useVraagStore } from '~/stores/vraag'
+
+vi.mock('ofetch', () => ({ $fetch: vi.fn() }))
 
 const ANTWOORD = {
   antwoord: 'Hoog risico [Artikel 6, lid 2].',
