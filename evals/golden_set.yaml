@@ -5,7 +5,11 @@
 - id: actualiteit-hoogrisico-deadline
   categorie: actualiteit
   vraag: "Vanaf wanneer moeten hoog-risico-AI-systemen uit bijlage III aan de verplichtingen van de AI-verordening voldoen?"
-  retrieval_refs: ["Artikel 113"]
+  # 19-07-2026: "Digital Omnibus" toegevoegd als geldige bron — handmatige lezing
+  # toonde een correct, correct geciteerd antwoord uit het geadministreerde
+  # omnibus-bestand; case actualiteit-watermerken accepteerde die bron al.
+  # De case is ouder dan het omnibus-bestand; dit corrigeert een false negative.
+  retrieval_refs: ["Artikel 113", "Digital Omnibus"]
   grounding_markers: ["2 december 2027"]
   verboden_markers: ["2 augustus 2026"]
   abstentie: false
