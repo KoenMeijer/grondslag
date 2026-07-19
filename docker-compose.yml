@@ -1,0 +1,14 @@
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: aiact
+      POSTGRES_PASSWORD: aiact
+      POSTGRES_DB: aiact
+    ports:
+      - "5433:5432"   # 5433: laat 5432 vrij voor andere lokale projecten
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+
+volumes:
+  dbdata:

@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+sqlalchemy>=2.0
+psycopg[binary]
+pgvector
+pydantic-settings
+mistralai>=1.0
+pyyaml
+httpx
+beautifulsoup4
+pytest
