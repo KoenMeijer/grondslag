@@ -33,7 +33,9 @@ backend_tests:
     # (bestaand gedrag); parser/scoring/prompt/API-tests draaien wél.
     - pytest
   rules:
-    - if: $CI_PIPELINE_SOURCE == "push"
+    # Elke branch-pipeline, ongeacht trigger (push/web/schedule): de teststage
+    # mag nooit leeg zijn wanneer er een deploy-job in de pipeline zit.
+    - if: $CI_COMMIT_BRANCH
 
 frontend_tests:
   stage: test
@@ -46,7 +48,9 @@ frontend_tests:
     - npm run lint
     - npm run test
   rules:
-    - if: $CI_PIPELINE_SOURCE == "push"
+    # Elke branch-pipeline, ongeacht trigger (push/web/schedule): de teststage
+    # mag nooit leeg zijn wanneer er een deploy-job in de pipeline zit.
+    - if: $CI_COMMIT_BRANCH
 
 .ssh_setup: &ssh_setup
   - apk add --no-cache openssh-client rsync bash
@@ -62,8 +66,10 @@ frontend_tests:
 deploy_hetzner:
   stage: deploy
   image: alpine:3.20
-  only:
-    - master
+  rules:
+    # Zelfde rules-mechanisme als de testjobs (geen only:-mix): een pipeline
+    # met deze job bevat gegarandeerd ook de testjobs die haar blokkeren.
+    - if: $CI_COMMIT_BRANCH == "master"
   before_script: *ssh_setup
   script:
     - ssh $SSH_USER@$SSH_HOST "mkdir -p $APP_DIR"
@@ -74,6 +80,7 @@ deploy_hetzner:
       --exclude=.git
       --exclude=.env
       --exclude=.venv
+      --exclude=.claude
       --exclude=.superpowers
       --exclude=.pytest_cache
       --exclude=__pycache__
@@ -103,9 +110,9 @@ deploy_hetzner:
 index_corpus:
   stage: deploy
   image: alpine:3.20
-  when: manual
-  only:
-    - master
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
+      when: manual
   needs: ["deploy_hetzner"]
   before_script: *ssh_setup
   script:

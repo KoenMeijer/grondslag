@@ -81,3 +81,9 @@ push → deploy → handmatig `index_corpus` draaien.
   rsync-target.
 - **Geen registry**: images worden op de VPS gebouwd (zelfde als WK Poule) —
   één machine, geen registry-beheer nodig.
+- **`APP_DIR` is relatief** (`aiactwijzer` t.o.v. de home-dir van `SSH_USER`),
+  waar wkpoule/alma een absoluut pad hardcoden — zo blijft de pipeline werken
+  als de VPS-gebruiker ooit anders heet.
+- **Geen backend-healthcheck in compose**: bij een koude start kunnen de
+  eerste `/api`-requests kort een 502 geven totdat uvicorn luistert
+  (zelfherstellend; acceptabel voor een low-traffic demo op één VPS).
