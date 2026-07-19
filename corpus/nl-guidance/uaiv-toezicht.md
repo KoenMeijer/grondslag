@@ -1,7 +1,7 @@
 ---
 bron: "NL-doorwerking AI-verordening — samenvatting UAIV en toezicht (eigen redactie op basis van publieke bronnen)"
 url: https://www.internetconsultatie.nl/uaiv/b1
-versie: "stand juli 2026 — consultatie gesloten (1 juni 2026), advies Raad van State loopt, nog niet bij de Tweede Kamer"
+versie: "stand juli 2026 — consultatie gesloten (1 juni 2026), advies Raad van State loopt, nog niet bij de Tweede Kamer; 19-07-2026 toezichthouders-sectie vraaggericht geherformuleerd (inhoud ongewijzigd)"
 datum-opgehaald: 2026-07-19
 stand-wetgeving: juli 2026
 type: guidance
@@ -16,8 +16,9 @@ Stand juli 2026: de internetconsultatie is gesloten (liep tot 1 juni 2026); na
 advies van de Raad van State gaat het wetsvoorstel naar de Tweede Kamer. Er is
 dus nog geen vastgestelde Nederlandse toezichtswet.
 
-## UAIV — beoogde toezichthouders in Nederland
+## UAIV — wie gaat in Nederland toezicht houden op de AI-verordening
 
+Wie gaat er in Nederland toezicht houden op de naleving van de AI-verordening?
 Het kabinet kiest niet voor één nieuwe AI-toezichthouder, maar belegt het
 markttoezicht bij bestaande toezichthouders binnen hun eigen domein. Beoogd zijn
 onder meer: de Autoriteit Persoonsgegevens (AP, met een coördinerende rol via de

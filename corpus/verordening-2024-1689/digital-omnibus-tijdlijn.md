@@ -1,7 +1,7 @@
 ---
 bron: "Digital Omnibus on AI (wijzigingsverordening op Verordening (EU) 2024/1689)"
 url: https://www.europarl.europa.eu/legislative-train/package-digital-package/file-digital-omnibus-on-ai
-versie: "stand juli 2026"
+versie: "stand juli 2026; 19-07-2026 vraaggericht geherformuleerd (inhoud ongewijzigd) t.b.v. vindbaarheid"
 datum-opgehaald: 2026-07-19
 stand-wetgeving: juli 2026
 type: guidance
@@ -18,18 +18,19 @@ waarin deze wijzigingen zijn verwerkt. De deadlineverschuivingen zijn om die
 reden handmatig in dit corpus verwerkt (zie de versie-administratie in de
 frontmatter van artikelen.md).
 
-## Digital Omnibus — verschoven deadlines hoog risico
+## Digital Omnibus — vanaf wanneer moeten hoog-risico-AI-systemen uit bijlage III voldoen
 
-De verplichtingen voor AI-systemen met een hoog risico op grond van bijlage III
-(artikel 6, lid 2) verschuiven van 2 augustus 2026 naar 2 december 2027. De
-verplichtingen voor hoog-risico-AI-systemen in gereguleerde producten
-(bijlage I, artikel 6, lid 1) verschuiven van augustus 2027 naar
-2 augustus 2028. De algemene toepassingsdatum van de verordening
-(2 augustus 2026) blijft ongewijzigd.
+Vanaf wanneer moeten AI-systemen met een hoog risico uit bijlage III (artikel 6,
+lid 2) aan de verplichtingen van de AI-verordening voldoen? Sinds de Digital
+Omnibus geldt: **vanaf 2 december 2027** (de eerdere deadline van 2 augustus 2026
+is verschoven; zie artikel 113, uitzondering d). Voor hoog-risico-AI-systemen in
+gereguleerde producten (bijlage I, artikel 6, lid 1) geldt: vanaf
+2 augustus 2028 (was: augustus 2027). De algemene toepassingsdatum van de
+verordening (2 augustus 2026) blijft ongewijzigd.
 
-## Digital Omnibus — watermerkverplichtingen artikel 50 voor bestaande systemen
+## Digital Omnibus — wanneer moeten bestaande systemen aan artikel 50 (watermerken) voldoen
 
-Bestaande AI-systemen moeten per 2 december 2026 voldoen aan de transparantie-
+Bestaande AI-systemen moeten vanaf 2 december 2026 voldoen aan de transparantie-
 en watermerkverplichtingen van artikel 50 (was: 2 augustus 2026). Deze
 overgangsbepaling is nieuw ingevoerd door de omnibus en heeft geen tekstueel
 anker in de oorspronkelijke wettekst; hij staat daarom alleen hier
