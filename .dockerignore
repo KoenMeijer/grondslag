@@ -1,0 +1,11 @@
+.git
+.venv
+.env
+.superpowers
+.pytest_cache
+__pycache__
+frontend/node_modules
+frontend/.nuxt
+frontend/.output
+evals/results
+docs
