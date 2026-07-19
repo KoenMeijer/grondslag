@@ -4,7 +4,7 @@ met Reciprocal Rank Fusion. Waarom hybride: gebruikers noemen letterlijke wetste
 vastgesteld: artikel 113 stond op rang 355 voor de deadlinevraag (zie evals/results).
 TOP_K blijft de enige externe knop; kandidaten- en dempingsconstanten staan hier.
 """
-from sqlalchemy import func, select
+from sqlalchemy import Text, cast, func, select
 from sqlalchemy.orm import Session
 
 from app.config import settings
@@ -32,14 +32,21 @@ def zoek_chunks(sessie: Session, vraag: str, top_k: int | None = None) -> list[C
         .limit(KANDIDATEN)
     ))
 
-    tsq = func.plainto_tsquery("dutch", vraag)
-    tsv = func.to_tsvector("dutch", Chunk.tekst)
-    trefwoord_ids = list(sessie.scalars(
-        select(Chunk.id)
-        .where(tsv.op("@@")(tsq))
-        .order_by(func.ts_rank(tsv, tsq).desc())
-        .limit(KANDIDATEN)
-    ))
+    # plainto_tsquery geeft AND-semantiek: één vraagwoord dat nergens voorkomt
+    # maakt het hele trefwoordpad leeg (gemeten: 0 matches op de deadlinevraag).
+    # Daarom herschrijven we de gestemde query naar OR; ts_rank beloont daarna
+    # chunks waarin de meeste termen samenkomen.
+    and_vorm = sessie.scalar(select(cast(func.plainto_tsquery("dutch", vraag), Text)))
+    trefwoord_ids: list[int] = []
+    if and_vorm:
+        tsq = func.to_tsquery("dutch", and_vorm.replace(" & ", " | "))
+        tsv = func.to_tsvector("dutch", Chunk.tekst)
+        trefwoord_ids = list(sessie.scalars(
+            select(Chunk.id)
+            .where(tsv.op("@@")(tsq))
+            .order_by(func.ts_rank(tsv, tsq).desc())
+            .limit(KANDIDATEN)
+        ))
 
     beste = rrf_fuseer(vector_ids, trefwoord_ids)[: top_k or settings.top_k]
     per_id = {c.id: c for c in sessie.scalars(select(Chunk).where(Chunk.id.in_(beste)))}
