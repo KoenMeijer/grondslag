@@ -52,16 +52,70 @@ server {
 3. TLS: `certbot --nginx -d aiactwijzer.example.nl` (zelfde werkwijze als de
    andere projecten; certbot herschrijft het blok naar 443).
 
-## Eerste deploy (runbook)
+## Stappenplan livegang (van nul naar draaiende demo)
 
-1. GitLab-project aanmaken/koppelen; de 7 variabelen hierboven instellen.
-2. Push naar `master` → pipeline draait `backend_tests` + `frontend_tests` →
-   `deploy_hetzner`.
-3. Draai daarna eenmalig de handmatige job **`index_corpus`** (pipeline-pagina
-   → play-knop): indexeert het corpus (~duizend chunks, centen aan
-   embedding-calls). Zonder deze stap antwoordt de API met lege bronnen.
-4. Controleer: `https://<domein>/api/health` → `{"status":"ok"}`, stel via de
-   site een vraag, bekijk `/transparantie`.
+Volgorde is bewust: variabelen vóór de eerste push (anders faalt de
+deploy-job), DNS vóór certbot (anders faalt de challenge).
+
+**Stap 1 — Naam en domein.**
+De projectnaam is nog niet definitief (CLAUDE.md: werknaam AiActWijzer,
+alternatief *Grondslag* — domeincheck stond nog open). Kies de naam, registreer
+het domein en zet een **A-record** naar het VPS-IP. DNS mag alvast propageren
+terwijl je verder gaat.
+
+**Stap 2 — Deploy-sleutelpaar.**
+Maak een eigen keypair voor de pipeline (niet je persoonlijke sleutel):
+
+```bash
+ssh-keygen -t ed25519 -f ~/.ssh/aiactwijzer_deploy -N "" -C "gitlab-deploy aiactwijzer"
+ssh-copy-id -i ~/.ssh/aiactwijzer_deploy.pub <SSH_USER>@<SSH_HOST>
+```
+
+**Stap 3 — GitLab-project + variabelen.**
+Maak een (privé) GitLab-project aan en zet **vóór de eerste push** de 7
+variabelen uit de tabel hierboven (Settings → CI/CD → Variables).
+`SSH_PRIVATE_KEY` = de inhoud van `~/.ssh/aiactwijzer_deploy` (incl.
+BEGIN/END-regels en afsluitende newline); `POSTGRES_PASSWORD` genereer je met
+`openssl rand -hex 24`; markeer beide wachtwoord-achtigen als **Masked**.
+
+**Stap 4 — Nginx op de VPS.**
+Plaats het serverblok hierboven (met het echte domein i.p.v. het placeholder),
+activeer en herlaad:
+
+```bash
+sudo nano /etc/nginx/sites-available/<domein>
+sudo ln -s /etc/nginx/sites-available/<domein> /etc/nginx/sites-enabled/
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+**Stap 5 — Eerste push.**
+
+```bash
+git remote add origin git@gitlab.com:<jouw-namespace>/<project>.git
+git push -u origin master
+```
+
+Volg de pipeline: `backend_tests` + `frontend_tests` → `deploy_hetzner`. De
+eerste deploy bouwt beide images op de VPS en duurt enkele minuten.
+
+**Stap 6 — TLS.**
+Zodra DNS doorverwijst: `sudo certbot --nginx -d <domein>` (herschrijft het
+blok naar 443 + redirect).
+
+**Stap 7 — Corpus indexeren (eenmalig).**
+Pipeline-pagina → play-knop bij **`index_corpus`**. Dit embedt ~duizend chunks
+(centen aan Mistral-calls). Zonder deze stap antwoordt de API met lege bronnen.
+
+**Stap 8 — Controle.**
+`https://<domein>/api/health` → `{"status":"ok"}`; stel via de site de
+cv-screeningvraag (verwacht: antwoord met citaatblok en klikbare ref); klik
+"bekijk de bron" (EUR-Lex opent); bekijk `/transparantie`; check smal venster
+(paneel onder het antwoord).
+
+**Stap 9 — Nazorg publiek moment (optioneel, uit CLAUDE.md).**
+Domein vermelden op de transparantie-pagina waar relevant; MIT-licentie +
+GitHub-publicatie (vindbaarheid/portfolio — CI blijft op GitLab); demo +
+LinkedIn-post.
 
 ## Corpus- of RAG-wijziging
 
