@@ -26,4 +26,18 @@ describe('CitaatBlok', () => {
     expect(link.text()).toBe('bekijk de bron')
     expect(link.attributes('href')).toBe('https://example.org')
   })
+
+  it('verankert de prefix-strip op de ref, zodat een dubbelepunt in de kop het citaat niet verminkt', () => {
+    const citaat = {
+      ref: 'Toezicht: rolverdeling',
+      fragment: 'Toezicht: rolverdeling: De AP coördineert.',
+      bron: 'B',
+      url: 'https://example.org',
+    }
+    const w = mount(CitaatBlok, {
+      props: { citaat },
+      global: { plugins: [createTestingPinia({ createSpy: vi.fn })] },
+    })
+    expect(w.find('.citaattekst').text()).toBe('De AP coördineert.')
+  })
 })

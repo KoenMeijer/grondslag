@@ -16,14 +16,16 @@ const store = useVraagStore()
 
     <VraagFormulier />
 
-    <p v-if="store.fout" class="fout">{{ store.fout }}</p>
+    <div aria-live="polite">
+      <p v-if="store.fout" class="fout" role="alert">{{ store.fout }}</p>
 
-    <div v-if="store.resultaat" class="resultaat">
-      <div>
-        <AntwoordWeergave />
-        <p class="stempel">stand van wetgeving: {{ store.resultaat.stand_van_wetgeving }}</p>
+      <div v-if="store.resultaat" class="resultaat">
+        <div>
+          <AntwoordWeergave />
+          <p class="stempel">stand van wetgeving: {{ store.resultaat.stand_van_wetgeving }}</p>
+        </div>
+        <CitaatPaneel />
       </div>
-      <CitaatPaneel />
     </div>
   </div>
 </template>

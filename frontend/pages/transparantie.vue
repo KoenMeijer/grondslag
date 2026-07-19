@@ -58,8 +58,9 @@
     <section>
       <h2>Privacy</h2>
       <p>
-        Er zijn geen accounts. Vragen worden niet opgeslagen en niet gebruikt
-        als trainings- of testdata.
+        Er zijn geen accounts. Wij slaan vragen niet op en gebruiken ze niet als
+        trainings- of testdata; een vraag wordt alleen ter beantwoording doorgegeven
+        aan de EU-gehoste Mistral-API.
       </p>
     </section>
   </article>

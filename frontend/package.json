@@ -22,7 +22,7 @@
     "@vitejs/plugin-vue": "^5",
     "@vue/test-utils": "^2",
     "eslint": "^9",
-    "happy-dom": "^15",
+    "happy-dom": "^20.11.0",
     "typescript": "^5",
     "vitest": "^2"
   }

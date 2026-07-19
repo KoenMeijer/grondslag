@@ -19,7 +19,16 @@ watch(() => store.actieveRef, (nieuw) => {
 
 // Het fragment draagt zijn eigen "ref (kop): "-prefix (kop-als-context voor
 // retrieval); naast het artikelnummer-kopje is die prefix dubbelop.
-const fragment = computed(() => props.citaat.fragment.replace(/^[^:]+:\s*/, ''))
+const fragment = computed(() => {
+  const f = props.citaat.fragment
+  // Strip alleen de bekende retrieval-prefix ("<ref> (kop): " of "<ref>: ");
+  // ankeren op de ref voorkomt dat een dubbelepunt in een kop het citaat verminkt.
+  if (f.startsWith(props.citaat.ref)) {
+    const scheiding = f.indexOf(': ', props.citaat.ref.length)
+    if (scheiding !== -1) return f.slice(scheiding + 2)
+  }
+  return f
+})
 </script>
 
 <template>
