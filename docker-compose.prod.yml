@@ -1,0 +1,52 @@
+# Productie-compose (zelfstandig bestand, géén overlay): docker-compose.yml
+# blijft het dev-bestand met alleen de database op 5433. Containers binden
+# op 127.0.0.1 — nginx op de VPS-host is de enige publieke ingang.
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: aiact-db-prod
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?POSTGRES_USER ontbreekt in .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD ontbreekt in .env}
+      POSTGRES_DB: ${POSTGRES_DB:?POSTGRES_DB ontbreekt in .env}
+    volumes:
+      - aiact_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: aiact-backend-prod
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      MISTRAL_API_KEY: ${MISTRAL_API_KEY:?MISTRAL_API_KEY ontbreekt in .env}
+      UVICORN_WORKERS: ${UVICORN_WORKERS:-2}
+    ports:
+      - "127.0.0.1:8094:8000"   # 8094: vrij naast alma (8080) en wkpoule (8092)
+    volumes:
+      # Corpus read-only gemount i.p.v. in de image gebakken: een corpus-update
+      # is dan rsync + handmatige index-job, zonder image-rebuild.
+      - ./corpus:/app/corpus:ro
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: aiact-frontend-prod
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3094:3000"   # 3094: vrij naast wkpoule (3091) en alma (3001)
+    depends_on:
+      - backend
+
+volumes:
+  aiact_pg_data:
