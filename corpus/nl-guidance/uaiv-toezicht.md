@@ -33,7 +33,7 @@ moeten scherper.
 
 Het Algoritmeregister (algoritmes.overheid.nl) is een Nederlands
 transparantie-initiatief. Publicatie is voor de rijksoverheid deels verplicht op
-grond van rijksbeleid, maar het is gén verplichting uit de AI-verordening. De
+grond van rijksbeleid, maar het is géén verplichting uit de AI-verordening. De
 twee worden vaak verward; houd ze uit elkaar bij compliance-vragen.
 
 ## IAMA en FRIA — Nederlands instrument naast een Europese plicht
