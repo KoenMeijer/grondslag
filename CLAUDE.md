@@ -74,7 +74,9 @@ gestructureerd intake-moment dat de RAG-context voedt, daarna vrij doorvragen.
 ## Scope v1 (wat er wél en níet in zit)
 
 **Wél:** vraag-antwoord met citaten (artikelnummer + fragment), golden set + eval-suite,
-actualiteits-stempel, transparantie-pagina. **Níet:** accounts, intake-beslisboom
+actualiteits-stempel, transparantie-pagina. **Stand 19 jul 2026: dit alles is
+functioneel compleet** (bouwsteen 1 backend + bouwsteen 2 frontend met citaat-paneel);
+nog niet gedaan: deploy en het publieke moment. **Níet:** accounts, intake-beslisboom
 (bewust "later", zie ActCheck-les), betaalfunctie, andere wetgeving dan de AI Act.
 Uitbreiden mag pas als v1 af is en de eval-suite groen.
 
