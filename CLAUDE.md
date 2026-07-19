@@ -102,7 +102,9 @@ passen (countdown, stat-tegels, ✓-lijstjes, 1-2-3-4-stappen, urgentie-teksten)
 Zelfde stack als Alma (`../Alma-project`) en WK Poule (`../wkpoule`), zodat patronen en
 tooling herbruikbaar zijn: **FastAPI + SQLAlchemy + Postgres · Nuxt 3 + Pinia + @nuxt/ui ·
 Docker/Docker Compose · GitLab CI → Hetzner**. AI-laag soeverein/EU (AVG): pgvector voor
-embeddings, Ollama en/of Mistral (EU) als model. Details: `docs/rag-aanpak.md`.
+embeddings, Ollama en/of Mistral (EU) als model — voor v1 gekozen: Mistral API
+(`mistral-embed` + `mistral-small-latest`), zie het goedgekeurde ontwerp in
+`docs/superpowers/specs/2026-07-19-eerste-bouwsteen-design.md`. Details: `docs/rag-aanpak.md`.
 Eval-driven vanaf dag 1: golden set + retrieval-/grounding-/abstentie-metrics —
 zie `docs/eval-aanpak.md` (later te generaliseren in referentieproject 2).
 
