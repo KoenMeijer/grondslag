@@ -45,6 +45,35 @@ citaten uit de wettekst, actuele omnibus-tijdlijn, NL-toezicht (UAIV), self-host
 **Wel van leren:** een beslisboom dwingt volledigheid af — evt. latere iteratie: kort
 gestructureerd intake-moment dat de RAG-context voedt, daarna vrij doorvragen.
 
+## Product- en governance-principes
+
+1. **De tool valt zélf onder de AI Act — en is zijn eigen schoolvoorbeeld.**
+   Als AI-systeem geldt minimaal de art. 50-transparantieplicht (gebruiker weet dat
+   hij met AI praat). Practice what you preach: transparantie-pagina, model card
+   (welk model, herkomst/hosting), eigen risicoclassificatie gedocumenteerd in de repo.
+   Dit is tegelijk het portfolio-verhaal.
+2. **Informatie, geen juridisch advies.** Vastgelegd als productprincipe: in de copy,
+   in het abstentie-gedrag (doorverwijzen bij advies-vragen) en straks in de
+   voorwaarden van een publieke demo. Antwoorden zijn een startpunt voor de eigen
+   jurist, geen vervanging.
+3. **Corpusbeheer en actualiteits-stempel.** Corpus = geconsolideerde wettekst
+   (EUR-Lex, verordening 2024/1689 incl. Digital Omnibus) + geselecteerde NL-guidance;
+   elke bron met versie/datum geadministreerd. Elk antwoord draagt een stempel
+   ("stand van wetgeving: <maand jaar>"). Wijziging in wet/guidance = corpus-update
+   + eval-run — anders veroudert deze tool net zo stil als de concurrentie.
+4. **Privacy van gebruikersvragen.** Bij een door ons gehoste demo: geen of minimale,
+   geanonimiseerde logging, korte retentie, en dit benoemd op de transparantie-pagina.
+   Vragen worden nooit trainings- of evaldata zonder dat expliciet te melden.
+5. **Licentie en kanaal.** Open source onder **MIT**; publicatie op **GitHub**
+   (vindbaarheid/portfolio), CI/deploy mag op GitLab → Hetzner blijven.
+
+## Scope v1 (wat er wél en níet in zit)
+
+**Wél:** vraag-antwoord met citaten (artikelnummer + fragment), golden set + eval-suite,
+actualiteits-stempel, transparantie-pagina. **Níet:** accounts, intake-beslisboom
+(bewust "later", zie ActCheck-les), betaalfunctie, andere wetgeving dan de AI Act.
+Uitbreiden mag pas als v1 af is en de eval-suite groen.
+
 ## Design-principes (anti-AI-sjabloon)
 
 Het "AI-gegenereerde" gevoel zit in generiekheid: bouwstenen en copy die op elk onderwerp
