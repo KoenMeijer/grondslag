@@ -11,16 +11,23 @@ from app.config import settings
 from app.models import Chunk
 from app.rag import mistral
 
-KANDIDATEN = 20  # per zoekpad; ruim boven top_k zodat de fusie echt kan mengen
-RRF_K = 60       # gangbare dempingsfactor: verschil tussen rang 1 en 2 telt zwaarder dan 19 en 20
+KANDIDATEN = 20      # per zoekpad; ruim boven top_k zodat de fusie echt kan mengen
+RRF_K = 60           # gangbare dempingsfactor: verschil tussen rang 1 en 2 telt zwaarder dan 19 en 20
+GEWICHT_VECTOR = 1.5 # vector blijft leidend; trefwoorden zijn het steuntje voor letterlijke
+                     # wetstermen. Offline gemeten (19 jul 2026): 1:1 verdringt de
+                     # artikel 3-definities (ts_rank kent geen zeldzaamheidsweging),
+                     # alles ≥1.25 scoort 6/8 op de retrieval-cases; 1.5 is het robuuste midden.
 
 
-def rrf_fuseer(*rangschikkingen: list[int], k: int = RRF_K) -> list[int]:
-    """Voegt rangschikkingen (beste eerst) samen; wie in meer lijsten hoog staat, wint."""
+def rrf_fuseer(*rangschikkingen: list[int], gewichten: list[float] | None = None,
+               k: int = RRF_K) -> list[int]:
+    """Voegt rangschikkingen (beste eerst) samen; wie in meer lijsten hoog staat, wint.
+    Gewichten laten één pad zwaarder tellen (vector leidend, trefwoorden als steun)."""
+    gewichten = gewichten or [1.0] * len(rangschikkingen)
     scores: dict[int, float] = {}
-    for lijst in rangschikkingen:
+    for lijst, gewicht in zip(rangschikkingen, gewichten, strict=True):
         for rang, chunk_id in enumerate(lijst):
-            scores[chunk_id] = scores.get(chunk_id, 0.0) + 1.0 / (k + rang + 1)
+            scores[chunk_id] = scores.get(chunk_id, 0.0) + gewicht / (k + rang + 1)
     return sorted(scores, key=lambda cid: -scores[cid])
 
 
@@ -48,6 +55,7 @@ def zoek_chunks(sessie: Session, vraag: str, top_k: int | None = None) -> list[C
             .limit(KANDIDATEN)
         ))
 
-    beste = rrf_fuseer(vector_ids, trefwoord_ids)[: top_k or settings.top_k]
+    beste = rrf_fuseer(vector_ids, trefwoord_ids,
+                       gewichten=[GEWICHT_VECTOR, 1.0])[: top_k or settings.top_k]
     per_id = {c.id: c for c in sessie.scalars(select(Chunk).where(Chunk.id.in_(beste)))}
     return [per_id[cid] for cid in beste]
