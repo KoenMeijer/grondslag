@@ -1,0 +1,34 @@
+/* Tokens uit docs/design-brief.md — wijzig ze dáár eerst, dan hier. */
+:root {
+  --inkt: #14213D;
+  --papier: #FAFAF7;
+  --wit: #FFFFFF;
+  --lijn: #E2E4E3;
+  --oker: #B98A2F;
+  --oker-donker: #8A6A1F;
+  --fout: #8C3A2E;
+  --font-ui: 'Public Sans', system-ui, sans-serif;
+  --font-citaat: 'Literata', Georgia, serif;
+  --radius: 4px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--papier);
+  color: var(--inkt);
+  font-family: var(--font-ui);
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+a { color: var(--oker-donker); }
+
+.label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  color: var(--oker-donker);
+}

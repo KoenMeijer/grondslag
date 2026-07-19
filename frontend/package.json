@@ -1,0 +1,29 @@
+{
+  "name": "aiactwijzer-frontend",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "lint": "eslint .",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@fontsource/literata": "^5",
+    "@fontsource/public-sans": "^5",
+    "@pinia/nuxt": "^1.0.1",
+    "nuxt": "^3.17",
+    "ofetch": "^1",
+    "pinia": "^4.0.2"
+  },
+  "devDependencies": {
+    "@nuxt/eslint": "^1",
+    "@pinia/testing": "^2.0.1",
+    "@vitejs/plugin-vue": "^5",
+    "@vue/test-utils": "^2",
+    "eslint": "^9",
+    "happy-dom": "^15",
+    "typescript": "^5",
+    "vitest": "^2"
+  }
+}
