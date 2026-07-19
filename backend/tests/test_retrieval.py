@@ -43,14 +43,20 @@ def test_trefwoord_haalt_chunk_op_die_vector_mist(db, monkeypatch):
                                  embedding=[1.0] + [0.0] * 1023))
         bron.chunks.append(Chunk(ref="B", kop="", tekst="nog een ander onderwerp", volgorde=1,
                                  embedding=[0.8, 0.6] + [0.0] * 1022))
-        bron.chunks.append(Chunk(ref="C", kop="", tekst="verplichtingen voor bijlage III systemen",
+        # Verzonnen termen die alléén in dit testchunk bestaan: ts_rank heeft
+        # geen zeldzaamheidsweging, dus met gewone woorden verdringt het echte
+        # corpus (zelfde database) het testchunk uit de trefwoord-top — de test
+        # moet per constructie corpus-onafhankelijk zijn. "zwiepzwap" komt
+        # nergens voor: bij AND-semantiek (de gemeten no-op-bug) zou het
+        # trefwoordpad daardoor leeg zijn.
+        bron.chunks.append(Chunk(ref="C", kop="", tekst="flarpicon knorvel systemen",
                                  volgorde=2, embedding=[0.0, 0.0, 1.0] + [0.0] * 1021))
         sessie.add(bron)
         sessie.commit()
 
         monkeypatch.setattr(mistral, "embed", lambda t: [[1.0] + [0.0] * 1023])
         refs = [c.ref for c in retrieval.zoek_chunks(
-            sessie, "wanneer gelden verplichtingen bijlage III", top_k=2)]
+            sessie, "flarpicon knorvel zwiepzwap", top_k=2)]
         assert "C" in refs
 
         sessie.delete(sessie.query(Source).filter_by(slug="test/hybride").one())
