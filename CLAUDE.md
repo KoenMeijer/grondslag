@@ -1,0 +1,83 @@
+# CLAUDE.md — AiActWijzer
+
+## Wat is dit
+
+Self-hosted assistent die vragen over de **EU AI Act** beantwoordt, gegrond in de
+wettekst + NL-doorwerking. Kernvraag van de gebruiker: *"wij bouwen/gebruiken X —
+valt dat onder de AI Act, welke risicocategorie, welke verplichtingen, welke deadline?"*
+
+Dit is **referentieproject 1** (jul–sep 2026) uit `../persoonlijk/doelen/ai-native-developer.md`:
+vlaggenschip dat alle drie de assen raakt (serieuze RAG + governance-inhoud + soevereine stack).
+Bronnenset/naslag: `../persoonlijk/naslag/eu-ai-act-nl.md`. Lessen uit `../persoonlijk/rag/`
+worden hier op grotere schaal toegepast.
+
+- **Naam:** AiActWijzer (werknaam). Alternatief dat overwogen is: *Grondslag*
+  (woordspeling juridische grondslag ↔ RAG-grounding); domeincheck nog te doen.
+- **Eerste oplever (2–3 avonden):** wettekst indexeren + 10 golden-set-vragen met grounding-eval.
+- **Publiek moment:** demo + LinkedIn-post.
+- **Privacy-grens:** alles op publieke data (wetgeving); géén privé-/vastgoeddata.
+
+## Waarom interessant voor organisaties (de pitch)
+
+1. **Verplichtingen komen eraan, niemand weet wat voor hén geldt** — risicoclassificatie
+   is de kernvraag en het antwoord staat verspreid over verordening, bijlagen en NL-guidance.
+2. **Rondzwervende info is massaal verouderd** — de Digital Omnibus (jul 2026) schoof de
+   hoog-risico-deadline van 2 aug 2026 naar 2 dec 2027 / 2 aug 2028; het internet (en
+   concurrent ActCheck) noemt nog de oude datum. Actualiteit is direct onderscheidend.
+3. **Triage-tool, geen juristvervanger** — laat zien wélke vragen naar de advocaat moeten;
+   verlaagt kosten en ontdooit stilliggende AI-projecten.
+4. **Self-hosted** — juist de doelgroep met de meeste AI Act-vragen (overheid, zorg,
+   financieel) wil die vragen niet in een Amerikaanse cloud-chatbot typen.
+5. **Controleerbaar** — grounding met citaat + artikelnummer maakt elk antwoord herleidbaar;
+   bij juridische vragen de voorwaarde voor vertrouwen.
+
+In één zin: *organisaties willen AI adopteren maar durven niet, omdat niemand precies weet
+wat de AI Act voor hun situatie betekent en de informatie online verouderd of
+Amerikaans-generiek is; deze tool geeft gegronde, actuele, controleerbare antwoorden —
+op een stack die zelf AVG-proof is.*
+
+## Positionering t.o.v. ActCheck (actcheck.nl)
+
+ActCheck = statische beslisboom-vragenlijst → rapport per e-mail (lead-generatie), zonder
+bronverwijzing, zonder NL-doorwerking, met verouderde deadline (2 aug 2026) en
+angst-marketing (countdown, boetes). Wij onderscheiden ons met: vrije vragen + doorvragen,
+citaten uit de wettekst, actuele omnibus-tijdlijn, NL-toezicht (UAIV), self-hosted.
+**Wel van leren:** een beslisboom dwingt volledigheid af — evt. latere iteratie: kort
+gestructureerd intake-moment dat de RAG-context voedt, daarna vrij doorvragen.
+
+## Design-principes (anti-AI-sjabloon)
+
+Het "AI-gegenereerde" gevoel zit in generiekheid: bouwstenen en copy die op elk onderwerp
+passen (countdown, stat-tegels, ✓-lijstjes, 1-2-3-4-stappen, urgentie-teksten). Daarom:
+
+1. **De wettekst draagt het ontwerp.** Signatuur-element = het **gegronde citaat-paneel**:
+   antwoord met daarnaast het letterlijke wetsfragment, vormgegeven als document
+   (artikelnummer als kopje, eigen letter voor het citaat, bronregel
+   "Verordening 2024/1689, art. 6 lid 2"). Vorm en USP vallen samen.
+2. **Copy nuchter.** Kalm, actief Nederlands ("Stel je vraag", "Bekijk de bron").
+   Geen countdown, boete-dreiging, emoji, superlatieven of verkoop-register.
+3. **Structuur codeert betekenis.** Nummering/tegels alleen waar de inhoud écht een
+   volgorde of meetwaarde is. Een deadline-tijdlijn (omnibus) is wél gerechtvaardigd.
+4. **Bewust afwijken van stack-defaults.** @nuxt/ui-defaults (Inter-achtig, standaard
+   radius/kleur) lezen als sjabloon. Vermijd AI-clichés: crème+terracotta+serif,
+   near-black+acid-green, paarse gradients, glassmorphism — en ook EU-vlagblauw.
+   Richting: eigen donker "inkt"-blauw + papier-wit, alsof uit een gedrukte verordening.
+5. **Eén gebaar, verder discipline.** Durf zit in het citaat-paneel; de rest stil:
+   veel wit, strak grid, minimale animatie.
+6. **Design-tokens vóór het bouwen vastleggen** (palet als hex-tokens, twee lettertypen,
+   signatuur-element, toon) en elke UI-taak daarnaar laten verwijzen — nooit "maak het
+   modern en clean" prompten. → Nog te doen: `design-brief.md` met concrete tokens.
+
+## Stack
+
+Zelfde stack als Alma (`../Alma-project`) en WK Poule (`../wkpoule`), zodat patronen en
+tooling herbruikbaar zijn: **FastAPI + SQLAlchemy + Postgres · Nuxt 3 + Pinia + @nuxt/ui ·
+Docker/Docker Compose · GitLab CI → Hetzner**. AI-laag soeverein/EU (AVG): pgvector voor
+embeddings, Ollama en/of Mistral (EU) als model.
+Eval-driven vanaf dag 1: golden set + grounding-/abstentie-metrics (aanpak uit
+`../persoonlijk/rag/eval.py`, later te generaliseren in referentieproject 2).
+
+## Werkafspraken
+
+Zie `../persoonlijk/CLAUDE.md` (Nederlands, waarom uitleggen, scope-discipline,
+testen vóór "klaar"). Extra hier: publieke data only; naam nog niet definitief.

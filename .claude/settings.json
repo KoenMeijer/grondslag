@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -c 'if ((.tool_input.command // \"\") | test(\"git commit\")) then {hookSpecificOutput:{hookEventName:\"PostToolUse\",additionalContext:\"Er is zojuist gecommit. Controleer of CLAUDE.md (projectcontext) nog klopt met deze wijziging — stack, structuur, werkafspraken, genomen beslissingen — en stel een update voor als dat nodig is. Zo niet, ga gewoon door.\"}} else empty end' 2>/dev/null || true",
+            "statusMessage": "Context-check na commit"
+          }
+        ]
+      }
+    ]
+  }
+}
