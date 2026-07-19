@@ -106,8 +106,10 @@ passen (countdown, stat-tegels, ✓-lijstjes, 1-2-3-4-stappen, urgentie-teksten)
 ## Stack
 
 Zelfde stack als Alma (`../Alma-project`) en WK Poule (`../wkpoule`), zodat patronen en
-tooling herbruikbaar zijn: **FastAPI + SQLAlchemy + Postgres · Nuxt 3 + Pinia + @nuxt/ui ·
-Docker/Docker Compose · GitLab CI → Hetzner**. AI-laag soeverein/EU (AVG): pgvector voor
+tooling herbruikbaar zijn: **FastAPI + SQLAlchemy + Postgres · Nuxt 3 + Pinia ·
+Docker/Docker Compose · GitLab CI → Hetzner**. Afwijking van Alma/WK Poule: géén
+@nuxt/ui maar kale Nuxt + eigen CSS op de design-tokens (keuze 19 jul 2026 — de
+design-brief eist juist afwijken van de library-defaults; heroverwegen als de UI groeit). AI-laag soeverein/EU (AVG): pgvector voor
 embeddings, Ollama en/of Mistral (EU) als model — voor v1 gekozen: Mistral API
 (`mistral-embed` + `mistral-small-latest`), zie het goedgekeurde ontwerp in
 `docs/superpowers/specs/2026-07-19-eerste-bouwsteen-design.md`. Details: `docs/rag-aanpak.md`.
