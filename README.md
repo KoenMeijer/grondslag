@@ -15,6 +15,8 @@ PYTHONPATH=backend .venv/bin/python -m app.ingest        # corpus indexeren
 PYTHONPATH=backend .venv/bin/uvicorn app.main:app        # API op :8000
 ```
 
+Deployment (GitLab CI → Hetzner): zie `docs/deploy.md`.
+
 ## Frontend
 
 ```bash
