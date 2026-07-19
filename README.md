@@ -37,11 +37,14 @@ De eval-suite draait bij elke wijziging aan chunking, prompt of model —
 zie `docs/eval-aanpak.md`. Corpusbeheer: `corpus/` is de bron van waarheid,
 elke wijziging is een git-diff + eval-run.
 
-**Bekende stand (2026-07-19, na retrieval-experimenten 1–3):** retrieval 9/10,
-grounding 9/10, abstentie 10/10. Was 6/6/10; verbeterd via artikel 3-splitsing,
-hybride zoeken (vector 1.5 : trefwoord 1, RRF) en vraaggerichte herformulering
-van de eigen guidance-bestanden. Twee bewust open punten: `rol-fria-overheid`
-(artikel 27 wordt niet opgehaald — semantische afstand; kandidaat-knoppen:
-query-expansie of reranker) en `nl-toezicht-uaiv` (generatie noemt wisselend
-"Uitvoeringswet" óf de toezichthouders, zelden beide — generatie-onvolledigheid,
-geen retrieval-fout). Een exit-code ≠ 0 op deze stand is dus verwacht.
+**Bekende stand (2026-07-19, na retrieval-experimenten):** retrieval 8/10,
+grounding 7/10, abstentie 10/10. Was 6/6/10; verbeterd via artikel 3-splitsing
+en hybride zoeken (vector 1.5 : trefwoord 1, RRF — onderbouwing:
+`evals/meet_fusie.py`). Een tussenstand van 9/9/10 bleek deels memorisatie
+(golden-vragen waren letterlijk in eigen guidance gelekt; verwijderd — zie de
+les in `docs/eval-aanpak.md`). Drie bewust open punten, alle drie met eerlijke
+abstentie of een correct-maar-onvolledig antwoord (nooit de verouderde datum):
+`actualiteit-hoogrisico-deadline` en `rol-fria-overheid` (semantische afstand
+vraag ↔ wetstekst; kandidaat-knoppen: query-expansie naar wetsvocabulaire,
+reranker) en `nl-toezicht-uaiv` (generatie-onvolledigheid). Een exit-code ≠ 0
+op deze stand is dus verwacht.
