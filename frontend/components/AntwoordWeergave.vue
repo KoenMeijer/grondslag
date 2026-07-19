@@ -1,21 +1,31 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useVraagStore } from '~/stores/vraag'
+import { useVraagStore, type Citaat } from '~/stores/vraag'
 
 const store = useVraagStore()
 
-// Splits het antwoord op [ref]-patronen; alleen refs die echt als citaat zijn
-// meegeleverd worden klikbaar — een niet-opgehaalde ref blijft platte tekst.
+// Splits het antwoord op [ref]-patronen; alleen refs die aan een meegeleverd
+// citaat te koppelen zijn worden klikbaar — een niet-opgehaalde ref blijft platte tekst.
 const delen = computed(() => {
   const resultaat = store.resultaat
   if (!resultaat) return []
-  const bekend = new Set(resultaat.citaten.map((c) => c.ref))
   return resultaat.antwoord.split(/(\[[^\]]+\])/).map((stuk) => {
     const m = stuk.match(/^\[([^\]]+)\]$/)
-    if (m && bekend.has(m[1])) return { type: 'ref' as const, ref: m[1], tekst: stuk }
+    if (m) {
+      const doel = vindCitaatRef(m[1], resultaat.citaten)
+      if (doel) return { type: 'ref' as const, ref: doel, tekst: stuk }
+    }
     return { type: 'tekst' as const, ref: '', tekst: stuk }
   })
 })
+
+// Zelfde regel als de backend (vind_citaten): het model mag een ref verfijnen
+// ("…, onder a)"); de langste chunk-ref die als prefix past wint.
+function vindCitaatRef(geciteerd: string, citaten: Citaat[]): string {
+  const passend = citaten.filter((c) => geciteerd === c.ref || geciteerd.startsWith(c.ref + ','))
+  if (!passend.length) return ''
+  return passend.reduce((a, b) => (a.ref.length >= b.ref.length ? a : b)).ref
+}
 
 function ga(refNaam: string) {
   store.markeer(refNaam)
