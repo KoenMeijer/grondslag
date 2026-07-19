@@ -99,7 +99,9 @@ passen (countdown, stat-tegels, ✓-lijstjes, 1-2-3-4-stappen, urgentie-teksten)
    veel wit, strak grid, minimale animatie.
 6. **Design-tokens vóór het bouwen vastleggen** (palet als hex-tokens, twee lettertypen,
    signatuur-element, toon) en elke UI-taak daarnaar laten verwijzen — nooit "maak het
-   modern en clean" prompten. → Nog te doen: `design-brief.md` met concrete tokens.
+   modern en clean" prompten. → Vastgelegd in `docs/design-brief.md` (19 jul 2026):
+   nachtinkt `#14213D` + papier `#FAFAF7` + oker-accent, Public Sans + Literata
+   (zelf gehost), citaat-paneel als ingetogen blok.
 
 ## Stack
 
