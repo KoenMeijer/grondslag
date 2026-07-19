@@ -25,3 +25,9 @@ PYTHONPATH=backend:. .venv/bin/python evals/run_evals.py # golden set (10 cases)
 De eval-suite draait bij elke wijziging aan chunking, prompt of model —
 zie `docs/eval-aanpak.md`. Corpusbeheer: `corpus/` is de bron van waarheid,
 elke wijziging is een git-diff + eval-run.
+
+**Bekende stand (baseline 2026-07-19, eerste run):** retrieval 6/10, grounding 6/10,
+abstentie 10/10. De rode cases zijn gediagnosticeerd als retrieval-granulariteit
+(artikel 3 is één megachunk; de omnibus-tijdlijn-chunks vallen net buiten de top-5)
+en staan bewust open als eerstvolgende gemeten experiment — een exit-code ≠ 0 op
+deze stand is dus verwacht, geen regressie.

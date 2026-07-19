@@ -36,7 +36,7 @@ def indexeer_bestand(sessie, pad: Path, corpus_root: Path, embed=mistral.embed) 
     for i in range(0, len(teksten), BATCH):
         vectoren.extend(embed(teksten[i:i + BATCH]))
 
-    for volgorde, (chunk, vector) in enumerate(zip(doc.chunks, vectoren)):
+    for volgorde, (chunk, vector) in enumerate(zip(doc.chunks, vectoren, strict=True)):
         sessie.add(Chunk(source=bron, ref=chunk.ref, kop=chunk.kop,
                          tekst=chunk.tekst, volgorde=volgorde, embedding=vector))
     return len(doc.chunks)

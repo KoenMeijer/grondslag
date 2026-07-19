@@ -4,7 +4,7 @@ sqlalchemy>=2.0
 psycopg[binary]
 pgvector
 pydantic-settings
-mistralai>=1.0
+mistralai>=2.7,<3
 pyyaml
 httpx
 beautifulsoup4
