@@ -8,8 +8,8 @@ valt dat onder de AI Act, welke risicocategorie, welke verplichtingen, welke dea
 
 Dit is **referentieproject 1** (jul–sep 2026) uit `../persoonlijk/doelen/ai-native-developer.md`:
 vlaggenschip dat alle drie de assen raakt (serieuze RAG + governance-inhoud + soevereine stack).
-Bronnenset/naslag: `../persoonlijk/naslag/eu-ai-act-nl.md`. Lessen uit `../persoonlijk/rag/`
-worden hier op grotere schaal toegepast.
+Bronnenset/naslag: `../persoonlijk/naslag/eu-ai-act-nl.md`. De RAG- en eval-aanpak staan
+zelfstandig in dit project: `docs/rag-aanpak.md` en `docs/eval-aanpak.md`.
 
 - **Naam:** AiActWijzer (werknaam). Alternatief dat overwogen is: *Grondslag*
   (woordspeling juridische grondslag ↔ RAG-grounding); domeincheck nog te doen.
@@ -73,11 +73,28 @@ passen (countdown, stat-tegels, ✓-lijstjes, 1-2-3-4-stappen, urgentie-teksten)
 Zelfde stack als Alma (`../Alma-project`) en WK Poule (`../wkpoule`), zodat patronen en
 tooling herbruikbaar zijn: **FastAPI + SQLAlchemy + Postgres · Nuxt 3 + Pinia + @nuxt/ui ·
 Docker/Docker Compose · GitLab CI → Hetzner**. AI-laag soeverein/EU (AVG): pgvector voor
-embeddings, Ollama en/of Mistral (EU) als model.
-Eval-driven vanaf dag 1: golden set + grounding-/abstentie-metrics (aanpak uit
-`../persoonlijk/rag/eval.py`, later te generaliseren in referentieproject 2).
+embeddings, Ollama en/of Mistral (EU) als model. Details: `docs/rag-aanpak.md`.
+Eval-driven vanaf dag 1: golden set + retrieval-/grounding-/abstentie-metrics —
+zie `docs/eval-aanpak.md` (later te generaliseren in referentieproject 2).
 
 ## Werkafspraken
 
-Zie `../persoonlijk/CLAUDE.md` (Nederlands, waarom uitleggen, scope-discipline,
-testen vóór "klaar"). Extra hier: publieke data only; naam nog niet definitief.
+- **Communiceer in het Nederlands**; code-comments ook in het Nederlands, en leg het
+  *waarom* uit, niet het *wat*.
+- **Leg bij elke fix/keuze het waarom uit** — de oorzaak begrijpen weegt zwaarder dan
+  snel een werkende oplossing.
+- **Scope-discipline:** doe precies wat gevraagd is, geen ongevraagde extra
+  features/UI/links; bevestig bij twijfel.
+- **Test/verifieer vóór "klaar":** lokaal `pytest` / `npm run lint` waar van toepassing,
+  en controleer het resultaat echt. Bij dit project extra: de eval-suite
+  (`docs/eval-aanpak.md`) draait mee bij elke RAG-/prompt-/modelwijziging.
+- **Bevestig vóór onomkeerbare of risicovolle acties** (verwijderen, overschrijven,
+  externe/publieke acties); maak waar zinvol eerst een backup. Nooit automatisch
+  naar productie pushen.
+- **Behandel feedback/observaties (screenshots, productie) als waarheid** en
+  heronderzoek, in plaats van het vorige antwoord te verdedigen.
+- **Wees kort en direct**; geef een aanbeveling i.p.v. een lange optie-opsomming.
+- **Contextonderhoud:** na elke commit checken of dit bestand nog klopt
+  (afgedwongen via de hook in `.claude/settings.json`).
+- **Specifiek voor dit project:** publieke data only (wetgeving/guidance, geen
+  privédata); naam is nog niet definitief.
