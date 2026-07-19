@@ -37,8 +37,11 @@ De eval-suite draait bij elke wijziging aan chunking, prompt of model —
 zie `docs/eval-aanpak.md`. Corpusbeheer: `corpus/` is de bron van waarheid,
 elke wijziging is een git-diff + eval-run.
 
-**Bekende stand (baseline 2026-07-19, eerste run):** retrieval 6/10, grounding 6/10,
-abstentie 10/10. De rode cases zijn gediagnosticeerd als retrieval-granulariteit
-(artikel 3 is één megachunk; de omnibus-tijdlijn-chunks vallen net buiten de top-5)
-en staan bewust open als eerstvolgende gemeten experiment — een exit-code ≠ 0 op
-deze stand is dus verwacht, geen regressie.
+**Bekende stand (2026-07-19, na retrieval-experimenten 1–3):** retrieval 9/10,
+grounding 9/10, abstentie 10/10. Was 6/6/10; verbeterd via artikel 3-splitsing,
+hybride zoeken (vector 1.5 : trefwoord 1, RRF) en vraaggerichte herformulering
+van de eigen guidance-bestanden. Twee bewust open punten: `rol-fria-overheid`
+(artikel 27 wordt niet opgehaald — semantische afstand; kandidaat-knoppen:
+query-expansie of reranker) en `nl-toezicht-uaiv` (generatie noemt wisselend
+"Uitvoeringswet" óf de toezichthouders, zelden beide — generatie-onvolledigheid,
+geen retrieval-fout). Een exit-code ≠ 0 op deze stand is dus verwacht.

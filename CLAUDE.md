@@ -14,10 +14,10 @@ zelfstandig in dit project: `docs/rag-aanpak.md` en `docs/eval-aanpak.md`.
 - **Naam:** AiActWijzer (werknaam). Alternatief dat overwogen is: *Grondslag*
   (woordspeling juridische grondslag ↔ RAG-grounding); domeincheck nog te doen.
 - **Eerste oplever (2–3 avonden):** wettekst indexeren + 10 golden-set-vragen met
-  grounding-eval. **Gerealiseerd 19 jul 2026** (831 chunks, API werkend; baseline
-  retrieval 6/10, grounding 6/10, abstentie 10/10 — zie README). Eerstvolgende
-  gemeten knop: retrieval-granulariteit (artikel 3-megachunk, omnibus-chunks net
-  buiten top-5).
+  grounding-eval. **Gerealiseerd 19 jul 2026**; na de retrieval-experimenten
+  (artikel 3-splitsing, hybride zoeken 1.5:1, vraaggerichte guidance) staat de
+  eval op retrieval 9/10, grounding 9/10, abstentie 10/10 — de twee open punten
+  en kandidaat-knoppen staan in de README.
 - **Publiek moment:** demo + LinkedIn-post.
 - **Privacy-grens:** alles op publieke data (wetgeving); géén privé-/vastgoeddata.
 
