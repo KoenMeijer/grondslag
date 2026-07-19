@@ -16,6 +16,8 @@ staan in `../CLAUDE.md` (Design-principes); dit is de concrete invulling.
 | `--oker` | `#B98A2F` | Accentrand citaat-paneel, markering |
 | `--oker-donker` | `#8A6A1F` | Artikelnummers, links, ref-verwijzingen (donkerder: contrast ≥ 4.5:1 op papier) |
 | `--fout` | `#8C3A2E` | Alleen foutmeldingen |
+| `--oker-licht` | `#F3EBD8` | Achtergrond van de korte citaat-highlight |
+| `--citaat-tekst` | `#1F2937` | Tekstkleur van het wetscitaat (zachter dan `--inkt`) |
 
 **Bewust géén stoplichtkleuren voor risicocategorieën.** "Hoog risico" staat in
 woorden en citaten, niet in rood alarm — nuchterheid is het merk. Ook verboden:

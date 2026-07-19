@@ -11,6 +11,7 @@ class Citaat:
     ref: str
     fragment: str
     bron: str
+    url: str
 
 
 @dataclass
@@ -25,7 +26,8 @@ def beantwoord(sessie, vraag: str) -> AskResultaat:
     chunks = retrieval.zoek_chunks(sessie, vraag)
     antwoord = mistral.genereer(prompt.SYSTEEMPROMPT,
                                 prompt.bouw_vraagprompt(vraag, chunks))
-    citaten = [Citaat(ref=c.ref, fragment=c.tekst, bron=c.source.titel)
+    citaten = [Citaat(ref=c.ref, fragment=c.tekst, bron=c.source.titel,
+                      url=c.source.url)
                for c in prompt.vind_citaten(antwoord, chunks)]
     return AskResultaat(antwoord=antwoord, citaten=citaten,
                         stand_van_wetgeving=settings.stand_van_wetgeving,

@@ -8,6 +8,7 @@ const CITAAT = {
   ref: 'Artikel 6, lid 2',
   fragment: 'Artikel 6, lid 2 (Classificatieregels): AI-systemen als bedoeld in bijlage III…',
   bron: 'Verordening (EU) 2024/1689',
+  url: 'https://example.org',
 }
 
 describe('CitaatBlok', () => {
@@ -21,5 +22,8 @@ describe('CitaatBlok', () => {
     expect(w.find('.citaattekst').text()).toBe('AI-systemen als bedoeld in bijlage III…')
     expect(w.find('.bronregel').text()).toContain('Verordening (EU) 2024/1689')
     expect(w.attributes('id')).toBe('citaat-Artikel 6, lid 2')
+    const link = w.find('.bronregel a')
+    expect(link.text()).toBe('bekijk de bron')
+    expect(link.attributes('href')).toBe('https://example.org')
   })
 })

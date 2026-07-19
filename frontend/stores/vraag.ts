@@ -7,6 +7,7 @@ export interface Citaat {
   ref: string
   fragment: string
   bron: string
+  url: string
 }
 
 export interface AskAntwoord {

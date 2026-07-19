@@ -14,7 +14,7 @@ function maak(antwoord: string) {
           vraag: {
             resultaat: {
               antwoord,
-              citaten: [{ ref: 'Artikel 6, lid 2', fragment: 'f', bron: 'b' }],
+              citaten: [{ ref: 'Artikel 6, lid 2', fragment: 'f', bron: 'b', url: 'https://example.org' }],
               stand_van_wetgeving: 'juli 2026',
             },
           },

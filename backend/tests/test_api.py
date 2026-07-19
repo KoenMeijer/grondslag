@@ -15,7 +15,8 @@ def test_health():
 def test_ask_geeft_antwoord_met_citaten(monkeypatch):
     resultaat = AskResultaat(
         antwoord="Zie [Artikel 6, lid 2].",
-        citaten=[Citaat(ref="Artikel 6, lid 2", fragment="tekst", bron="Verordening")],
+        citaten=[Citaat(ref="Artikel 6, lid 2", fragment="tekst", bron="Verordening",
+                        url="https://example.org")],
         stand_van_wetgeving="juli 2026",
         opgehaalde_refs=["Artikel 6, lid 2"],
     )
@@ -25,6 +26,7 @@ def test_ask_geeft_antwoord_met_citaten(monkeypatch):
 
     assert data["antwoord"] == "Zie [Artikel 6, lid 2]."
     assert data["citaten"][0]["ref"] == "Artikel 6, lid 2"
+    assert data["citaten"][0]["url"] == "https://example.org"
     # interne refs horen niet in de publieke respons
     assert "opgehaalde_refs" not in data
 

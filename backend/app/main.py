@@ -18,6 +18,7 @@ class CitaatUit(BaseModel):
     ref: str
     fragment: str
     bron: str
+    url: str
 
 
 class AskAntwoord(BaseModel):

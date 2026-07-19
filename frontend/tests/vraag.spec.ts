@@ -8,7 +8,7 @@ import { useVraagStore } from '~/stores/vraag'
 
 const ANTWOORD = {
   antwoord: 'Hoog risico [Artikel 6, lid 2].',
-  citaten: [{ ref: 'Artikel 6, lid 2', fragment: 'Artikel 6, lid 2 (Kop): tekst', bron: 'Verordening (EU) 2024/1689' }],
+  citaten: [{ ref: 'Artikel 6, lid 2', fragment: 'Artikel 6, lid 2 (Kop): tekst', bron: 'Verordening (EU) 2024/1689', url: 'https://example.org' }],
   stand_van_wetgeving: 'juli 2026',
 }
 

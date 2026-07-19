@@ -7,6 +7,8 @@
   --oker: #B98A2F;
   --oker-donker: #8A6A1F;
   --fout: #8C3A2E;
+  --oker-licht: #F3EBD8;   /* achtergrond citaat-highlight */
+  --citaat-tekst: #1F2937; /* wetscitaat: zachter dan --inkt */
   --font-ui: 'Public Sans', system-ui, sans-serif;
   --font-citaat: 'Literata', Georgia, serif;
   --radius: 4px;

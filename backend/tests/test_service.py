@@ -6,6 +6,7 @@ from app.rag import service
 @dataclass
 class NepSource:
     titel: str
+    url: str = "https://example.org"
 
 
 @dataclass
@@ -30,5 +31,6 @@ def test_beantwoord_bundelt_antwoord_citaten_en_refs(monkeypatch):
     assert r.antwoord == "Zie [Artikel 6, lid 2]."
     assert [c.ref for c in r.citaten] == ["Artikel 6, lid 2"]
     assert r.citaten[0].bron == "Verordening (EU) 2024/1689"
+    assert r.citaten[0].url == "https://example.org"
     assert r.opgehaalde_refs == ["Artikel 6, lid 2", "Overweging 61"]
     assert r.stand_van_wetgeving == "juli 2026"

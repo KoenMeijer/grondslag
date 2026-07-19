@@ -26,7 +26,7 @@ const fragment = computed(() => props.citaat.fragment.replace(/^[^:]+:\s*/, ''))
   <blockquote :id="`citaat-${citaat.ref}`" class="citaatblok" :class="{ licht }">
     <span class="artnr label">{{ citaat.ref }}</span>
     <p class="citaattekst">{{ fragment }}</p>
-    <footer class="bronregel">{{ citaat.bron }} · <span class="stempel-inline">stand: {{ store.resultaat?.stand_van_wetgeving }}</span></footer>
+    <footer class="bronregel">{{ citaat.bron }} · <span class="stempel-inline">stand: {{ store.resultaat?.stand_van_wetgeving }}</span> · <a :href="citaat.url" target="_blank" rel="noopener">bekijk de bron</a></footer>
   </blockquote>
 </template>
 
@@ -38,14 +38,14 @@ const fragment = computed(() => props.citaat.fragment.replace(/^[^:]+:\s*/, ''))
   padding: 12px 14px;
   transition: background 0.4s ease;
 }
-.citaatblok.licht { background: #F3EBD8; }
+.citaatblok.licht { background: var(--oker-licht); }
 .artnr { display: block; margin-bottom: 5px; }
 .citaattekst {
   margin: 0;
   font-family: var(--font-citaat);
   font-size: 17px;
   line-height: 1.6;
-  color: #1F2937;
+  color: var(--citaat-tekst);
 }
 .bronregel { font-size: 11.5px; margin-top: 8px; opacity: 0.7; }
 </style>
