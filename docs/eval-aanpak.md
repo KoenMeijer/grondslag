@@ -44,6 +44,13 @@ De eerste oplever is ~10 cases; uitbreiden naarmate het corpus groeit. Categorie
 - **Temperatuur 0**, anders varieert grounding per run en meet je ruis.
 - **Regressie is het doel.** De set draait bij elke wijziging (chunking, model, prompt);
   een knop die één metric verbetert mag geen andere stilletjes slopen.
+- **Corpus-herformulering mag nooit de letterlijke golden-vraag bevatten** (les
+  19 jul 2026): vraaggericht schrijven van eigen guidance is legitieme
+  IR-techniek, maar met de evalvraag woordelijk in het corpus meet de eval
+  memorisatie van de formulering in plaats van generalisatie.
+- **Temperatuur 0 via een API is niet bit-reproduceerbaar** (les 19 jul 2026):
+  grounding kan per run flippen op cases waarvan de retrieval al kapot is —
+  beoordeel zulke flips als ruis, niet als effect van de gedraaide knop.
 
 ## Governance-koppeling
 

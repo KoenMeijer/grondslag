@@ -10,7 +10,7 @@ import yaml
 
 from app.config import settings
 from app.db import SessionLocal
-from app.rag import service
+from app.rag import retrieval, service
 from evals import scoring
 
 METRICS = ("retrieval", "grounding", "abstentie")
@@ -45,8 +45,11 @@ def main() -> None:
     uit = Path("evals/results") / f"run-{stempel}.json"
     uit.write_text(json.dumps({
         "tijdstip": stempel,
+        # Alle actieve knoppen horen in het regressiespoor — anders is een
+        # delta tussen runs niet herleidbaar tot een instelling.
         "config": {"chat_model": settings.chat_model, "embed_model": settings.embed_model,
-                   "top_k": settings.top_k},
+                   "top_k": settings.top_k, "gewicht_vector": retrieval.GEWICHT_VECTOR,
+                   "rrf_k": retrieval.RRF_K, "kandidaten": retrieval.KANDIDATEN},
         "resultaten": resultaten,
     }, ensure_ascii=False, indent=2))
     print(f"\nresultaat: {uit}")

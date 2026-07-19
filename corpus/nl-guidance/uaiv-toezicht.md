@@ -16,9 +16,9 @@ Stand juli 2026: de internetconsultatie is gesloten (liep tot 1 juni 2026); na
 advies van de Raad van State gaat het wetsvoorstel naar de Tweede Kamer. Er is
 dus nog geen vastgestelde Nederlandse toezichtswet.
 
-## UAIV — wie gaat in Nederland toezicht houden op de AI-verordening
+## UAIV — welke instanties worden de Nederlandse AI-toezichthouders
 
-Wie gaat er in Nederland toezicht houden op de naleving van de AI-verordening?
+Welke instanties gaan in Nederland de AI-regels controleren en handhaven?
 Het kabinet kiest niet voor één nieuwe AI-toezichthouder, maar belegt het
 markttoezicht bij bestaande toezichthouders binnen hun eigen domein. Beoogd zijn
 onder meer: de Autoriteit Persoonsgegevens (AP, met een coördinerende rol via de

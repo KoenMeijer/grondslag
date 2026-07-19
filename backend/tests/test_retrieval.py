@@ -1,3 +1,5 @@
+from sqlalchemy import select
+
 from app.db import SessionLocal
 from app.models import Chunk, Source
 from app.rag import mistral, retrieval
@@ -55,6 +57,20 @@ def test_trefwoord_haalt_chunk_op_die_vector_mist(db, monkeypatch):
         sessie.commit()
 
         monkeypatch.setattr(mistral, "embed", lambda t: [[1.0] + [0.0] * 1023])
+
+        # Preconditie: C moet in de vector-kandidatenlijst zitten — de
+        # trefwoordboost alléén haalt de top-2 nooit. Zit C er niet in, dan
+        # verdringt het echte corpus (zelfde database) hem en meet deze test
+        # niets; dat hoort een duidelijke fout te zijn, geen stille pass/fail.
+        kandidaat_ids = list(sessie.scalars(
+            select(Chunk.id)
+            .order_by(Chunk.embedding.cosine_distance([1.0] + [0.0] * 1023))
+            .limit(retrieval.KANDIDATEN)))
+        c_id = sessie.query(Chunk).filter_by(ref="C").one().id
+        assert c_id in kandidaat_ids, (
+            "corpus verdringt testchunk C uit de vector-top-20; "
+            "draai de test tegen een lege database of verhoog KANDIDATEN")
+
         refs = [c.ref for c in retrieval.zoek_chunks(
             sessie, "flarpicon knorvel zwiepzwap", top_k=2)]
         assert "C" in refs

@@ -18,14 +18,14 @@ waarin deze wijzigingen zijn verwerkt. De deadlineverschuivingen zijn om die
 reden handmatig in dit corpus verwerkt (zie de versie-administratie in de
 frontmatter van artikelen.md).
 
-## Digital Omnibus — vanaf wanneer moeten hoog-risico-AI-systemen uit bijlage III voldoen
+## Digital Omnibus — nieuwe ingangsdatum verplichtingen bijlage III (hoog risico)
 
-Vanaf wanneer moeten AI-systemen met een hoog risico uit bijlage III (artikel 6,
-lid 2) aan de verplichtingen van de AI-verordening voldoen? Sinds de Digital
-Omnibus geldt: **vanaf 2 december 2027** (de eerdere deadline van 2 augustus 2026
-is verschoven; zie artikel 113, uitzondering d). Voor hoog-risico-AI-systemen in
-gereguleerde producten (bijlage I, artikel 6, lid 1) geldt: vanaf
-2 augustus 2028 (was: augustus 2027). De algemene toepassingsdatum van de
+Voor AI-systemen met een hoog risico uit bijlage III (artikel 6, lid 2) geldt
+sinds de Digital Omnibus een nieuwe ingangsdatum: zij moeten per
+**2 december 2027** aan de verplichtingen voldoen. De eerdere deadline van
+2 augustus 2026 is daarmee vervallen (zie artikel 113, uitzondering d).
+Hoog-risico-AI in gereguleerde producten (bijlage I, artikel 6, lid 1) volgt
+per 2 augustus 2028 (was: augustus 2027). De algemene toepassingsdatum van de
 verordening (2 augustus 2026) blijft ongewijzigd.
 
 ## Digital Omnibus — wanneer moeten bestaande systemen aan artikel 50 (watermerken) voldoen
