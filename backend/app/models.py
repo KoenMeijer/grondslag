@@ -30,7 +30,8 @@ class Chunk(Base):
     __tablename__ = "chunks"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    source_id: Mapped[int] = mapped_column(ForeignKey("sources.id"))
+    # ondelete: ook op DB-niveau cascaden, zodat opruimen nooit op de FK strandt
+    source_id: Mapped[int] = mapped_column(ForeignKey("sources.id", ondelete="CASCADE"))
     ref: Mapped[str]        # citatie-anker, bv. "Artikel 6, lid 2"
     kop: Mapped[str]
     tekst: Mapped[str] = mapped_column(Text)   # inclusief hiërarchie-prefix
