@@ -1,7 +1,7 @@
 ---
 bron: "Verordening (EU) 2024/1689 (AI-verordening)"
 url: https://eur-lex.europa.eu/legal-content/NL/TXT/?uri=CELEX:32024R1689
-versie: "oorspronkelijke publicatie CELEX 32024R1689 (PB L 12.7.2024); geconsolideerde versie 02024R1689-20240712 bevat geen overwegingen en is voor art. 6/50 inhoudelijk identiek; omnibus-datums (Digital Omnibus on AI, getekend 8 juli 2026, nog niet gepubliceerd) handmatig doorgevoerd in art. 113"
+versie: "OJ-tekst 32024R1689 (PB L, 12.7.2024); geconsolideerde versie 02024R1689-20240712 bevat geen overwegingen en is voor art. 6/50 inhoudelijk identiek; Digital Omnibus-datums handmatig doorgevoerd in art. 113 (bijlage III → 2 dec 2027 als nieuwe uitzondering d; bijlage I → 2 aug 2028); bron: Digital Omnibus on AI, jul 2026"
 datum-opgehaald: 2026-07-19
 stand-wetgeving: juli 2026
 type: wettekst
@@ -3326,7 +3326,7 @@ Uiterlijk op 2 augustus 2031 voert de Commissie een beoordeling uit van de handh
 Deze verordening treedt in werking op de twintigste dag na die van de bekendmaking ervan in het
 Publicatieblad van de Europese Unie
 .
-Zij is van toepassing met ingang van 2 december 2027.
+Zij is van toepassing met ingang van 2 augustus 2026.
 Evenwel zijn:
 a)
 de hoofdstukken I en II van toepassing met ingang van 2 februari 2025;
@@ -3334,4 +3334,6 @@ b)
 hoofdstuk III, afdeling 4, hoofdstuk V, hoofdstuk VII en hoofdstuk XII en artikel 78 van toepassing met ingang van 2 augustus 2025, met uitzondering van artikel 101;
 c)
 artikel 6, lid 1, en de overeenkomstige verplichtingen van deze verordening van toepassing met ingang van 2 augustus 2028.
+d)
+de verplichtingen voor AI-systemen met een hoog risico als bedoeld in artikel 6, lid 2, en bijlage III van toepassing met ingang van 2 december 2027.
 Deze verordening is verbindend in al haar onderdelen en is rechtstreeks toepasselijk in elke lidstaat.

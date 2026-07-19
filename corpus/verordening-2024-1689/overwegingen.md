@@ -1,7 +1,7 @@
 ---
 bron: "Verordening (EU) 2024/1689 (AI-verordening)"
 url: https://eur-lex.europa.eu/legal-content/NL/TXT/?uri=CELEX:32024R1689
-versie: "oorspronkelijke publicatie CELEX 32024R1689 (PB L 12.7.2024); geconsolideerde versie 02024R1689-20240712 bevat geen overwegingen en is voor art. 6/50 inhoudelijk identiek; omnibus-datums (Digital Omnibus on AI, getekend 8 juli 2026, nog niet gepubliceerd) handmatig doorgevoerd in art. 113"
+versie: "OJ-tekst 32024R1689 (PB L, 12.7.2024); geconsolideerde versie 02024R1689-20240712 bevat geen overwegingen en is voor art. 6/50 inhoudelijk identiek"
 datum-opgehaald: 2026-07-19
 stand-wetgeving: juli 2026
 type: wettekst

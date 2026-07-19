@@ -128,29 +128,33 @@ def schrijf_bijlagen(regels: list[str], uit: Path, url: str, versie: str) -> int
 
 
 OMNIBUS_VERVANGINGEN = [
-    (
-        "Zij is van toepassing met ingang van 2 augustus 2026.",
-        "Zij is van toepassing met ingang van 2 december 2027.",
-    ),
+    # De omnibus verschuift NIET de algemene toepassingsdatum (2 aug 2026 blijft
+    # staan — anders zou bv. art. 50 óók pas eind 2027 lijken te gelden), maar
+    # alléén de hoog-risico-verplichtingen. Bijlage I (via art. 6 lid 1, al als
+    # uitzondering c aanwezig): 2 aug 2027 → 2 aug 2028. Bijlage III (via art. 6
+    # lid 2): had geen eigen uitzondering en krijgt er een nieuwe — uitzondering
+    # d), 2 dec 2027 — direct ná c) ingevoegd.
     (
         "artikel 6, lid 1, en de overeenkomstige verplichtingen van deze verordening "
         "van toepassing met ingang van 2 augustus 2027.",
         "artikel 6, lid 1, en de overeenkomstige verplichtingen van deze verordening "
-        "van toepassing met ingang van 2 augustus 2028.",
+        "van toepassing met ingang van 2 augustus 2028.\n"
+        "d)\n"
+        "de verplichtingen voor AI-systemen met een hoog risico als bedoeld in "
+        "artikel 6, lid 2, en bijlage III van toepassing met ingang van 2 december 2027.",
     ),
 ]
 
 
 def pas_omnibus_datums_toe(pad: Path) -> list[str]:
-    """Vervangt in art. 113 de twee toepassingsdatums die de Digital Omnibus on AI
-    verschuift (bijlage III: 2 aug 2026 → 2 dec 2027; bijlage I: 2 aug 2027 →
-    2 aug 2028). Elke anker-zin moet exact één keer voorkomen — dat borgt dat we
-    niet per ongeluk een andere, niet-omnibus-datum (bv. evaluatietermijnen) raken.
-    De derde tabelregel uit de taakbrief (art. 50-watermerken bestaande systemen
-    → 2 december 2026) heeft geen tekstuele verankering in deze wettekst — dat
-    is vermoedelijk een geheel nieuwe overgangsbepaling van de omnibus die nog
-    niet in een gepubliceerde tekst staat. Die wijziging is dus NIET doorgevoerd;
-    zie task-9-report.md."""
+    """Voert in art. 113 de deadlineverschuivingen van de Digital Omnibus on AI
+    door (bijlage III: nieuwe uitzondering d, 2 dec 2027; bijlage I: uitzondering
+    c, 2 aug 2027 → 2 aug 2028). Elke anker-zin moet exact één keer voorkomen —
+    dat borgt dat we niet per ongeluk een andere, niet-omnibus-datum (bv.
+    evaluatietermijnen) raken. De overige omnibus-wijzigingen (art. 50-watermerken
+    bestaande systemen per 2 dec 2026, nieuwe verbodsbepalingen) hebben geen
+    tekstueel anker in deze wettekst en staan daarom — geadministreerd, niet
+    verzonnen — in corpus/verordening-2024-1689/digital-omnibus-tijdlijn.md."""
     tekst = pad.read_text()
     toegepast = []
     for oud, nieuw in OMNIBUS_VERVANGINGEN:
@@ -168,8 +172,16 @@ def main() -> None:
     doel = Path("corpus/verordening-2024-1689")
     doel.mkdir(parents=True, exist_ok=True)
 
+    # Alleen artikelen.md wijkt af van de bron (omnibus-datums in art. 113);
+    # de versie-administratie moet die afwijking per bestand exact benoemen.
+    versie_artikelen = (
+        f"{versie}; Digital Omnibus-datums handmatig doorgevoerd in art. 113 "
+        "(bijlage III → 2 dec 2027 als nieuwe uitzondering d; bijlage I → "
+        "2 aug 2028); bron: Digital Omnibus on AI, jul 2026"
+    )
+
     n_ov = schrijf_overwegingen(regels, doel / "overwegingen.md", url, versie)
-    n_art = schrijf_artikelen(regels, doel / "artikelen.md", url, versie)
+    n_art = schrijf_artikelen(regels, doel / "artikelen.md", url, versie_artikelen)
     n_bijl = schrijf_bijlagen(regels, doel / "bijlagen.md", url, versie)
     print(f"overwegingen: {n_ov}, artikelen: {n_art}, bijlagen: {n_bijl}")
 
