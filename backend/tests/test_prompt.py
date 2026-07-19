@@ -33,6 +33,23 @@ def test_vind_citaten_leeg_bij_abstentie():
     assert prompt.vind_citaten("Dat kan ik niet beantwoorden op basis van mijn bronnen.", CHUNKS) == []
 
 
+def test_vind_citaten_matcht_verfijnde_ref_op_langste_prefix():
+    # Het model verfijnt de ref soms ("…, onder a)"); dat mag de citatie niet laten mislukken
+    antwoord = "Dat volgt uit [Artikel 6, lid 2, onder a)]."
+    citaten = prompt.vind_citaten(antwoord, CHUNKS)
+    assert [c.ref for c in citaten] == ["Artikel 6, lid 2"]
+
+
+def test_vind_citaten_kiest_langste_prefix_bij_overlappende_refs():
+    chunks = [
+        NepChunk(ref="Artikel 6", tekst="Artikel 6: tekst A"),
+        NepChunk(ref="Artikel 6, lid 2", tekst="Artikel 6, lid 2: tekst B"),
+    ]
+    antwoord = "Dat volgt uit [Artikel 6, lid 2]."
+    citaten = prompt.vind_citaten(antwoord, chunks)
+    assert [c.ref for c in citaten] == ["Artikel 6, lid 2"]
+
+
 def test_systeemprompt_bevat_abstentie_en_geen_advies():
     assert "geen juridisch advies" in prompt.SYSTEEMPROMPT
     assert "jurist" in prompt.SYSTEEMPROMPT
