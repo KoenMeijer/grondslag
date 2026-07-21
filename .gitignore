@@ -8,3 +8,6 @@ evals/results/*.json
 frontend/node_modules/
 frontend/.nuxt/
 frontend/.output/
+
+# Privécontext voor de assistent: hoort niet in de publieke repo
+CLAUDE.local.md

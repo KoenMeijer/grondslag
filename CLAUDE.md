@@ -6,16 +6,17 @@ Self-hosted assistent die vragen over de **EU AI Act** beantwoordt, gegrond in d
 wettekst + NL-doorwerking. Kernvraag van de gebruiker: *"wij bouwen/gebruiken X —
 valt dat onder de AI Act, welke risicocategorie, welke verplichtingen, welke deadline?"*
 
-Dit is **referentieproject 1** (jul–sep 2026) uit `../persoonlijk/doelen/ai-native-developer.md`:
-vlaggenschip dat alle drie de assen raakt (serieuze RAG + governance-inhoud + soevereine stack).
-Bronnenset/naslag: `../persoonlijk/naslag/eu-ai-act-nl.md`. De RAG- en eval-aanpak staan
-zelfstandig in dit project: `docs/rag-aanpak.md` en `docs/eval-aanpak.md`.
+De RAG- en eval-aanpak staan zelfstandig in dit project: `docs/rag-aanpak.md` en
+`docs/eval-aanpak.md`. Privécontext (persoonlijke doelen, concurrentie-analyse,
+infradetails) staat in het niet-getrackte `CLAUDE.local.md` — deze repo is
+publiek, dus houd die scheiding aan bij nieuwe notities.
 
 - **Naam:** **Grondslag** (gekozen 21 jul 2026; woordspeling juridische grondslag ↔
   RAG-grounding). Domein: **grondslag.eu** — `.eu` past bij de EU-verordening + soevereine
   stack. **Geregistreerd en live op https://grondslag.eu** (21 jul 2026; ook
-  `www.grondslag.eu`). Het subdomein `grondslag.almaconecta.eu` loopt bewust mee zodat
-  eerder gedeelde links blijven werken — omzetten naar één canonieke naam is stap 4 in
+  `www.grondslag.eu`). Een subdomein van een ander project draaide als eerste livegang
+  en loopt nog mee zodat eerder gedeelde links blijven werken — omzetten naar één
+  canonieke naam is stap 4 in
   `docs/deploy.md`. *AiActWijzer* was de werknaam en leunde op de Engelse term; in de
   copy hanteren we consequent "AI-verordening (AI Act)". De codebase draagt nog
   grotendeels de oude naam — hernoemen is een aparte actie.
@@ -35,8 +36,9 @@ zelfstandig in dit project: `docs/rag-aanpak.md` en `docs/eval-aanpak.md`.
 1. **Verplichtingen komen eraan, niemand weet wat voor hén geldt** — risicoclassificatie
    is de kernvraag en het antwoord staat verspreid over verordening, bijlagen en NL-guidance.
 2. **Rondzwervende info is massaal verouderd** — de Digital Omnibus (jul 2026) schoof de
-   hoog-risico-deadline van 2 aug 2026 naar 2 dec 2027 / 2 aug 2028; het internet (en
-   concurrent ActCheck) noemt nog de oude datum. Actualiteit is direct onderscheidend.
+   hoog-risico-deadline van 2 aug 2026 naar 2 dec 2027 / 2 aug 2028; veel bronnen online,
+   inclusief bestaande AI Act-tools, noemen nog de oude datum. Actualiteit is direct
+   onderscheidend.
 3. **Triage-tool, geen juristvervanger** — laat zien wélke vragen naar de advocaat moeten;
    verlaagt kosten en ontdooit stilliggende AI-projecten.
 4. **Self-hosted** — juist de doelgroep met de meeste AI Act-vragen (overheid, zorg,
@@ -49,14 +51,15 @@ wat de AI Act voor hun situatie betekent en de informatie online verouderd of
 Amerikaans-generiek is; deze tool geeft gegronde, actuele, controleerbare antwoorden —
 op een stack die zelf AVG-proof is.*
 
-## Positionering t.o.v. ActCheck (actcheck.nl)
+## Positionering
 
-ActCheck = statische beslisboom-vragenlijst → rapport per e-mail (lead-generatie), zonder
-bronverwijzing, zonder NL-doorwerking, met verouderde deadline (2 aug 2026) en
-angst-marketing (countdown, boetes). Wij onderscheiden ons met: vrije vragen + doorvragen,
-citaten uit de wettekst, actuele omnibus-tijdlijn, NL-toezicht (UAIV), self-hosted.
-**Wel van leren:** een beslisboom dwingt volledigheid af — evt. latere iteratie: kort
-gestructureerd intake-moment dat de RAG-context voedt, daarna vrij doorvragen.
+Bestaande AI Act-tools werken vaak als statische beslisboom met een rapport per
+e-mail, zonder bronverwijzing en zonder NL-doorwerking. Wij onderscheiden ons met:
+vrije vragen + doorvragen, citaten uit de wettekst, actuele omnibus-tijdlijn,
+NL-toezicht (UAIV), self-hosted. **Wel van leren:** een beslisboom dwingt
+volledigheid af — evt. latere iteratie: kort gestructureerd intake-moment dat de
+RAG-context voedt, daarna vrij doorvragen. Uitgewerkte concurrentie-analyse:
+`CLAUDE.local.md`.
 
 ## Product- en governance-principes
 
@@ -85,10 +88,10 @@ gestructureerd intake-moment dat de RAG-context voedt, daarna vrij doorvragen.
 **Wél:** vraag-antwoord met citaten (artikelnummer + fragment), golden set + eval-suite,
 actualiteits-stempel, transparantie-pagina. **Stand 19 jul 2026: dit alles is
 functioneel compleet** (bouwsteen 1 backend + bouwsteen 2 frontend met citaat-paneel).
-**Live sinds 21 jul 2026 op https://grondslag.eu** (GitLab
-`alma-group1/grondslag` → Hetzner, TLS via certbot, 905 chunks geïndexeerd);
-nog niet gedaan: het publieke moment. **Níet:** accounts, intake-beslisboom
-(bewust "later", zie ActCheck-les), betaalfunctie, andere wetgeving dan de AI Act.
+**Live sinds 21 jul 2026 op https://grondslag.eu** (GitLab CI → Hetzner,
+TLS via certbot, corpus geïndexeerd); nog niet gedaan: het publieke moment.
+**Níet:** accounts, intake-beslisboom (bewust "later", zie de positionering
+hierboven), betaalfunctie, andere wetgeving dan de AI Act.
 Uitbreiden mag pas als v1 af is en de eval-suite groen — uitzondering (21 jul 2026,
 expliciet akkoord): statische, gegronde content die de RAG-keten niet raakt, zoals
 de pagina "Over de AI-verordening" (elke sectie leunt op een wetscitaat; de
@@ -121,9 +124,9 @@ passen (countdown, stat-tegels, ✓-lijstjes, 1-2-3-4-stappen, urgentie-teksten)
 
 ## Stack
 
-Zelfde stack als Alma (`../Alma-project`) en WK Poule (`../wkpoule`), zodat patronen en
+Zelfde stack als mijn andere projecten (zie `CLAUDE.local.md`), zodat patronen en
 tooling herbruikbaar zijn: **FastAPI + SQLAlchemy + Postgres · Nuxt 3 + Pinia ·
-Docker/Docker Compose · GitLab CI → Hetzner**. Afwijking van Alma/WK Poule: géén
+Docker/Docker Compose · GitLab CI → Hetzner**. Afwijking daarvan: géén
 @nuxt/ui maar kale Nuxt + eigen CSS op de design-tokens (keuze 19 jul 2026 — de
 design-brief eist juist afwijken van de library-defaults; heroverwegen als de UI groeit). AI-laag soeverein/EU (AVG): pgvector voor
 embeddings, Ollama en/of Mistral (EU) als model — voor v1 gekozen: Mistral API

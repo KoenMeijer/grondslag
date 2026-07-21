@@ -1,9 +1,17 @@
-# AiActWijzer
+# Grondslag
 
-Assistent die vragen over de EU AI Act beantwoordt, gegrond in de NL-wettekst
-(verordening 2024/1689, incl. Digital Omnibus) en NL-guidance. Elke claim draagt
-een citaat met artikelnummer; elk antwoord een actualiteits-stempel.
-Informatie, geen juridisch advies.
+**Live: [grondslag.eu](https://grondslag.eu)**
+
+Assistent die vragen over de AI-verordening (AI Act) beantwoordt, gegrond in de
+Nederlandse wettekst: verordening (EU) 2024/1689 inclusief de Digital
+Omnibus-wijzigingen, plus de Nederlandse doorwerking (het UAIV-wetsvoorstel en
+guidance). Elke claim draagt een citaat met artikelnummer, elk antwoord een
+stempel met de stand van de wetgeving. Informatie, geen juridisch advies.
+
+Zelf gehost op een EU-stack (Mistral voor embeddings en generatie, pgvector voor
+de index) — de doelgroep met de meeste AI Act-vragen wil die vragen niet in een
+Amerikaanse cloud-chatbot typen. De repo-naam draagt nog de werknaam
+*AiActWijzer*; hernoemen van de codebase is een aparte actie.
 
 ## Snelstart
 

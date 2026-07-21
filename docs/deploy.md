@@ -1,6 +1,6 @@
 # Deployment — GitLab CI → Hetzner
 
-Patroon: identiek aan WK Poule/Alma. CI test, rsync't de repo naar de VPS,
+Patroon: identiek aan mijn andere Hetzner-projecten. CI test, rsync't de repo naar de VPS,
 genereert `.env` uit CI/CD-variabelen en draait
 `docker compose -f docker-compose.prod.yml build + up`. Containers binden op
 127.0.0.1 (backend 8094, frontend 3094); nginx op de host is de publieke ingang.
@@ -11,7 +11,7 @@ genereert `.env` uit CI/CD-variabelen en draait
 | --- | --- | --- |
 | `SSH_USER` | — | VPS-gebruiker: `root` (app komt in `/root/aiactwijzer`, want `APP_DIR` is relatief) |
 | `SSH_HOST` | — | VPS-IP of hostnaam |
-| `SSH_PRIVATE_KEY` | type **Variable**, Protected | Erft van de groep `alma-group1` (gedeeld met alma/wkpoule) — niet projecteigen instellen. Zie stap 3: `master` moet protected zijn, anders komt hij leeg binnen |
+| `SSH_PRIVATE_KEY` | type **Variable**, Protected | Erft van de GitLab-groep — niet projecteigen instellen. Zie stap 3: `master` moet protected zijn, anders komt hij leeg binnen |
 | `POSTGRES_USER` | — | bv. `aiact` |
 | `POSTGRES_PASSWORD` | **Masked** | sterk wachtwoord (`openssl rand -hex 24`) |
 | `POSTGRES_DB` | — | bv. `aiact` |
@@ -24,7 +24,7 @@ het compose-netwerk.
 
 1. Docker + docker compose aanwezig (staat er al voor de andere projecten).
 2. Nginx-serverblok: staat in de repo als
-   `deploy/nginx/grondslag.almaconecta.eu.conf` (v1 draait op het subdomein,
+   `deploy/nginx/grondslag.eu.conf` (v1 draait op het subdomein,
    zie stap 1) — één bron, zodat doc en VPS niet uit elkaar lopen. Plaatsen:
    zie stap 4 hieronder.
 3. TLS: `certbot --nginx -d grondslag.almaconecta.eu` (zelfde werkwijze als de
@@ -41,18 +41,17 @@ beide secties samen: de stappen kloppen, alleen de domeinnaam is inmiddels
 Volgorde is bewust: variabelen vóór de eerste push (anders faalt de
 deploy-job), DNS vóór certbot (anders faalt de challenge).
 
-**Stap 1 — Domein: eerst een subdomein van alma.**
-Naam gekozen: **Grondslag** (CLAUDE.md, 21 jul 2026); `grondslag.eu` is het doel,
-maar voor de eerste livegang draaien we op een subdomein van het bestaande
-`almaconecta.eu`: **`grondslag.almaconecta.eu`**. Reden: geen registratie en geen
-wachttijd op beschikbaarheid, en de VPS is dezelfde machine — alleen een
-**A-record** `grondslag` → het VPS-IP bij de DNS-provider van `almaconecta.eu`.
-Overstappen naar een eigen domein is later een kwestie van DNS + nginx + certbot;
-zie *Later: naar een eigen domein* onderaan.
+**Stap 1 — Domein: eerst een subdomein.**
+Naam gekozen: **Grondslag** (21 jul 2026); `grondslag.eu` is het doel, maar voor
+de eerste livegang draaide de site op een subdomein van een bestaand project op
+dezelfde VPS. Reden: geen registratie en geen wachttijd op beschikbaarheid —
+alleen een **A-record** naar het VPS-IP. Zo is registratie geen blokkade voor
+livegang. Overstappen naar het eigen domein is daarna een kwestie van DNS +
+nginx + certbot; zie de sectie *Eigen domein* onderaan.
 
 **Stap 2 — Deploy-sleutel: hergebruikt uit de groep.**
-`SSH_PRIVATE_KEY` is een **group-level variabele van `alma-group1`**, gedeeld met
-alma en wkpoule; die is bij livegang (21 jul 2026) hergebruikt. Er is dus géén
+`SSH_PRIVATE_KEY` is een **group-level variabele** die bij livegang
+(21 jul 2026) is hergebruikt. Er is dus géén
 eigen keypair nodig — een projecteigen sleutel zou wel netter isoleren, maar
 betekent een tweede secret beheren voor dezelfde VPS. Alleen als je die route
 tóch wilt:
@@ -85,15 +84,15 @@ Het serverblok staat als bestand in de repo, dus kopiëren i.p.v. overtikken
 (geen quoting-gedoe met heredocs door twee shells heen):
 
 ```bash
-scp deploy/nginx/grondslag.almaconecta.eu.conf \
+scp deploy/nginx/grondslag.eu.conf \
   root@<SSH_HOST>:/etc/nginx/sites-available/grondslag.almaconecta.eu
 ssh root@<SSH_HOST> "ln -sf /etc/nginx/sites-available/grondslag.almaconecta.eu \
   /etc/nginx/sites-enabled/ && nginx -t && systemctl reload nginx"
 ```
 
 `nginx -t` staat bewust vóór de reload: nginx weigert bij een fout de héle
-config, dus een typefout hier zou ook alma en wkpoule offline halen.
-Controleer eerst dat 8094/3094 vrij zijn — meerdere projecten delen deze VPS:
+config, dus een typefout hier haalt ook de andere sites op deze machine offline.
+Controleer eerst dat 8094/3094 vrij zijn — deze VPS host meer dan één app:
 `ssh root@<SSH_HOST> "ss -tlnp | grep -E '8094|3094' || echo 'poorten vrij'"`.
 
 **Stap 5 — Eerste push.**
@@ -109,7 +108,7 @@ eerste deploy bouwt beide images op de VPS en duurt enkele minuten.
 **Stap 6 — TLS.**
 Zodra DNS doorverwijst: `sudo certbot --nginx -d grondslag.almaconecta.eu`
 (herschrijft het blok naar 443 + redirect). Dit is een **los certificaat** voor
-het subdomein; het bestaande cert van alma wordt niet aangeraakt en hoeft niet
+het subdomein; het cert van de bestaande site wordt niet aangeraakt en hoeft niet
 uitgebreid te worden — de twee sites blijven onafhankelijk.
 
 **Stap 7 — Corpus indexeren (eenmalig).**
@@ -151,8 +150,8 @@ domeinen serveren de site. Stappen 4 t/m 6 staan nog open.
 1. ✅ **Geregistreerd**, zone bij Hetzner DNS, **A-records** `@` en `www` naar
    het VPS-IP. Bewust **geen AAAA**: de VPS heeft wel IPv6, maar nginx luistert
    alleen op IPv4 (`listen 80;` / `listen 443`, niet `[::]`) — een AAAA-record
-   zou IPv6-bezoekers naar een dichte poort sturen. Alma doet dit om dezelfde
-   reden IPv4-only.
+   zou IPv6-bezoekers naar een dichte poort sturen. De andere sites op deze VPS
+   zijn om dezelfde reden IPv4-only.
 2. ✅ **Nginx: domein toegevoegd, niet vervangen.** Het nieuwe domein staat
    *naast* het subdomein in beide serverblokken (443 én de poort-80-redirect),
    zodat gedeelde links blijven werken:
@@ -205,10 +204,10 @@ push → deploy → handmatig `index_corpus` draaien.
 - **rsync zonder `--delete`**: een hernoemde map kan nooit per ongeluk data op
   de VPS weggooien; named volume `aiact_pg_data` staat sowieso buiten de
   rsync-target.
-- **Geen registry**: images worden op de VPS gebouwd (zelfde als WK Poule) —
+- **Geen registry**: images worden op de VPS gebouwd —
   één machine, geen registry-beheer nodig.
 - **`APP_DIR` is relatief** (`aiactwijzer` t.o.v. de home-dir van `SSH_USER`),
-  waar wkpoule/alma een absoluut pad hardcoden — zo blijft de pipeline werken
+  waar mijn oudere projecten een absoluut pad hardcoden — zo blijft de pipeline werken
   als de VPS-gebruiker ooit anders heet.
 - **Geen backend-healthcheck in compose**: bij een koude start kunnen de
   eerste `/api`-requests kort een 502 geven totdat uvicorn luistert
