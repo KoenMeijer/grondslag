@@ -22,6 +22,8 @@ const store = useVraagStore()
     <footer class="sitefooter">
       <p>Grondslag geeft informatie, geen juridisch advies. Raadpleeg voor je eigen situatie een jurist.</p>
       <p class="footerlinks">
+        <NuxtLink to="/over">Over de verordening</NuxtLink>
+        <span aria-hidden="true">·</span>
         <NuxtLink to="/transparantie">Transparantie</NuxtLink>
         <span aria-hidden="true">·</span>
         <a href="https://eur-lex.europa.eu/legal-content/NL/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener">Bron: Verordening (EU) 2024/1689 op EUR-Lex</a>
@@ -44,6 +46,12 @@ const store = useVraagStore()
 }
 .siteheader nav { display: flex; gap: 16px; }
 .siteheader nav a { font-size: 14px; }
+/* Op smalle schermen dringen twee navlinks naast het merk; de footer draagt
+   dezelfde links, dus daar navigeer je onderin. Geen vaste balk: die zou
+   permanent hoogte kosten en bij een open toetsenbord over de textarea vallen. */
+@media (max-width: 640px) {
+  .siteheader nav { display: none; }
+}
 .inhoud { flex: 1; width: 100%; max-width: 960px; margin: 0 auto; padding: 32px 24px; }
 .sitefooter {
   border-top: 1px solid var(--lijn);

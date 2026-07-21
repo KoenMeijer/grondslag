@@ -22,6 +22,9 @@ describe('footer', () => {
     const footer = w.find('.sitefooter')
     expect(footer.text()).toContain('geen juridisch advies')
     expect(footer.find('a[href="/transparantie"]').exists()).toBe(true)
+    // Op mobiel is de footer de enige navigatie (header-nav is dan verborgen),
+    // dus beide pagina's moeten hier bereikbaar zijn.
+    expect(footer.find('a[href="/over"]').exists()).toBe(true)
     const eurlex = footer.find('a[href*="eur-lex.europa.eu"]')
     expect(eurlex.text()).toContain('EUR-Lex')
     const maker = footer.find('a[href*="linkedin.com/in/koenmeijer"]')
