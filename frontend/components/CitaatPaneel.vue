@@ -15,7 +15,8 @@ const store = useVraagStore()
 </template>
 
 <style scoped>
-.citaatpaneel { background: var(--wit); border: 1px solid var(--lijn); border-radius: var(--radius); padding: 16px; }
+/* Geen kaart: de citaatblokken zijn zelf het gebaar en staan direct op het
+   papier — een rand eromheen verpakte ze als generieke widget. */
 .citaatpaneel h2 { margin: 0 0 12px; }
 .geen { font-size: 14px; opacity: 0.75; }
 </style>
