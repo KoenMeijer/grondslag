@@ -6,8 +6,8 @@
 # Vereiste GitLab CI/CD-variabelen (Settings → CI/CD → Variables):
 #   SSH_USER          — VPS-gebruiker (bv. 'koen')
 #   SSH_HOST          — VPS-IP of hostnaam
-#   SSH_PRIVATE_KEY   — type Variable; volledige key incl. BEGIN/END-regels
-#                       en afsluitende newline
+#   SSH_PRIVATE_KEY_B64 — de private key base64-gecodeerd op één regel:
+#                       base64 -w0 < ~/.ssh/aiactwijzer_deploy ; markeer Masked
 #   POSTGRES_USER, POSTGRES_DB
 #   POSTGRES_PASSWORD — markeer als Masked
 #   MISTRAL_API_KEY   — markeer als Masked
@@ -55,8 +55,10 @@ frontend_tests:
 .ssh_setup: &ssh_setup
   - apk add --no-cache openssh-client rsync bash
   - eval $(ssh-agent -s)
-  # tr -d '\r' voorkomt CRLF-issues als de key ooit via Windows is geplakt
-  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+  # Key als base64 (één regel): plakken in de GitLab-UI kan geen regelafbreking
+  # meer slopen — een meerregelige key gaf 'error in libcrypto'. Bijkomend
+  # voordeel: één regel mag wél Masked worden gemarkeerd.
+  - echo "$SSH_PRIVATE_KEY_B64" | base64 -d | ssh-add -
   - mkdir -p ~/.ssh && chmod 700 ~/.ssh
   # Host-key live ophalen (trust-on-first-use): een VPS-rebuild met nieuwe
   # host-key breekt de pipeline dan niet.
