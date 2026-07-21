@@ -14,11 +14,18 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: { lang: 'nl' },
-      title: 'AiActWijzer',
-      meta: [{ name: 'description', content: 'Antwoorden over de EU AI Act, gegrond in de wettekst.' }],
+      title: 'Grondslag',
+      meta: [{ name: 'description', content: 'Antwoorden over de AI-verordening (AI Act), gegrond in de wettekst.' }],
     },
   },
   nitro: {
-    devProxy: { '/api': { target: 'http://localhost:8000', changeOrigin: true } },
+    // Overschrijfbaar zodat je zonder lokale backend tegen de live API kunt
+    // testen: NUXT_DEV_API_PROXY=https://grondslag.almaconecta.eu/api npm run dev
+    devProxy: {
+      '/api': {
+        target: process.env.NUXT_DEV_API_PROXY || 'http://localhost:8000',
+        changeOrigin: true,
+      },
+    },
   },
 })
