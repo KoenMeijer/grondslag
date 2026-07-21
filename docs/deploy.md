@@ -11,7 +11,7 @@ genereert `.env` uit CI/CD-variabelen en draait
 | --- | --- | --- |
 | `SSH_USER` | — | VPS-gebruiker: `root` (app komt in `/root/aiactwijzer`, want `APP_DIR` is relatief) |
 | `SSH_HOST` | — | VPS-IP of hostnaam |
-| `SSH_PRIVATE_KEY_B64` | **Masked** | Private key base64 op één regel: `base64 -w0 < ~/.ssh/aiactwijzer_deploy` |
+| `SSH_PRIVATE_KEY` | type **Variable** | Volledige private key incl. `-----BEGIN/END-----`-regels en afsluitende newline |
 | `POSTGRES_USER` | — | bv. `aiact` |
 | `POSTGRES_PASSWORD` | **Masked** | sterk wachtwoord (`openssl rand -hex 24`) |
 | `POSTGRES_DB` | — | bv. `aiact` |
@@ -55,13 +55,9 @@ ssh-copy-id -i ~/.ssh/aiactwijzer_deploy.pub <SSH_USER>@<SSH_HOST>
 **Stap 3 — GitLab-project + variabelen.**
 Maak een (privé) GitLab-project aan en zet **vóór de eerste push** de 7
 variabelen uit de tabel hierboven (Settings → CI/CD → Variables).
-`SSH_PRIVATE_KEY_B64` = `base64 -w0 < ~/.ssh/aiactwijzer_deploy` — bewust
-base64: de meerregelige key rechtstreeks plakken gaf `Error loading key:
-error in libcrypto` doordat de regelafbrekingen sneuvelden, en GitLab weigert
-meerregelige waarden te maskeren. `POSTGRES_PASSWORD` genereer je met
+`SSH_PRIVATE_KEY` = de inhoud van `~/.ssh/aiactwijzer_deploy` (incl.
+BEGIN/END-regels en afsluitende newline); `POSTGRES_PASSWORD` genereer je met
 `openssl rand -hex 24`; markeer beide wachtwoord-achtigen als **Masked**.
-Zet bij alle variabelen **"Protect variable" uit** zolang `master` geen
-protected branch is — anders krijgt de deploy-job lege waarden.
 
 **Stap 4 — Nginx op de VPS.**
 Het serverblok staat als bestand in de repo, dus kopiëren i.p.v. overtikken
