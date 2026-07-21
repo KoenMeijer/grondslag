@@ -3,6 +3,7 @@ import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
 
 import IndexPagina from '~/pages/index.vue'
+import { useVraagStore } from '~/stores/vraag'
 
 // Kale vitest kent Nuxt's auto-import niet; de kindcomponenten zijn hier
 // niet het onderwerp — alleen wélke kolominhoud de pagina toont.
@@ -34,6 +35,15 @@ describe('index-pagina (kolomwissel rechts)', () => {
     const w = maak({ bezig: true })
     expect(w.find('.zoekstatus').text()).toContain('Zoeken in de wettekst')
     expect(w.find('.stub-beginpaneel').exists()).toBe(false)
+  })
+
+  it('toont bij een fout een probeer-opnieuw-knop die de vraag herhaalt', async () => {
+    const w = maak({ fout: 'Het antwoord kon niet worden opgehaald. Probeer het opnieuw.' })
+    const knop = w.find('.foutvak button')
+    expect(knop.text()).toBe('Probeer opnieuw')
+    await knop.trigger('click')
+    const store = useVraagStore()
+    expect(store.opnieuw).toHaveBeenCalled()
   })
 
   it('toont na een antwoord het antwoord en de echte bronnen', () => {

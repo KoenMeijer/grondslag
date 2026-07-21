@@ -21,7 +21,10 @@ const store = useVraagStore()
       <VraagFormulier />
 
       <div aria-live="polite">
-        <p v-if="store.fout" class="fout" role="alert">{{ store.fout }}</p>
+        <div v-if="store.fout" class="foutvak" role="alert">
+          <p class="fout">{{ store.fout }}</p>
+          <button type="button" @click="store.opnieuw()">Probeer opnieuw</button>
+        </div>
         <div v-if="store.resultaat" class="antwoordvak">
           <AntwoordWeergave />
           <p class="stempel">stand van wetgeving: {{ store.resultaat.stand_van_wetgeving }}</p>
@@ -52,7 +55,14 @@ const store = useVraagStore()
   margin: 0 0 12px;
 }
 .intro p { margin: 0 0 24px; max-width: 60ch; }
-.fout { color: var(--fout); margin-top: 16px; }
+.foutvak { margin-top: 16px; }
+.fout { color: var(--fout); margin: 0 0 8px; }
+.foutvak button {
+  font-family: var(--font-ui); font-size: 14px; font-weight: 600;
+  background: none; color: var(--inkt);
+  border: 1px solid var(--lijn); border-radius: var(--radius);
+  padding: 6px 14px; cursor: pointer;
+}
 .antwoordvak { margin-top: 28px; }
 .stempel { font-size: 12px; opacity: 0.7; margin-top: 16px; }
 .zoekstatus { margin: 0; }

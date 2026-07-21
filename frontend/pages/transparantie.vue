@@ -5,7 +5,7 @@
     <section>
       <h2>Je praat met AI</h2>
       <p>
-        AiActWijzer is een AI-systeem (artikel 50 van de AI-verordening vraagt
+        Grondslag is een AI-systeem (artikel 50 van de AI-verordening vraagt
         dat we dat duidelijk zeggen). Antwoorden worden gegenereerd door een
         taalmodel en zijn uitsluitend gebaseerd op de bronnen hieronder — met
         bij elke claim een letterlijk citaat, zodat je het antwoord zelf kunt
@@ -38,7 +38,7 @@
     <section>
       <h2>Onze eigen risicoclassificatie</h2>
       <p>
-        AiActWijzer valt zelf onder de AI-verordening. Het is geen
+        Grondslag valt zelf onder de AI-verordening. Het is geen
         hoog-risico-toepassing uit bijlage III; er geldt wel de
         transparantieplicht van artikel 50 — deze pagina is daar de invulling
         van. De kwaliteitscontrole (een herhaalbare testset met
@@ -50,7 +50,7 @@
       <h2>Informatie, geen advies</h2>
       <p>
         Antwoorden zijn een startpunt voor je eigen jurist, geen vervanging.
-        Bij vragen over jouw specifieke situatie verwijst AiActWijzer bewust
+        Bij vragen over jouw specifieke situatie verwijst Grondslag bewust
         door in plaats van te gokken.
       </p>
     </section>
@@ -60,7 +60,8 @@
       <p>
         Er zijn geen accounts. Wij slaan vragen niet op en gebruiken ze niet als
         trainings- of testdata; een vraag wordt alleen ter beantwoording doorgegeven
-        aan de EU-gehoste Mistral-API.
+        aan de EU-gehoste Mistral-API. Ook bezoekgegevens registreren we niet:
+        de webserver houdt geen toegangslog met IP-adressen bij.
       </p>
     </section>
   </article>

@@ -22,9 +22,12 @@ export const useVraagStore = defineStore('vraag', {
     fout: '',
     resultaat: null as AskAntwoord | null,
     actieveRef: '',
+    // Onthouden voor "Probeer opnieuw" bij een mislukte aanroep.
+    laatsteVraag: '',
   }),
   actions: {
     async stel(vraag: string) {
+      this.laatsteVraag = vraag
       this.bezig = true
       this.fout = ''
       this.resultaat = null
@@ -39,6 +42,9 @@ export const useVraagStore = defineStore('vraag', {
       } finally {
         this.bezig = false
       }
+    },
+    async opnieuw() {
+      if (this.laatsteVraag) await this.stel(this.laatsteVraag)
     },
     markeer(ref: string) {
       this.actieveRef = ref

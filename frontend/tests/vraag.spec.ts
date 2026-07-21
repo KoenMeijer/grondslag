@@ -39,4 +39,24 @@ describe('vraagStore', () => {
     store.markeer('Artikel 6, lid 2')
     expect(store.actieveRef).toBe('Artikel 6, lid 2')
   })
+
+  it('opnieuw herhaalt de laatst gestelde vraag', async () => {
+    vi.mocked($fetch).mockRejectedValueOnce(new Error('502')).mockResolvedValueOnce(ANTWOORD)
+    const store = useVraagStore()
+    await store.stel('Is cv-screening hoog risico?')
+    expect(store.fout).not.toBe('')
+    await store.opnieuw()
+    expect(store.fout).toBe('')
+    expect(store.resultaat?.citaten[0].ref).toBe('Artikel 6, lid 2')
+    expect(vi.mocked($fetch)).toHaveBeenLastCalledWith('/api/ask', {
+      method: 'POST',
+      body: { vraag: 'Is cv-screening hoog risico?' },
+    })
+  })
+
+  it('opnieuw zonder eerdere vraag doet niets', async () => {
+    const store = useVraagStore()
+    await store.opnieuw()
+    expect(vi.mocked($fetch)).not.toHaveBeenCalled()
+  })
 })
