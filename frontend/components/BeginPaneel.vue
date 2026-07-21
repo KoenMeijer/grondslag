@@ -2,13 +2,6 @@
 // Begintoestand van de bronnen-kolom: laat zien wát de tool maakt vóór er
 // iets gevraagd is. Artikel 50 is bewust gekozen — de transparantieplicht
 // waar deze tool zélf onder valt (governance-principe 1, eigen schoolvoorbeeld).
-//
-// STAND: handmatig gelijk houden met de corpus-frontmatter
-// (corpus/*/digital-omnibus-tijdlijn.md, veld stand-wetgeving). Bewuste keuze:
-// een backend-endpoint alleen hiervoor is zwaarder dan dit ene onderhoudspunt;
-// corpus-update = ook deze constante bijwerken (zie docs/deploy.md).
-const STAND = 'juli 2026'
-const EURLEX = 'https://eur-lex.europa.eu/legal-content/NL/TXT/?uri=CELEX:32024R1689'
 
 // Ingekort naar de kernzin; het volledige lid staat één klik verder op EUR-Lex.
 const ART50 =
@@ -32,14 +25,7 @@ const TIJDLIJN = [
 <template>
   <aside class="beginpaneel" aria-label="Voorbeeld uit de wettekst en tijdlijn">
     <h2 class="label">Zo antwoordt Grondslag</h2>
-    <blockquote class="citaatblok">
-      <span class="artnr label">Artikel 50, lid 1</span>
-      <p class="citaattekst">{{ ART50 }}</p>
-      <footer class="bronregel">
-        Verordening (EU) 2024/1689 · <span>stand: {{ STAND }}</span> ·
-        <a :href="EURLEX" target="_blank" rel="noopener">bekijk de bron</a>
-      </footer>
-    </blockquote>
+    <WetCitaat artnr="Artikel 50, lid 1" :tekst="ART50" />
     <p class="toelichting">
       Deze transparantieplicht geldt ook voor deze tool: je praat hier met AI.
     </p>
@@ -56,24 +42,7 @@ const TIJDLIJN = [
 
 <style scoped>
 .beginpaneel h2 { margin: 0 0 12px; }
-
-/* Zelfde vorm als CitaatBlok — het signatuur-element, hier als voorproef. */
-.citaatblok {
-  margin: 0 0 8px;
-  border-left: 3px solid var(--oker);
-  background: var(--papier);
-  padding: 12px 14px;
-}
-.artnr { display: block; margin-bottom: 5px; }
-.citaattekst {
-  margin: 0;
-  font-family: var(--font-citaat);
-  font-size: 17px;
-  line-height: 1.6;
-  color: var(--citaat-tekst);
-}
-.bronregel { font-size: 11.5px; margin-top: 8px; opacity: 0.7; }
-.toelichting { font-size: 13px; opacity: 0.75; margin: 0 0 28px; }
+.toelichting { font-size: 13px; opacity: 0.75; margin: 8px 0 28px; }
 
 .tijdlijnkop { margin-top: 0; }
 .tijdlijn { margin: 0; }

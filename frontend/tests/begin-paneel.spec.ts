@@ -3,10 +3,15 @@ import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
 
 import BeginPaneel from '~/components/BeginPaneel.vue'
+import WetCitaat from '~/components/WetCitaat.vue'
 
 function maak() {
+  // WetCitaat expliciet registreren: kale vitest kent Nuxts auto-import niet.
   return mount(BeginPaneel, {
-    global: { plugins: [createTestingPinia({ createSpy: vi.fn })] },
+    global: {
+      components: { WetCitaat },
+      plugins: [createTestingPinia({ createSpy: vi.fn })],
+    },
   })
 }
 

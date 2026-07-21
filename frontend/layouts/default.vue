@@ -11,7 +11,10 @@ const store = useVraagStore()
          Het merk in de citaat-letter — dezelfde stem als de wettekst. -->
     <header class="siteheader">
       <NuxtLink to="/" class="merk" @click="store.wis()">Grondslag</NuxtLink>
-      <nav><NuxtLink to="/transparantie">Transparantie</NuxtLink></nav>
+      <nav>
+        <NuxtLink to="/over">Over de verordening</NuxtLink>
+        <NuxtLink to="/transparantie">Transparantie</NuxtLink>
+      </nav>
     </header>
     <main class="inhoud"><slot /></main>
     <!-- Twee regels, geen kolommen of iconen: disclaimer (productprincipe 2)
@@ -39,6 +42,7 @@ const store = useVraagStore()
   font-family: var(--font-citaat); font-weight: 600; font-size: 20px;
   color: var(--inkt); text-decoration: none;
 }
+.siteheader nav { display: flex; gap: 16px; }
 .siteheader nav a { font-size: 14px; }
 .inhoud { flex: 1; width: 100%; max-width: 960px; margin: 0 auto; padding: 32px 24px; }
 .sitefooter {
