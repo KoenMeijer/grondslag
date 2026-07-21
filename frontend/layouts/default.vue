@@ -14,8 +14,17 @@ const store = useVraagStore()
       <nav><NuxtLink to="/transparantie">Transparantie</NuxtLink></nav>
     </header>
     <main class="inhoud"><slot /></main>
+    <!-- Twee regels, geen kolommen of iconen: disclaimer (productprincipe 2)
+         en drie tekstlinks — controleerbaarheid (EUR-Lex) en maker (portfolio). -->
     <footer class="sitefooter">
       <p>Grondslag geeft informatie, geen juridisch advies. Raadpleeg voor je eigen situatie een jurist.</p>
+      <p class="footerlinks">
+        <NuxtLink to="/transparantie">Transparantie</NuxtLink>
+        <span aria-hidden="true">·</span>
+        <a href="https://eur-lex.europa.eu/legal-content/NL/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener">Bron: Verordening (EU) 2024/1689 op EUR-Lex</a>
+        <span aria-hidden="true">·</span>
+        <a href="https://www.linkedin.com/in/koenmeijer" target="_blank" rel="noopener">Gemaakt door Koen Meijer</a>
+      </p>
     </footer>
   </div>
 </template>
@@ -34,7 +43,11 @@ const store = useVraagStore()
 .inhoud { flex: 1; width: 100%; max-width: 960px; margin: 0 auto; padding: 32px 24px; }
 .sitefooter {
   border-top: 1px solid var(--lijn);
-  padding: 16px 24px; font-size: 13px; color: var(--inkt); opacity: 0.75;
+  padding: 16px 24px; font-size: 13px; color: var(--inkt);
 }
 .sitefooter p { margin: 0; }
+/* Alleen de disclaimer gedempt; de links houden vol contrast. */
+.sitefooter p:first-of-type { opacity: 0.75; }
+.footerlinks { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 4px 8px; }
+.footerlinks a { text-underline-offset: 3px; }
 </style>
