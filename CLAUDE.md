@@ -87,7 +87,10 @@ functioneel compleet** (bouwsteen 1 backend + bouwsteen 2 frontend met citaat-pa
 `alma-group1/grondslag` → Hetzner, TLS via certbot, 905 chunks geïndexeerd);
 nog niet gedaan: het publieke moment. **Níet:** accounts, intake-beslisboom
 (bewust "later", zie ActCheck-les), betaalfunctie, andere wetgeving dan de AI Act.
-Uitbreiden mag pas als v1 af is en de eval-suite groen.
+Uitbreiden mag pas als v1 af is en de eval-suite groen — uitzondering (21 jul 2026,
+expliciet akkoord): statische, gegronde content die de RAG-keten niet raakt, zoals
+de pagina "Over de AI-verordening" (elke sectie leunt op een wetscitaat; de
+stand-constante in `frontend/utils/bron.ts` beweegt mee met corpus-updates).
 
 ## Design-principes (anti-AI-sjabloon)
 
