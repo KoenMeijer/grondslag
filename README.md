@@ -31,7 +31,7 @@ Ontwerp-tokens en signatuur-element: `docs/design-brief.md`.
 ## Evals
 
 ```bash
-PYTHONPATH=backend:. .venv/bin/python evals/run_evals.py # golden set (10 cases)
+PYTHONPATH=backend:. .venv/bin/python evals/run_evals.py # golden set (14 cases)
 .venv/bin/pytest                                         # unit- en integratietests
 ```
 
@@ -39,24 +39,23 @@ De eval-suite draait bij elke wijziging aan chunking, prompt of model —
 zie `docs/eval-aanpak.md`. Corpusbeheer: `corpus/` is de bron van waarheid,
 elke wijziging is een git-diff + eval-run.
 
-**Bekende stand (2026-07-21, na opname van het UAIV-wetsvoorstel):** retrieval
-8/10, grounding 9/10, abstentie 10/10. Was 8/7/10; de twee grounding-winsten
-(`nl-toezicht-uaiv`, `rol-fria-overheid`) komen door de primaire NL-brontekst in
-het corpus (`corpus/nl-guidance/uaiv-wetsvoorstel.md`, 77 chunks) plus de
-gecorrigeerde wegwijzer. Daarvóór: 6/6/10 → 8/7/10 via artikel 3-splitsing en
-hybride zoeken (vector 1.5 : trefwoord 1, RRF — onderbouwing:
-`evals/meet_fusie.py`). Een tussenstand van 9/9/10 bleek deels memorisatie
-(golden-vragen waren letterlijk in eigen guidance gelekt; verwijderd — zie de
-les in `docs/eval-aanpak.md`). Twee open punten, beide met eerlijke abstentie of
-een correct-maar-onvolledig antwoord (nooit de verouderde datum):
-`actualiteit-hoogrisico-deadline` en `rol-fria-overheid` (semantische afstand
-vraag ↔ wetstekst; kandidaat-knoppen: query-expansie naar wetsvocabulaire,
-reranker). Een exit-code ≠ 0 op deze stand is dus verwacht.
+**Bekende stand (2026-07-21, 14 cases): retrieval 8/14, grounding 9/14,
+abstentie 14/14.** Een exit-code ≠ 0 op deze stand is dus verwacht.
 
-**Nulmeting NL-doorwerking (2026-07-21, 14 cases):** retrieval 8/14, grounding
-9/14, abstentie 14/14. De vier nieuwe UAIV-cases falen **alle vier** op
-retrieval. Dat de cijfers dalen betekent niet dat het systeem slechter werd — we
-meten nu iets dat de set van 10 niet zag.
+*Verloop op de oorspronkelijke 10 cases:* 6/6/10 → 8/7/10 via artikel
+3-splitsing en hybride zoeken (vector 1.5 : trefwoord 1, RRF — onderbouwing:
+`evals/meet_fusie.py`) → 8/9/10 door opname van de primaire NL-brontekst
+(`corpus/nl-guidance/uaiv-wetsvoorstel.md`, 77 chunks) plus de gecorrigeerde
+wegwijzer. Een tussenstand van 9/9/10 bleek deels memorisatie (golden-vragen
+waren letterlijk in eigen guidance gelekt; verwijderd — zie de les in
+`docs/eval-aanpak.md`). Twee hardnekkige punten daarin:
+`actualiteit-hoogrisico-deadline` en `rol-fria-overheid`, beide semantische
+afstand vraag ↔ wetstekst, beide met eerlijke abstentie of een
+correct-maar-onvolledig antwoord (nooit de verouderde datum).
+
+*Daarna uitgebreid naar 14 cases (nulmeting NL-doorwerking):* de vier nieuwe
+UAIV-cases falen **alle vier** op retrieval. Dat de cijfers dalen betekent niet
+dat het systeem slechter werd — we meten nu iets dat de set van 10 niet zag.
 
 Het failure-patroon is bovendien scherper dan verwacht: de NL-vragen krijgen
 geen eerlijke abstentie maar een **zelfverzekerd EU-antwoord**. "In welke taal
@@ -92,3 +91,14 @@ afgeraden: dat maakte grounding eerder aantoonbaar slechter.
 identiek corpus, identieke prompt en temperatuur 0 — zelfde retrieval, andere
 formulering. Beoordeel een enkele run dus niet als bewijs; kijk naar het patroon
 over runs.
+
+## Licentie
+
+Code en documentatie: **MIT** (zie `LICENSE`) — vrij te gebruiken, aan te passen
+en te verspreiden, met behoud van de copyrightvermelding en zonder garantie.
+
+Het `corpus/` valt daar buiten: dat zijn overheidspublicaties die onder hun eigen
+regime vallen. De verordeningstekst komt van EUR-Lex (© Europese Unie,
+hergebruik toegestaan met bronvermelding); het UAIV-wetsvoorstel is een
+Nederlandse overheidspublicatie van internetconsultatie.nl. Herkomst, versie en
+ophaaldatum staan per bestand in de frontmatter.
