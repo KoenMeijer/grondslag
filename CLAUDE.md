@@ -82,8 +82,10 @@ gestructureerd intake-moment dat de RAG-context voedt, daarna vrij doorvragen.
 
 **Wél:** vraag-antwoord met citaten (artikelnummer + fragment), golden set + eval-suite,
 actualiteits-stempel, transparantie-pagina. **Stand 19 jul 2026: dit alles is
-functioneel compleet** (bouwsteen 1 backend + bouwsteen 2 frontend met citaat-paneel);
-nog niet gedaan: deploy en het publieke moment. **Níet:** accounts, intake-beslisboom
+functioneel compleet** (bouwsteen 1 backend + bouwsteen 2 frontend met citaat-paneel).
+**Live sinds 21 jul 2026 op https://grondslag.almaconecta.eu** (GitLab
+`alma-group1/grondslag` → Hetzner, TLS via certbot, 905 chunks geïndexeerd);
+nog niet gedaan: het publieke moment. **Níet:** accounts, intake-beslisboom
 (bewust "later", zie ActCheck-les), betaalfunctie, andere wetgeving dan de AI Act.
 Uitbreiden mag pas als v1 af is en de eval-suite groen.
 

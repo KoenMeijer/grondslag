@@ -11,7 +11,7 @@ genereert `.env` uit CI/CD-variabelen en draait
 | --- | --- | --- |
 | `SSH_USER` | — | VPS-gebruiker: `root` (app komt in `/root/aiactwijzer`, want `APP_DIR` is relatief) |
 | `SSH_HOST` | — | VPS-IP of hostnaam |
-| `SSH_PRIVATE_KEY` | type **Variable** | Volledige private key incl. `-----BEGIN/END-----`-regels en afsluitende newline |
+| `SSH_PRIVATE_KEY` | type **Variable**, Protected | Erft van de groep `alma-group1` (gedeeld met alma/wkpoule) — niet projecteigen instellen. Zie stap 3: `master` moet protected zijn, anders komt hij leeg binnen |
 | `POSTGRES_USER` | — | bv. `aiact` |
 | `POSTGRES_PASSWORD` | **Masked** | sterk wachtwoord (`openssl rand -hex 24`) |
 | `POSTGRES_DB` | — | bv. `aiact` |
@@ -44,20 +44,35 @@ wachttijd op beschikbaarheid, en de VPS is dezelfde machine — alleen een
 Overstappen naar een eigen domein is later een kwestie van DNS + nginx + certbot;
 zie *Later: naar een eigen domein* onderaan.
 
-**Stap 2 — Deploy-sleutelpaar.**
-Maak een eigen keypair voor de pipeline (niet je persoonlijke sleutel):
+**Stap 2 — Deploy-sleutel: hergebruikt uit de groep.**
+`SSH_PRIVATE_KEY` is een **group-level variabele van `alma-group1`**, gedeeld met
+alma en wkpoule; die is bij livegang (21 jul 2026) hergebruikt. Er is dus géén
+eigen keypair nodig — een projecteigen sleutel zou wel netter isoleren, maar
+betekent een tweede secret beheren voor dezelfde VPS. Alleen als je die route
+tóch wilt:
 
 ```bash
 ssh-keygen -t ed25519 -f ~/.ssh/aiactwijzer_deploy -N "" -C "gitlab-deploy aiactwijzer"
-ssh-copy-id -i ~/.ssh/aiactwijzer_deploy.pub <SSH_USER>@<SSH_HOST>
+ssh-copy-id -i ~/.ssh/aiactwijzer_deploy.pub root@<SSH_HOST>
 ```
 
-**Stap 3 — GitLab-project + variabelen.**
-Maak een (privé) GitLab-project aan en zet **vóór de eerste push** de 7
-variabelen uit de tabel hierboven (Settings → CI/CD → Variables).
-`SSH_PRIVATE_KEY` = de inhoud van `~/.ssh/aiactwijzer_deploy` (incl.
-BEGIN/END-regels en afsluitende newline); `POSTGRES_PASSWORD` genereer je met
-`openssl rand -hex 24`; markeer beide wachtwoord-achtigen als **Masked**.
+**Stap 3 — GitLab-project, branch-instellingen en variabelen.**
+Maak een (privé) GitLab-project aan — **zonder** "Initialize repository with a
+README", anders krijg je een `main` met een losse historie naast je `master`.
+
+Zet daarna, **vóór de eerste push**:
+
+1. **Default branch op `master`** (Settings → Repository → Branch defaults) —
+   de CI-rules draaien op `$CI_COMMIT_BRANCH == "master"`.
+2. **`master` als protected branch** (Settings → Repository → Protected
+   branches). Dit is geen formaliteit: group-variabelen staan op *Protected* en
+   worden aan een onbeschermde branch **niet** uitgeleverd. Het gevolg is
+   verraderlijk — `$SSH_PRIVATE_KEY` is dan leeg en `ssh-add` meldt
+   `Error loading key "(stdin)": error in libcrypto`, wat leest als een kapotte
+   sleutel terwijl er simpelweg niets in de variabele zat.
+3. De projectvariabelen uit de tabel hierboven (Settings → CI/CD → Variables).
+   `POSTGRES_PASSWORD` genereer je met `openssl rand -hex 24`; markeer die en
+   `MISTRAL_API_KEY` als **Masked**.
 
 **Stap 4 — Nginx op de VPS.**
 Het serverblok staat als bestand in de repo, dus kopiëren i.p.v. overtikken
@@ -96,7 +111,18 @@ Pipeline-pagina → play-knop bij **`index_corpus`**. Dit embedt ~duizend chunks
 (centen aan Mistral-calls). Zonder deze stap antwoordt de API met lege bronnen.
 
 **Stap 8 — Controle.**
-`https://<domein>/api/health` → `{"status":"ok"}`; stel via de site de
+Snelle rooktest vanaf je eigen machine (health, redirect, en de RAG-keten —
+citaten leeg betekent dat stap 7 niet gelukt is):
+
+```bash
+curl -s https://grondslag.almaconecta.eu/api/health
+curl -s -o /dev/null -w '%{http_code} -> %{redirect_url}\n' http://grondslag.almaconecta.eu/api/health
+curl -s -X POST https://grondslag.almaconecta.eu/api/ask \
+  -H 'Content-Type: application/json' \
+  -d '{"vraag":"Wij screenen cvs met AI. Valt dat onder de AI Act?"}'
+```
+
+Verder handmatig: stel via de site de
 cv-screeningvraag (verwacht: antwoord met citaatblok en klikbare ref); klik
 "bekijk de bron" (EUR-Lex opent); bekijk `/transparantie`; check smal venster
 (paneel onder het antwoord).

@@ -4,10 +4,12 @@
 # (eenmalige VPS-setup: zie docs/deploy.md).
 #
 # Vereiste GitLab CI/CD-variabelen (Settings → CI/CD → Variables):
-#   SSH_USER          — VPS-gebruiker (bv. 'koen')
+#   SSH_USER          — VPS-gebruiker: 'root' (app landt in /root/aiactwijzer)
 #   SSH_HOST          — VPS-IP of hostnaam
-#   SSH_PRIVATE_KEY   — type Variable; volledige key incl. BEGIN/END-regels
-#                       en afsluitende newline
+#   SSH_PRIVATE_KEY   — erft van groep alma-group1 (gedeeld met alma/wkpoule).
+#                       Staat op Protected: 'master' MOET een protected branch
+#                       zijn, anders komt de var leeg binnen en faalt ssh-add
+#                       met 'error in libcrypto' — zie docs/deploy.md stap 3
 #   POSTGRES_USER, POSTGRES_DB
 #   POSTGRES_PASSWORD — markeer als Masked
 #   MISTRAL_API_KEY   — markeer als Masked
