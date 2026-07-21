@@ -9,7 +9,7 @@ genereert `.env` uit CI/CD-variabelen en draait
 
 | Variabele | Markering | Toelichting |
 | --- | --- | --- |
-| `SSH_USER` | — | VPS-gebruiker (bv. `koen`) |
+| `SSH_USER` | — | VPS-gebruiker: `root` (app komt in `/root/aiactwijzer`, want `APP_DIR` is relatief) |
 | `SSH_HOST` | — | VPS-IP of hostnaam |
 | `SSH_PRIVATE_KEY` | type **Variable** | Volledige private key incl. `-----BEGIN/END-----`-regels en afsluitende newline |
 | `POSTGRES_USER` | — | bv. `aiact` |
@@ -23,32 +23,10 @@ het compose-netwerk.
 ## Eenmalige VPS-setup
 
 1. Docker + docker compose aanwezig (staat er al voor de andere projecten).
-2. Nginx-serverblok (v1 draait op het subdomein, zie stap 1):
-
-```nginx
-server {
-    server_name grondslag.almaconecta.eu;
-
-    # API: prefix /api wordt gestript door de trailing slash in proxy_pass.
-    location /api/ {
-        proxy_pass http://127.0.0.1:8094/;
-        proxy_set_header Host $host;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    }
-
-    # Al het andere: de Nuxt-frontend.
-    location / {
-        proxy_pass http://127.0.0.1:3094;
-        proxy_set_header Host $host;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    }
-
-    listen 80;
-}
-```
-
+2. Nginx-serverblok: staat in de repo als
+   `deploy/nginx/grondslag.almaconecta.eu.conf` (v1 draait op het subdomein,
+   zie stap 1) — één bron, zodat doc en VPS niet uit elkaar lopen. Plaatsen:
+   zie stap 4 hieronder.
 3. TLS: `certbot --nginx -d grondslag.almaconecta.eu` (zelfde werkwijze als de
    andere projecten; certbot herschrijft het blok naar 443).
 
@@ -82,14 +60,20 @@ BEGIN/END-regels en afsluitende newline); `POSTGRES_PASSWORD` genereer je met
 `openssl rand -hex 24`; markeer beide wachtwoord-achtigen als **Masked**.
 
 **Stap 4 — Nginx op de VPS.**
-Plaats het serverblok hierboven (met het echte domein i.p.v. het placeholder),
-activeer en herlaad:
+Het serverblok staat als bestand in de repo, dus kopiëren i.p.v. overtikken
+(geen quoting-gedoe met heredocs door twee shells heen):
 
 ```bash
-sudo nano /etc/nginx/sites-available/<domein>
-sudo ln -s /etc/nginx/sites-available/<domein> /etc/nginx/sites-enabled/
-sudo nginx -t && sudo systemctl reload nginx
+scp deploy/nginx/grondslag.almaconecta.eu.conf \
+  root@<SSH_HOST>:/etc/nginx/sites-available/grondslag.almaconecta.eu
+ssh root@<SSH_HOST> "ln -sf /etc/nginx/sites-available/grondslag.almaconecta.eu \
+  /etc/nginx/sites-enabled/ && nginx -t && systemctl reload nginx"
 ```
+
+`nginx -t` staat bewust vóór de reload: nginx weigert bij een fout de héle
+config, dus een typefout hier zou ook alma en wkpoule offline halen.
+Controleer eerst dat 8094/3094 vrij zijn — meerdere projecten delen deze VPS:
+`ssh root@<SSH_HOST> "ss -tlnp | grep -E '8094|3094' || echo 'poorten vrij'"`.
 
 **Stap 5 — Eerste push.**
 
