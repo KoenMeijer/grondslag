@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useVraagStore } from '~/stores/vraag'
 
 const store = useVraagStore()
-const vraag = ref('')
-const kanVersturen = computed(() => vraag.value.trim().length > 0 && !store.bezig)
+const kanVersturen = computed(() => store.invoer.trim().length > 0 && !store.bezig)
 
 // Uit de golden set (evals/golden_set.yaml): vragen waarvan retrieval
 // aantoonbaar werkt. Samen tonen ze de breedte van wat je kunt vragen:
@@ -17,12 +16,12 @@ const voorbeelden = [
 ]
 
 function verstuur() {
-  if (kanVersturen.value) store.stel(vraag.value.trim())
+  if (kanVersturen.value) store.stel(store.invoer.trim())
 }
 
 // Textarea meevullen zodat zichtbaar blijft wélke vraag er gesteld is.
 function stelVoorbeeld(tekst: string) {
-  vraag.value = tekst
+  store.invoer = tekst
   store.stel(tekst)
 }
 </script>
@@ -32,7 +31,7 @@ function stelVoorbeeld(tekst: string) {
     <label class="label" for="vraag">Stel je vraag</label>
     <textarea
       id="vraag"
-      v-model="vraag"
+      v-model="store.invoer"
       rows="3"
       placeholder="Beschrijf je situatie of stel je vraag"
     />

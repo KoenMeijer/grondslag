@@ -28,6 +28,7 @@ const store = useVraagStore()
         <div v-if="store.resultaat" class="antwoordvak">
           <AntwoordWeergave />
           <p class="stempel">stand van wetgeving: {{ store.resultaat.stand_van_wetgeving }}</p>
+          <button type="button" class="nieuwevraag" @click="store.wis()">Stel een nieuwe vraag</button>
         </div>
       </div>
     </div>
@@ -65,6 +66,12 @@ const store = useVraagStore()
 }
 .antwoordvak { margin-top: 28px; }
 .stempel { font-size: 12px; opacity: 0.7; margin-top: 16px; }
+/* Zelfde kalme tekstlink-vorm als de voorbeeldvragen. */
+.nieuwevraag {
+  background: none; border: none; padding: 0; margin-top: 12px; cursor: pointer;
+  font-family: var(--font-ui); font-size: 15px; color: var(--oker-donker);
+  text-decoration: underline; text-underline-offset: 3px;
+}
 .zoekstatus { margin: 0; }
 @media (max-width: 760px) {
   .pagina { grid-template-columns: 1fr; gap: 28px; }

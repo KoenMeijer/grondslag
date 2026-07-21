@@ -1,9 +1,16 @@
+<script setup lang="ts">
+import { useVraagStore } from '~/stores/vraag'
+
+// Logo-klik = terug naar de begintoestand, de conventie die iedereen kent.
+const store = useVraagStore()
+</script>
+
 <template>
   <div class="app">
     <!-- Geen wit vlak: het papier loopt door, alleen een dunne lijn scheidt.
          Het merk in de citaat-letter — dezelfde stem als de wettekst. -->
     <header class="siteheader">
-      <NuxtLink to="/" class="merk">Grondslag</NuxtLink>
+      <NuxtLink to="/" class="merk" @click="store.wis()">Grondslag</NuxtLink>
       <nav><NuxtLink to="/transparantie">Transparantie</NuxtLink></nav>
     </header>
     <main class="inhoud"><slot /></main>

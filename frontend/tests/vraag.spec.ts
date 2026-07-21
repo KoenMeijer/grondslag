@@ -59,4 +59,17 @@ describe('vraagStore', () => {
     await store.opnieuw()
     expect(vi.mocked($fetch)).not.toHaveBeenCalled()
   })
+
+  it('wis brengt de store terug naar de begintoestand', async () => {
+    vi.mocked($fetch).mockResolvedValue(ANTWOORD)
+    const store = useVraagStore()
+    store.invoer = 'Is cv-screening hoog risico?'
+    await store.stel(store.invoer)
+    store.wis()
+    expect(store.resultaat).toBeNull()
+    expect(store.fout).toBe('')
+    expect(store.invoer).toBe('')
+    expect(store.laatsteVraag).toBe('')
+    expect(store.actieveRef).toBe('')
+  })
 })

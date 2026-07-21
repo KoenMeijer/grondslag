@@ -24,6 +24,8 @@ export const useVraagStore = defineStore('vraag', {
     actieveRef: '',
     // Onthouden voor "Probeer opnieuw" bij een mislukte aanroep.
     laatsteVraag: '',
+    // Textarea-inhoud leeft in de store, zodat wis() óók het formulier leegt.
+    invoer: '',
   }),
   actions: {
     async stel(vraag: string) {
@@ -45,6 +47,17 @@ export const useVraagStore = defineStore('vraag', {
     },
     async opnieuw() {
       if (this.laatsteVraag) await this.stel(this.laatsteVraag)
+    },
+    // Terug naar de begintoestand (logo-klik en "Stel een nieuwe vraag").
+    // Bewust een eigen actie i.p.v. Pinia's $reset: bezig hoort er niet bij
+    // (een lopende aanroep afbreken is een ander gebaar) en een actie is
+    // in tests als spy zichtbaar.
+    wis() {
+      this.fout = ''
+      this.resultaat = null
+      this.actieveRef = ''
+      this.laatsteVraag = ''
+      this.invoer = ''
     },
     markeer(ref: string) {
       this.actieveRef = ref

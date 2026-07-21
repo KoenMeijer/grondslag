@@ -54,4 +54,15 @@ describe('index-pagina (kolomwissel rechts)', () => {
     expect(w.find('.stub-citaatpaneel').exists()).toBe(true)
     expect(w.find('.stub-beginpaneel').exists()).toBe(false)
   })
+
+  it('biedt onder het antwoord een link terug naar de begintoestand', async () => {
+    const w = maak({
+      resultaat: { antwoord: 'a', citaten: [], stand_van_wetgeving: 'juli 2026' },
+    })
+    const link = w.find('.nieuwevraag')
+    expect(link.text()).toBe('Stel een nieuwe vraag')
+    await link.trigger('click')
+    const store = useVraagStore()
+    expect(store.wis).toHaveBeenCalled()
+  })
 })
