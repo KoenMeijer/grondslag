@@ -32,6 +32,40 @@ Tweede lid.
     assert doc.meta["type"] == "wettekst"
 
 
+def test_status_uit_frontmatter_staat_in_elke_chunktekst():
+    # Een concept-wetsvoorstel mag nooit als geldend recht klinken. De prompt
+    # ziet alleen ref + tekst (geen bron-metadata), dus de status moet in de
+    # chunktekst zelf staan — anders kan het model hem niet melden.
+    concept = FRONTMATTER.replace("type: wettekst", "status: concept-wetsvoorstel\ntype: wettekst")
+    doc = parse_document(concept + """
+## UAIV artikel 5.4 — coördinatie
+### Lid 1
+Onze Minister en de Autoriteit persoonsgegevens hebben tot taak.
+""")
+    assert doc.meta["status"] == "concept-wetsvoorstel"
+    assert doc.chunks[0].tekst == (
+        "UAIV artikel 5.4, lid 1 (coördinatie) — status: concept-wetsvoorstel, nog niet in werking: "
+        "Onze Minister en de Autoriteit persoonsgegevens hebben tot taak."
+    )
+
+
+def test_status_in_guidance_chunkt_ook_mee():
+    concept = FRONTMATTER.replace("type: wettekst", "status: beleid\ntype: guidance")
+    doc = parse_document(concept + """
+## Algoritmeregister
+Publicatie berust op rijksbeleid.
+""")
+    assert doc.chunks[0].tekst == "Algoritmeregister — status: beleid: Publicatie berust op rijksbeleid."
+
+
+def test_zonder_status_blijft_de_chunktekst_ongewijzigd():
+    doc = parse_document(FRONTMATTER + """
+## Artikel 4 — AI-geletterdheid
+Aanbieders nemen maatregelen.
+""")
+    assert doc.chunks[0].tekst == "Artikel 4 (AI-geletterdheid): Aanbieders nemen maatregelen."
+
+
 def test_artikel_zonder_leden():
     doc = parse_document(FRONTMATTER + """
 ## Artikel 4 — AI-geletterdheid

@@ -182,7 +182,7 @@ push → deploy → handmatig `index_corpus` draaien.
 ## Bewuste keuzes
 
 - **Evals niet in CI**: elke run kost Mistral-calls, en de bekende stand
-  (8/7/10) zou de pipeline permanent rood kleuren. Kwaliteitsbewaking is een
+  (8/9/10, juli 2026) zou de pipeline permanent rood kleuren. Kwaliteitsbewaking is een
   bewuste lokale actie met menselijke beoordeling van de scorekaart.
 - **Eerst een subdomein van alma, niet meteen een eigen domein**: het domein
   zit nergens in de code, dus registratie is geen blokkade voor livegang. Zo

@@ -1,8 +1,8 @@
 ---
-bron: "NL-doorwerking AI-verordening — samenvatting UAIV en toezicht (eigen redactie op basis van publieke bronnen)"
+bron: "NL-doorwerking AI-verordening — wegwijzer bij het UAIV-wetsvoorstel (eigen redactie op basis van publieke bronnen)"
 url: https://www.internetconsultatie.nl/uaiv/b1
-versie: "stand juli 2026 — consultatie gesloten (1 juni 2026), advies Raad van State loopt, nog niet bij de Tweede Kamer; 19-07-2026 toezichthouders-sectie vraaggericht geherformuleerd (inhoud ongewijzigd)"
-datum-opgehaald: 2026-07-19
+versie: "stand juli 2026 — 21-07-2026 herzien: de toezichthouders-passage stond niet in de brontekst en is vervangen door een verwijzing naar uaiv-wetsvoorstel.md (artikelen 1.2, 2.2, 2.3 en 5.4); consultatie gesloten (1 juni 2026), advies Raad van State loopt"
+datum-opgehaald: 2026-07-21
 stand-wetgeving: juli 2026
 type: guidance
 ---
@@ -14,28 +14,41 @@ er is geen omzettingswet nodig zoals bij een richtlijn. Nederland regelt zelf
 alleen het toezicht en de handhaving, via de Uitvoeringswet AI-verordening (UAIV).
 Stand juli 2026: de internetconsultatie is gesloten (liep tot 1 juni 2026); na
 advies van de Raad van State gaat het wetsvoorstel naar de Tweede Kamer. Er is
-dus nog geen vastgestelde Nederlandse toezichtswet.
+dus nog geen vastgestelde Nederlandse toezichtswet. De verordening zelf gaat wél
+gewoon gelden op de data uit artikel 113, ongeacht of de UAIV al in werking is.
 
-## UAIV — welke instanties worden de Nederlandse AI-toezichthouders
+## UAIV — welke toezichthouders houden in Nederland toezicht op de AI-regels
 
-Welke instanties gaan in Nederland de AI-regels controleren en handhaven?
-Het kabinet kiest niet voor één nieuwe AI-toezichthouder, maar belegt het
-markttoezicht bij bestaande toezichthouders binnen hun eigen domein. Beoogd zijn
-onder meer: de Autoriteit Persoonsgegevens (AP, met een coördinerende rol via de
-Directie Coördinatie Algoritmes), de Rijksinspectie Digitale Infrastructuur (RDI),
-de ILT, de IGJ, de NVWA en de Arbeidsinspectie, en voor de financiële sector de
-AFM en DNB. Voor de rechtspraak gelden bijzondere voorzieningen (procureur-generaal
-bij de Hoge Raad, Afdeling bestuursrechtspraak van de Raad van State). De ACM
-staat niet in het rijtje beoogde AI-markttoezichthouders. Uit de uitvoeringstoetsen
-kwam kritiek: taakverdeling, capaciteit en gegevensdeling tussen toezichthouders
-moeten scherper.
+De Uitvoeringswet AI-verordening (UAIV) is nog een wetsvoorstel en nog niet in
+werking; de aanwijzing hieronder is dus nog geen geldend recht en kan tijdens de
+parlementaire behandeling wijzigen. Het markttoezicht wordt daarin niet bij één
+nieuwe AI-toezichthouder belegd, maar verdeeld over bestaande instanties.
+Volgens artikel 2.2 van het wetsvoorstel
+zijn dat de Autoriteit persoonsgegevens (AP), de Autoriteit Financiële Markten
+(AFM), De Nederlandsche Bank (DNB), de minister van Economische Zaken en Klimaat
+("Onze Minister"), de minister van Infrastructuur en Waterstaat, en voor de
+rechtspraak de procureur-generaal bij de Hoge Raad en de voorzitter van de
+Afdeling bestuursrechtspraak van de Raad van State. De AP is aangewezen voor
+onder meer de verboden praktijken en het merendeel van de hoog-risicogebieden
+uit bijlage III. De coördinerende taak ligt bij Onze Minister én de AP samen,
+die daarvoor een samenwerkingsprotocol vastleggen (artikel 5.4); Onze Minister
+is ook het centrale contactpunt richting de Europese Unie (artikel 2.3, tweede
+lid). De grondrechtenautoriteiten worden aangewezen door de minister van
+Binnenlandse Zaken en Koninkrijksrelaties (artikel 2.4). Let bij sectorvragen op
+artikel 1.2: voor hoog-risico-AI in producten uit bijlage I (artikel 6, eerste
+lid, van de verordening) gelden de hoofdstukken 2 en 3 van de UAIV niet — daar
+loopt het toezicht via de bestaande productwetgeving en de toezichthouders die
+daarin zijn aangewezen. De letterlijke aanwijzing staat in `uaiv-wetsvoorstel`;
+deze samenvatting is daarvan afgeleid.
 
 ## Algoritmeregister — rijksbeleid, geen eis uit de AI-verordening
 
 Het Algoritmeregister (algoritmes.overheid.nl) is een Nederlands
 transparantie-initiatief. Publicatie is voor de rijksoverheid deels verplicht op
-grond van rijksbeleid, maar het is géén verplichting uit de AI-verordening. De
-twee worden vaak verward; houd ze uit elkaar bij compliance-vragen.
+grond van rijksbeleid, vastgelegd in Kamerbrieven, maar het is géén verplichting
+uit de AI-verordening. De twee worden vaak verward; houd ze uit elkaar bij
+compliance-vragen. De registratieplicht die de AI-verordening zelf kent (artikel
+49, EU-databank voor hoog-risico-systemen) staat daar los van.
 
 ## IAMA en FRIA — Nederlands instrument naast een Europese plicht
 
