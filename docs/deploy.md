@@ -32,6 +32,12 @@ het compose-netwerk.
 
 ## Stappenplan livegang (van nul naar draaiende demo)
 
+Dit is het traject zoals het op 21 jul 2026 is gelopen, met het subdomein als
+startpunt. **De site draait inmiddels op https://grondslag.eu** — zie de sectie
+over het eigen domein hieronder. Zet je dit ooit op een nieuwe machine, lees dan
+beide secties samen: de stappen kloppen, alleen de domeinnaam is inmiddels
+`grondslag.eu`.
+
 Volgorde is bewust: variabelen vóór de eerste push (anders faalt de
 deploy-job), DNS vóór certbot (anders faalt de challenge).
 
@@ -115,9 +121,9 @@ Snelle rooktest vanaf je eigen machine (health, redirect, en de RAG-keten —
 citaten leeg betekent dat stap 7 niet gelukt is):
 
 ```bash
-curl -s https://grondslag.almaconecta.eu/api/health
-curl -s -o /dev/null -w '%{http_code} -> %{redirect_url}\n' http://grondslag.almaconecta.eu/api/health
-curl -s -X POST https://grondslag.almaconecta.eu/api/ask \
+curl -s https://grondslag.eu/api/health
+curl -s -o /dev/null -w '%{http_code} -> %{redirect_url}\n' http://grondslag.eu/api/health
+curl -s -X POST https://grondslag.eu/api/ask \
   -H 'Content-Type: application/json' \
   -d '{"vraag":"Wij screenen cvs met AI. Valt dat onder de AI Act?"}'
 ```
@@ -132,23 +138,29 @@ Domein vermelden op de transparantie-pagina waar relevant; MIT-licentie +
 GitHub-publicatie (vindbaarheid/portfolio — CI blijft op GitLab); demo +
 LinkedIn-post.
 
-## Later: naar een eigen domein (bv. grondslag.eu)
+## Eigen domein grondslag.eu — gedaan op 21 jul 2026
 
 De code kent het domein niet: de frontend praat relatief via `/api`, er is geen
-CORS-config en geen `BASE_URL`-variabele. De overstap is dus puur infra — DNS,
-nginx, certbot — en kost geen deploy of rebuild.
+CORS-config en geen `BASE_URL`-variabele. De overstap was dus puur infra — DNS,
+nginx, certbot — zonder deploy of rebuild.
 
-1. **Registreren en controleren.** Whois toonde eerder NXDOMAIN voor
-   `grondslag.eu`; dat is geen bewijs van beschikbaarheid, dus bevestig het bij
-   de registrar. Zet daarna een **A-record** (`@`, en `www` als je die wil) naar
-   hetzelfde VPS-IP.
-2. **Nginx: domein toevoegen, niet vervangen.** Zet het nieuwe domein er eerst
-   *naast* in het bestaande blok, zodat het subdomein blijft werken terwijl DNS
-   propageert:
-   `server_name grondslag.almaconecta.eu grondslag.eu www.grondslag.eu;` →
-   `sudo nginx -t && sudo systemctl reload nginx`.
-3. **Certificaat uitbreiden.**
-   `sudo certbot --nginx -d grondslag.almaconecta.eu -d grondslag.eu -d www.grondslag.eu`
+Stappen 1 t/m 3 zijn **uitgevoerd**; het certificaat draagt nu drie namen
+(`grondslag.eu`, `www.grondslag.eu`, `grondslag.almaconecta.eu`) en beide
+domeinen serveren de site. Stappen 4 t/m 6 staan nog open.
+
+1. ✅ **Geregistreerd**, zone bij Hetzner DNS, **A-records** `@` en `www` naar
+   het VPS-IP. Bewust **geen AAAA**: de VPS heeft wel IPv6, maar nginx luistert
+   alleen op IPv4 (`listen 80;` / `listen 443`, niet `[::]`) — een AAAA-record
+   zou IPv6-bezoekers naar een dichte poort sturen. Alma doet dit om dezelfde
+   reden IPv4-only.
+2. ✅ **Nginx: domein toegevoegd, niet vervangen.** Het nieuwe domein staat
+   *naast* het subdomein in beide serverblokken (443 én de poort-80-redirect),
+   zodat gedeelde links blijven werken:
+   `server_name grondslag.eu www.grondslag.eu grondslag.almaconecta.eu;` →
+   `nginx -t && systemctl reload nginx`. Tussenstand daarna: `http://grondslag.eu`
+   gaf 404 en https een certfout — normaal, dat sluit stap 3.
+3. ✅ **Certificaat uitgebreid.**
+   `certbot --nginx --expand --redirect -d grondslag.almaconecta.eu -d grondslag.eu -d www.grondslag.eu`
    — certbot vervangt het bestaande cert door één met alle namen erin. Doe dit
    pas als de DNS van het nieuwe domein daadwerkelijk het VPS-IP teruggeeft
    (`dig +short grondslag.eu`), anders faalt de HTTP-01-challenge en rolt certbot

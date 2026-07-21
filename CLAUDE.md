@@ -13,10 +13,10 @@ zelfstandig in dit project: `docs/rag-aanpak.md` en `docs/eval-aanpak.md`.
 
 - **Naam:** **Grondslag** (gekozen 21 jul 2026; woordspeling juridische grondslag ↔
   RAG-grounding). Domein: **grondslag.eu** — `.eu` past bij de EU-verordening + soevereine
-  stack; nog definitief te bevestigen bij registratie (whois toonde NXDOMAIN, geen bewijs
-  van beschikbaarheid). **V1 gaat live op `grondslag.almaconecta.eu`** — subdomein van
-  alma, zodat registratie geen blokkade is; overstap naar het eigen domein staat als
-  losse route in `docs/deploy.md`. *AiActWijzer* was de werknaam en leunde op de Engelse term; in de
+  stack. **Geregistreerd en live op https://grondslag.eu** (21 jul 2026; ook
+  `www.grondslag.eu`). Het subdomein `grondslag.almaconecta.eu` loopt bewust mee zodat
+  eerder gedeelde links blijven werken — omzetten naar één canonieke naam is stap 4 in
+  `docs/deploy.md`. *AiActWijzer* was de werknaam en leunde op de Engelse term; in de
   copy hanteren we consequent "AI-verordening (AI Act)". De codebase draagt nog
   grotendeels de oude naam — hernoemen is een aparte actie.
 - **Eerste oplever (2–3 avonden):** wettekst indexeren + 10 golden-set-vragen met
@@ -84,7 +84,7 @@ gestructureerd intake-moment dat de RAG-context voedt, daarna vrij doorvragen.
 **Wél:** vraag-antwoord met citaten (artikelnummer + fragment), golden set + eval-suite,
 actualiteits-stempel, transparantie-pagina. **Stand 19 jul 2026: dit alles is
 functioneel compleet** (bouwsteen 1 backend + bouwsteen 2 frontend met citaat-paneel).
-**Live sinds 21 jul 2026 op https://grondslag.almaconecta.eu** (GitLab
+**Live sinds 21 jul 2026 op https://grondslag.eu** (GitLab
 `alma-group1/grondslag` → Hetzner, TLS via certbot, 905 chunks geïndexeerd);
 nog niet gedaan: het publieke moment. **Níet:** accounts, intake-beslisboom
 (bewust "later", zie ActCheck-les), betaalfunctie, andere wetgeving dan de AI Act.
