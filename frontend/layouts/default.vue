@@ -28,7 +28,9 @@ const store = useVraagStore()
         <span aria-hidden="true">·</span>
         <a href="https://eur-lex.europa.eu/legal-content/NL/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener">Bron: Verordening (EU) 2024/1689 op EUR-Lex</a>
         <span aria-hidden="true">·</span>
-        <a href="https://www.linkedin.com/in/koenmeijer" target="_blank" rel="noopener">Gemaakt door Koen Meijer</a>
+        <a href="https://www.linkedin.com/in/koen-meijer-5b47239/" target="_blank" rel="noopener">Gemaakt door Koen Meijer</a>
+        <span aria-hidden="true">·</span>
+        <a href="https://github.com/KoenMeijer/grondslag" target="_blank" rel="noopener">Broncode op GitHub</a>
       </p>
     </footer>
   </div>
