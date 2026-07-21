@@ -35,6 +35,22 @@ de hoog-risico-lijst) verdienen eigen behandeling: per punt, niet als één blok
   ("artikel 6", "GPAI", "deployer") die exact matchen.
 - **Kop als context.** Een chunk zonder zijn kop/artikelaanduiding is ambigu voor
   zowel retrieval als generatie.
+- **Meer kandidaten ≠ beter** (gemeten 21 jul 2026, `evals/meet_bronquotum.py`).
+  De kandidatendiepte per zoekpad verhogen van 20 naar 50/100 verslechterde
+  retrieval van 6/12 naar 4/12: RRF verwatert. Chunks die in beide paden
+  middelmatig scoren stapelen twee bijdragen en verdringen een chunk die in één
+  pad hoog staat — de doelchunk van `risico-cv-screening` zakte van rang 4 naar
+  8 naar 10. Zelfde les als TOP_K: de knop die "meer informatie" belooft, kost
+  precisie. Meten, niet aannemen.
+- **Bronquotum lost geen semantische afstand op** (zelfde meting). Plaatsen in de
+  top-K reserveren voor de ondervertegenwoordigde bron (77 NL-chunks tegen 900
+  EU-chunks) leverde één case op van de vier: bij de andere drie stond de
+  doelchunk op rang 56, 92 en 95 — die haal je met geen enkel quotum binnen.
+  Oorzaak is vocabulaire, niet volume: de vraag zegt "boete", "uittesten",
+  "aanspreekpunt"; de wet zegt "bestuurlijke boete ten hoogste het bedrag,
+  genoemd in artikel 99, vierde lid", "AI-testomgeving voor regelgeving",
+  "centraal contactpunt, bedoeld in artikel 70, tweede lid". Dát is de knop:
+  query-expansie naar wetsvocabulaire (of een reranker), niet meer kandidaten.
 
 ## Soevereine stack
 

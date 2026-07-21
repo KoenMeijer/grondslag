@@ -66,13 +66,27 @@ te begrijpen is") in plaats van UAIV artikel 3.10 ("Nederlands of Engels");
 EU-instellingen) in plaats van UAIV artikel 3.7. De 77 NL-chunks verliezen het
 structureel van 900 EU-chunks die dezelfde begrippen letterlijker gebruiken.
 
-Kandidaat-knoppen, in volgorde van verwachte opbrengst per euro:
-1. **Bronquotum in retrieval** — reserveer 1–2 van de top-K plaatsen voor de
-   best scorende NL-chunk, deterministisch en zonder keyword-heuristiek. Risico:
-   verdringt een goede EU-chunk bij EU-vragen; de 14-case set laat dat meteen zien.
-2. Query-expansie naar wetsvocabulaire (helpt ook `actualiteit-hoogrisico-deadline`).
-3. Reranker — zwaarder, extra modelaanroep per vraag.
-TOP_K verhogen blijft afgeraden: dat maakte grounding eerder aantoonbaar slechter.
+**Bronquotum gemeten en afgevoerd (21 jul 2026, `evals/meet_bronquotum.py`).**
+Het idee — 1 à 2 van de vijf top-K-plaatsen reserveren voor de best scorende
+NL-chunk — leverde één extra case op (7/12 tegen 6/12) en kost twee van de vijf
+plaatsen bij élke vraag. Niet doorgevoerd; `retrieval.py` is ongewijzigd. De
+meetbank staat in de repo als onderbouwing, net als `meet_fusie.py`.
+
+Twee lessen uit die meting, beide contra-intuïtief:
+- **Kandidatendiepte verhogen maakt het slechter**: 20 → 50 → 100 kandidaten per
+  zoekpad gaf 6/12 → 4/12 → 4/12. RRF verwatert; middelmatige chunks uit twee
+  paden verdringen een chunk die in één pad hoog staat.
+- **Volume was niet de oorzaak, vocabulaire wel.** Bij drie van de vier NL-cases
+  stond de doelchunk op rang 56, 92 en 95 — onbereikbaar voor welk quotum ook.
+  De vraag zegt "boete" en "uittesten", de wet zegt "bestuurlijke boete ten
+  hoogste het bedrag, genoemd in artikel 99, vierde lid" en "AI-testomgeving
+  voor regelgeving".
+
+Volgende knop, nu met bewijs onderbouwd: **query-expansie naar wetsvocabulaire**.
+Die raakt niet alleen de NL-cases maar ook `actualiteit-hoogrisico-deadline`
+(doelrang 24) en `rol-fria-overheid` (rang 23) — dezelfde oorzaak. Daarna pas
+een reranker (zwaarder: extra modelaanroep per vraag). TOP_K verhogen blijft
+afgeraden: dat maakte grounding eerder aantoonbaar slechter.
 
 **Meetruis:** `nl-toezicht-uaiv` sloeg tussen twee runs om van ✓ naar ✗ bij
 identiek corpus, identieke prompt en temperatuur 0 — zelfde retrieval, andere
