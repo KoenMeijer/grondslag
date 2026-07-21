@@ -23,11 +23,11 @@ het compose-netwerk.
 ## Eenmalige VPS-setup
 
 1. Docker + docker compose aanwezig (staat er al voor de andere projecten).
-2. Nginx-serverblok (vervang het placeholder-domein zodra er een domein is):
+2. Nginx-serverblok (v1 draait op het subdomein, zie stap 1):
 
 ```nginx
 server {
-    server_name aiactwijzer.example.nl;
+    server_name grondslag.almaconecta.eu;
 
     # API: prefix /api wordt gestript door de trailing slash in proxy_pass.
     location /api/ {
@@ -49,7 +49,7 @@ server {
 }
 ```
 
-3. TLS: `certbot --nginx -d aiactwijzer.example.nl` (zelfde werkwijze als de
+3. TLS: `certbot --nginx -d grondslag.almaconecta.eu` (zelfde werkwijze als de
    andere projecten; certbot herschrijft het blok naar 443).
 
 ## Stappenplan livegang (van nul naar draaiende demo)
@@ -57,11 +57,14 @@ server {
 Volgorde is bewust: variabelen vóór de eerste push (anders faalt de
 deploy-job), DNS vóór certbot (anders faalt de challenge).
 
-**Stap 1 — Naam en domein.**
-De projectnaam is nog niet definitief (CLAUDE.md: werknaam AiActWijzer,
-alternatief *Grondslag* — domeincheck stond nog open). Kies de naam, registreer
-het domein en zet een **A-record** naar het VPS-IP. DNS mag alvast propageren
-terwijl je verder gaat.
+**Stap 1 — Domein: eerst een subdomein van alma.**
+Naam gekozen: **Grondslag** (CLAUDE.md, 21 jul 2026); `grondslag.eu` is het doel,
+maar voor de eerste livegang draaien we op een subdomein van het bestaande
+`almaconecta.eu`: **`grondslag.almaconecta.eu`**. Reden: geen registratie en geen
+wachttijd op beschikbaarheid, en de VPS is dezelfde machine — alleen een
+**A-record** `grondslag` → het VPS-IP bij de DNS-provider van `almaconecta.eu`.
+Overstappen naar een eigen domein is later een kwestie van DNS + nginx + certbot;
+zie *Later: naar een eigen domein* onderaan.
 
 **Stap 2 — Deploy-sleutelpaar.**
 Maak een eigen keypair voor de pipeline (niet je persoonlijke sleutel):
@@ -99,8 +102,10 @@ Volg de pipeline: `backend_tests` + `frontend_tests` → `deploy_hetzner`. De
 eerste deploy bouwt beide images op de VPS en duurt enkele minuten.
 
 **Stap 6 — TLS.**
-Zodra DNS doorverwijst: `sudo certbot --nginx -d <domein>` (herschrijft het
-blok naar 443 + redirect).
+Zodra DNS doorverwijst: `sudo certbot --nginx -d grondslag.almaconecta.eu`
+(herschrijft het blok naar 443 + redirect). Dit is een **los certificaat** voor
+het subdomein; het bestaande cert van alma wordt niet aangeraakt en hoeft niet
+uitgebreid te worden — de twee sites blijven onafhankelijk.
 
 **Stap 7 — Corpus indexeren (eenmalig).**
 Pipeline-pagina → play-knop bij **`index_corpus`**. Dit embedt ~duizend chunks
@@ -117,6 +122,47 @@ Domein vermelden op de transparantie-pagina waar relevant; MIT-licentie +
 GitHub-publicatie (vindbaarheid/portfolio — CI blijft op GitLab); demo +
 LinkedIn-post.
 
+## Later: naar een eigen domein (bv. grondslag.eu)
+
+De code kent het domein niet: de frontend praat relatief via `/api`, er is geen
+CORS-config en geen `BASE_URL`-variabele. De overstap is dus puur infra — DNS,
+nginx, certbot — en kost geen deploy of rebuild.
+
+1. **Registreren en controleren.** Whois toonde eerder NXDOMAIN voor
+   `grondslag.eu`; dat is geen bewijs van beschikbaarheid, dus bevestig het bij
+   de registrar. Zet daarna een **A-record** (`@`, en `www` als je die wil) naar
+   hetzelfde VPS-IP.
+2. **Nginx: domein toevoegen, niet vervangen.** Zet het nieuwe domein er eerst
+   *naast* in het bestaande blok, zodat het subdomein blijft werken terwijl DNS
+   propageert:
+   `server_name grondslag.almaconecta.eu grondslag.eu www.grondslag.eu;` →
+   `sudo nginx -t && sudo systemctl reload nginx`.
+3. **Certificaat uitbreiden.**
+   `sudo certbot --nginx -d grondslag.almaconecta.eu -d grondslag.eu -d www.grondslag.eu`
+   — certbot vervangt het bestaande cert door één met alle namen erin. Doe dit
+   pas als de DNS van het nieuwe domein daadwerkelijk het VPS-IP teruggeeft
+   (`dig +short grondslag.eu`), anders faalt de HTTP-01-challenge en rolt certbot
+   de hele wijziging terug.
+4. **Omzetten.** Maak het nieuwe domein de canonieke naam en laat het subdomein
+   een tijdje 301'en, zodat gedeelde links blijven werken:
+
+```nginx
+server {
+    listen 443 ssl;
+    server_name grondslag.almaconecta.eu;
+    return 301 https://grondslag.eu$request_uri;
+    # ssl_certificate-regels van certbot hier laten staan
+}
+```
+
+5. **Opruimen.** Pas als niemand het subdomein meer gebruikt: het redirect-blok
+   weg, het A-record weg, en het subdomein uit het certificaat halen met
+   `sudo certbot --nginx -d grondslag.eu -d www.grondslag.eu` (certbot vraagt om
+   bevestiging dat het cert de oude naam verliest).
+6. **Nalopen op vermeldingen.** Domeinnaam staat verder alleen in tekst:
+   `CLAUDE.md`, dit bestand, de transparantie-pagina en de LinkedIn/README-links.
+   `grep -rn "almaconecta" .` vóór je afsluit.
+
 ## Corpus- of RAG-wijziging
 
 Werkafspraak: eval-suite lokaal draaien vóór de push (zie README — exit ≠ 0 is
@@ -128,6 +174,10 @@ push → deploy → handmatig `index_corpus` draaien.
 - **Evals niet in CI**: elke run kost Mistral-calls, en de bekende stand
   (8/7/10) zou de pipeline permanent rood kleuren. Kwaliteitsbewaking is een
   bewuste lokale actie met menselijke beoordeling van de scorekaart.
+- **Eerst een subdomein van alma, niet meteen een eigen domein**: het domein
+  zit nergens in de code, dus registratie is geen blokkade voor livegang. Zo
+  komt de demo online zonder te wachten op domeincheck/registratie, en blijft
+  `grondslag.eu` een losse, omkeerbare stap.
 - **Corpus als bind-mount, niet in de image**: corpus-update = rsync +
   index-job, zonder rebuild.
 - **rsync zonder `--delete`**: een hernoemde map kan nooit per ongeluk data op

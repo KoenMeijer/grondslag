@@ -11,8 +11,14 @@ vlaggenschip dat alle drie de assen raakt (serieuze RAG + governance-inhoud + so
 Bronnenset/naslag: `../persoonlijk/naslag/eu-ai-act-nl.md`. De RAG- en eval-aanpak staan
 zelfstandig in dit project: `docs/rag-aanpak.md` en `docs/eval-aanpak.md`.
 
-- **Naam:** AiActWijzer (werknaam). Alternatief dat overwogen is: *Grondslag*
-  (woordspeling juridische grondslag ↔ RAG-grounding); domeincheck nog te doen.
+- **Naam:** **Grondslag** (gekozen 21 jul 2026; woordspeling juridische grondslag ↔
+  RAG-grounding). Domein: **grondslag.eu** — `.eu` past bij de EU-verordening + soevereine
+  stack; nog definitief te bevestigen bij registratie (whois toonde NXDOMAIN, geen bewijs
+  van beschikbaarheid). **V1 gaat live op `grondslag.almaconecta.eu`** — subdomein van
+  alma, zodat registratie geen blokkade is; overstap naar het eigen domein staat als
+  losse route in `docs/deploy.md`. *AiActWijzer* was de werknaam en leunde op de Engelse term; in de
+  copy hanteren we consequent "AI-verordening (AI Act)". De codebase draagt nog
+  grotendeels de oude naam — hernoemen is een aparte actie.
 - **Eerste oplever (2–3 avonden):** wettekst indexeren + 10 golden-set-vragen met
   grounding-eval. **Gerealiseerd 19 jul 2026**; na de retrieval-experimenten
   (artikel 3-splitsing, hybride zoeken 1.5:1) staat de eval op retrieval 8/10,
