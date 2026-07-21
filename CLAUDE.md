@@ -21,9 +21,10 @@ zelfstandig in dit project: `docs/rag-aanpak.md` en `docs/eval-aanpak.md`.
   grotendeels de oude naam — hernoemen is een aparte actie.
 - **Eerste oplever (2–3 avonden):** wettekst indexeren + 10 golden-set-vragen met
   grounding-eval. **Gerealiseerd 19 jul 2026**; na de retrieval-experimenten
-  (artikel 3-splitsing, hybride zoeken 1.5:1) staat de eval op retrieval 8/10,
-  grounding 9/10 (21 jul 2026, na opname van het UAIV-wetsvoorstel als primaire
-  NL-brontekst), abstentie 10/10 — open punten en kandidaat-knoppen in de
+  (artikel 3-splitsing, hybride zoeken 1.5:1) staat de eval op **retrieval 8/14,
+  grounding 9/14, abstentie 14/14** (21 jul 2026; de set groeide van 10 naar 14
+  cases met de UAIV-nulmeting — de vier NL-cases falen alle vier op retrieval,
+  dus de daling is nieuw meetbereik, geen achteruitgang) — knoppen in de
   README; de memorisatie-les (golden-vraag nooit letterlijk in het corpus)
   staat in docs/eval-aanpak.md.
 - **Publiek moment:** demo + LinkedIn-post.

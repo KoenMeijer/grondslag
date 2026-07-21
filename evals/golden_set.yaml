@@ -85,3 +85,41 @@
   grounding_markers: []
   verboden_markers: []
   abstentie: true
+
+# NL-doorwerking op de primaire brontekst (toegevoegd 21-07-2026). Deze cases
+# meten iets anders dan nl-toezicht-uaiv: dáár volstaat de wegwijzer, hier moet
+# retrieval de UAIV-artikelen zelf ophalen tussen 900 EU-chunks door. De
+# formuleringen wijken bewust af van de corpuswoorden (memorisatie-les,
+# docs/eval-aanpak.md): "aanspreekpunt richting Europa" i.p.v. "centraal
+# contactpunt", "uittesten" i.p.v. "AI-testomgeving voor regelgeving".
+- id: nl-boete-verboden-praktijk
+  categorie: nl-doorwerking
+  vraag: "Kan een toezichthouder in Nederland een boete opleggen aan een organisatie die een verboden AI-systeem gebruikt?"
+  retrieval_refs: ["UAIV artikel 3.7"]
+  grounding_markers: ["bestuurlijke boete"]
+  verboden_markers: []
+  abstentie: false
+
+- id: nl-taal-documentatie
+  categorie: nl-doorwerking
+  vraag: "In welke taal moet ik mijn documentatie aanleveren aan de Nederlandse toezichthouder?"
+  retrieval_refs: ["UAIV artikel 3.10"]
+  grounding_markers: ["Nederlands", "Engels"]
+  verboden_markers: []
+  abstentie: false
+
+- id: nl-aanspreekpunt-europa
+  categorie: nl-doorwerking
+  vraag: "Welke instantie is in Nederland het aanspreekpunt richting Europa voor de AI-regels?"
+  retrieval_refs: ["UAIV artikel 2.3"]
+  grounding_markers: ["minister"]
+  verboden_markers: ["Rijksinspectie Digitale Infrastructuur"]
+  abstentie: false
+
+- id: nl-testomgeving-uittesten
+  categorie: nl-doorwerking
+  vraag: "Kan ik een AI-systeem in Nederland onder toezicht uittesten voordat ik het op de markt breng?"
+  retrieval_refs: ["UAIV artikel 4.1"]
+  grounding_markers: ["markttoezichtautoriteiten"]
+  verboden_markers: []
+  abstentie: false

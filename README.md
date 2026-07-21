@@ -53,10 +53,28 @@ een correct-maar-onvolledig antwoord (nooit de verouderde datum):
 vraag ↔ wetstekst; kandidaat-knoppen: query-expansie naar wetsvocabulaire,
 reranker). Een exit-code ≠ 0 op deze stand is dus verwacht.
 
-**Waargenomen zwakte, nog niet in de golden set:** bij UAIV-specifieke vragen
-haalt retrieval het juiste artikel vaak wél op, maar niet altijd hoog genoeg —
-in ad-hoc proeven wisselde het antwoord tussen een correct gegrond antwoord en
-een eerlijke abstentie, afhankelijk van welke EU-chunks meekwamen
-(lost-in-the-middle, zie `docs/rag-aanpak.md`). Volgende stap: UAIV-cases aan de
-golden set toevoegen (formulering nooit letterlijk uit het corpus), dán pas aan
-knoppen draaien.
+**Nulmeting NL-doorwerking (2026-07-21, 14 cases):** retrieval 8/14, grounding
+9/14, abstentie 14/14. De vier nieuwe UAIV-cases falen **alle vier** op
+retrieval. Dat de cijfers dalen betekent niet dat het systeem slechter werd — we
+meten nu iets dat de set van 10 niet zag.
+
+Het failure-patroon is bovendien scherper dan verwacht: de NL-vragen krijgen
+geen eerlijke abstentie maar een **zelfverzekerd EU-antwoord**. "In welke taal
+moet ik documentatie aanleveren?" levert artikel 21 ("een taal die gemakkelijk
+te begrijpen is") in plaats van UAIV artikel 3.10 ("Nederlands of Engels");
+"kan een toezichthouder een boete opleggen?" levert artikel 100 (boetes voor
+EU-instellingen) in plaats van UAIV artikel 3.7. De 77 NL-chunks verliezen het
+structureel van 900 EU-chunks die dezelfde begrippen letterlijker gebruiken.
+
+Kandidaat-knoppen, in volgorde van verwachte opbrengst per euro:
+1. **Bronquotum in retrieval** — reserveer 1–2 van de top-K plaatsen voor de
+   best scorende NL-chunk, deterministisch en zonder keyword-heuristiek. Risico:
+   verdringt een goede EU-chunk bij EU-vragen; de 14-case set laat dat meteen zien.
+2. Query-expansie naar wetsvocabulaire (helpt ook `actualiteit-hoogrisico-deadline`).
+3. Reranker — zwaarder, extra modelaanroep per vraag.
+TOP_K verhogen blijft afgeraden: dat maakte grounding eerder aantoonbaar slechter.
+
+**Meetruis:** `nl-toezicht-uaiv` sloeg tussen twee runs om van ✓ naar ✗ bij
+identiek corpus, identieke prompt en temperatuur 0 — zelfde retrieval, andere
+formulering. Beoordeel een enkele run dus niet als bewijs; kijk naar het patroon
+over runs.
