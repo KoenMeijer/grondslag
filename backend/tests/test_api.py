@@ -12,6 +12,39 @@ def test_health():
     assert client.get("/health").json() == {"status": "ok"}
 
 
+def test_ask_telt_een_vraag(monkeypatch):
+    resultaat = AskResultaat(antwoord="a", citaten=[], stand_van_wetgeving="juli 2026",
+                             opgehaalde_refs=[])
+    monkeypatch.setattr(service, "beantwoord", lambda sessie, vraag: resultaat)
+    geteld = []
+    monkeypatch.setattr("app.main.tel_op", lambda sleutel: geteld.append(sleutel))
+
+    client.post("/ask", json={"vraag": "Wat is hoog risico?"})
+
+    # Alleen dát er een vraag was, niet welke
+    assert geteld == ["vraag"]
+
+
+def test_bezoek_telt_alleen_het_pad(monkeypatch):
+    geteld = []
+    monkeypatch.setattr("app.main.tel_op", lambda sleutel: geteld.append(sleutel))
+
+    r = client.post("/bezoek", json={"pad": "/over"})
+
+    assert r.status_code == 204
+    assert geteld == ["bezoek:/over"]
+
+
+def test_bezoek_weigert_onbekende_paden(monkeypatch):
+    # Een open teller is een open deur: zonder witte lijst kan iedereen de
+    # tabel volschrijven met verzonnen paden.
+    geteld = []
+    monkeypatch.setattr("app.main.tel_op", lambda sleutel: geteld.append(sleutel))
+
+    assert client.post("/bezoek", json={"pad": "/verzonnen"}).status_code == 204
+    assert geteld == []
+
+
 def test_ask_geeft_antwoord_met_citaten(monkeypatch):
     resultaat = AskResultaat(
         antwoord="Zie [Artikel 6, lid 2].",

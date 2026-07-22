@@ -184,6 +184,22 @@ server {
    `CLAUDE.md`, dit bestand, de transparantie-pagina en de LinkedIn/README-links.
    `grep -rn "almaconecta" .` vóór je afsluit.
 
+## Gebruikscijfers uitlezen
+
+Per dag wordt geteld: het aantal bezoeken per pagina en het aantal gestelde
+vragen. Geen IP, geen cookie, geen vraagtekst — zie de transparantie-pagina,
+die deze belofte expliciet doet. Uitlezen:
+
+```bash
+ssh root@<SSH_HOST> "cd aiactwijzer && docker compose -f docker-compose.prod.yml \
+  exec -T db psql -U aiact -d aiact -c \
+  'select datum, sleutel, aantal from dagtellingen order by datum desc, sleutel'"
+```
+
+De tabel groeit met het aantal dagen, niet met het aantal bezoeken (upsert per
+dag). Wijzig je hier iets aan, pas dan ook de privacy-alinea op
+`/transparantie` aan — de tool hoort zelf te doen wat zij belooft.
+
 ## Corpus- of RAG-wijziging
 
 Werkafspraak: eval-suite lokaal draaien vóór de push (zie README — exit ≠ 0 is

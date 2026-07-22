@@ -63,6 +63,13 @@
         aan de EU-gehoste Mistral-API. Ook bezoekgegevens registreren we niet:
         de webserver houdt geen toegangslog met IP-adressen bij.
       </p>
+      <p class="vervolg">
+        Wat we wél bijhouden is een teller: per dag het aantal bezochte pagina's
+        en het aantal gestelde vragen. Dat gebeurt zonder IP-adres, zonder cookie
+        en zonder de inhoud van de vraag — er wordt alleen een getal opgehoogd.
+        Daarmee kunnen we zien of de tool gebruikt wordt, maar niet wie hem
+        gebruikt of wat iemand heeft gevraagd.
+      </p>
     </section>
   </article>
 </template>
@@ -72,4 +79,5 @@
 .transparantie h1 { font-size: 26px; margin: 0 0 20px; }
 .transparantie h2 { font-size: 17px; margin: 24px 0 6px; }
 .transparantie p { margin: 0; }
+.transparantie .vervolg { margin-top: 10px; }
 </style>

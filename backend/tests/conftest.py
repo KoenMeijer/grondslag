@@ -4,6 +4,13 @@ import pytest
 from sqlalchemy import text
 
 
+@pytest.fixture(autouse=True)
+def geen_echte_tellingen(monkeypatch):
+    """Tests mogen de gebruiksstatistiek niet vervuilen. Tests die het tellen
+    zélf controleren, zetten hier hun eigen spy overheen."""
+    monkeypatch.setattr("app.main.tel_op", lambda *a, **k: None, raising=False)
+
+
 @pytest.fixture(scope="session")
 def db():
     from app.db import engine, init_db

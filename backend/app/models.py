@@ -1,7 +1,7 @@
 """Datamodel: bronnen en chunks. `ref` is het citatie-anker ("Artikel 6, lid 2")
 dat het citaat-paneel en de eval-suite voeden — zie de spec."""
 from pgvector.sqlalchemy import Vector
-from sqlalchemy import ForeignKey, Text
+from sqlalchemy import ForeignKey, Text, UniqueConstraint
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 from app.config import settings
@@ -38,3 +38,19 @@ class Chunk(Base):
     volgorde: Mapped[int]
     embedding: Mapped[list[float]] = mapped_column(Vector(settings.embed_dim))
     source: Mapped[Source] = relationship(back_populates="chunks")
+
+
+class Dagtelling(Base):
+    """Gebruikstellingen per dag. Bewust géén IP, sessie, user-agent of
+    vraagtekst: de transparantie-pagina belooft dat wij dat niet bijhouden, en
+    een tabel zonder die kolommen kan die belofte niet per ongeluk breken.
+    Eén rij per (datum, sleutel), opgehoogd via upsert — de tabel groeit dus met
+    het aantal dagen, niet met het aantal bezoeken."""
+
+    __tablename__ = "dagtellingen"
+    __table_args__ = (UniqueConstraint("datum", "sleutel", name="uq_dagtelling"),)
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    datum: Mapped[str]      # ISO-datum (UTC); string volstaat en leest in psql prettig
+    sleutel: Mapped[str]    # "bezoek:/", "bezoek:/over", "vraag"
+    aantal: Mapped[int]
