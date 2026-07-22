@@ -1,3 +1,10 @@
+<script setup lang="ts">
+useHead({
+  title: 'Transparantie · Grondslag',
+  meta: [{ name: 'description', content: 'Welk model Grondslag gebruikt, waar het draait, welke bronnen erin zitten en wat er wel en niet wordt bijgehouden.' }],
+})
+</script>
+
 <template>
   <article class="transparantie">
     <h1>Transparantie</h1>

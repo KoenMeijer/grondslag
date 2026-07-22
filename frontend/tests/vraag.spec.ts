@@ -34,6 +34,14 @@ describe('vraagStore', () => {
     expect(store.fout).toContain('Probeer het opnieuw')
   })
 
+  it('vertaalt een 429 naar een uitleg over de limiet, niet naar een storing', async () => {
+    vi.mocked($fetch).mockRejectedValue({ response: { status: 429 } })
+    const store = useVraagStore()
+    await store.stel('Is cv-screening hoog risico?')
+    expect(store.fout).toContain('kort wachten')
+    expect(store.fout).not.toContain('Probeer het opnieuw.')
+  })
+
   it('markeer zet de actieve ref', () => {
     const store = useVraagStore()
     store.markeer('Artikel 6, lid 2')

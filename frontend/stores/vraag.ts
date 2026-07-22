@@ -38,9 +38,14 @@ export const useVraagStore = defineStore('vraag', {
           method: 'POST',
           body: { vraag },
         })
-      } catch {
-        // Kalme melding, geen technische details — toon per design-brief §5
-        this.fout = 'Het antwoord kon niet worden opgehaald. Probeer het opnieuw.'
+      } catch (e) {
+        // Kalme melding, geen technische details — toon per design-brief §5.
+        // 429 apart: dat is geen storing maar de snelheidslimiet, en dan is
+        // "probeer het opnieuw" juist het verkeerde advies.
+        const status = (e as { response?: { status?: number } })?.response?.status
+        this.fout = status === 429
+          ? 'Er komen op dit moment veel vragen binnen. Na kort wachten kun je het opnieuw proberen.'
+          : 'Het antwoord kon niet worden opgehaald. Probeer het opnieuw.'
       } finally {
         this.bezig = false
       }

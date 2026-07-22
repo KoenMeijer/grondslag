@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Grondslag">
+  <!-- Signatuur van het ontwerp in het klein: papier met de okerrand van het
+       citaatblok, en de G in een schreefletter zoals de wettekst zelf. -->
+  <rect width="64" height="64" rx="8" fill="#FAFAF7"/>
+  <rect x="8" y="10" width="4" height="44" fill="#B98A2F"/>
+  <text x="38" y="46" text-anchor="middle" font-family="Literata, Georgia, serif"
+        font-size="42" fill="#14213D">G</text>
+</svg>

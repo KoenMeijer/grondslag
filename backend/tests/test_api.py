@@ -56,7 +56,7 @@ def test_mistralfout_wordt_502(monkeypatch):
         raise MistralFout("api plat")
     monkeypatch.setattr(service, "beantwoord", kapot)
 
-    r = client.post("/ask", json={"vraag": "x"})
+    r = client.post("/ask", json={"vraag": "Is cv-screening hoog risico?"})
     assert r.status_code == 502
 
 
@@ -66,7 +66,7 @@ def _stel_vraag(monkeypatch, antwoord: str, citaten=()):
     monkeypatch.setattr(service, "beantwoord", lambda sessie, vraag: resultaat)
     geteld = []
     monkeypatch.setattr("app.main.tel_op", lambda sleutel: geteld.append(sleutel))
-    client.post("/ask", json={"vraag": "v"})
+    client.post("/ask", json={"vraag": "Is cv-screening hoog risico?"})
     return geteld
 
 
@@ -97,5 +97,16 @@ def test_modelfout_telt_als_fout_en_niet_als_vraag(monkeypatch):
     geteld = []
     monkeypatch.setattr("app.main.tel_op", lambda sleutel: geteld.append(sleutel))
 
-    assert client.post("/ask", json={"vraag": "v"}).status_code == 502
+    assert client.post("/ask", json={"vraag": "Is cv-screening hoog risico?"}).status_code == 502
     assert geteld == ["vraag:fout"]
+
+
+def test_te_lange_vraag_wordt_geweigerd():
+    # Zonder bovengrens betaalt elke lange vraag zich uit in embedding- en
+    # generatietokens; 422 is goedkoper dan een rekening.
+    r = client.post("/ask", json={"vraag": "a" * 1001})
+    assert r.status_code == 422
+
+
+def test_lege_vraag_wordt_geweigerd():
+    assert client.post("/ask", json={"vraag": "  "}).status_code == 422

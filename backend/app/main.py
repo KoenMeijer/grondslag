@@ -4,7 +4,7 @@ import logging
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException, Response
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, field_validator
 
 from app.db import SessionLocal, init_db
 from app.rag import service
@@ -37,7 +37,17 @@ PAGINAS = {"/", "/over", "/transparantie"}
 
 
 class AskVraag(BaseModel):
-    vraag: str
+    # Bovengrens is een kostenmaatregel: elke vraag wordt geëmbed én meegestuurd
+    # in de prompt, dus lengte vertaalt zich direct in tokens. 1000 tekens is
+    # ruim voor een situatieschets en te krap voor misbruik.
+    vraag: str = Field(min_length=3, max_length=1000)
+
+    @field_validator("vraag")
+    @classmethod
+    def niet_alleen_witruimte(cls, v: str) -> str:
+        if not v.strip():
+            raise ValueError("vraag mag niet leeg zijn")
+        return v
 
 
 class CitaatUit(BaseModel):

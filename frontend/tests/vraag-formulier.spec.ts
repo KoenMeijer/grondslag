@@ -46,6 +46,22 @@ describe('VraagFormulier', () => {
     expect(w.find('.voorbeelden').exists()).toBe(false)
   })
 
+  it('verstuurt met Enter', async () => {
+    const w = maak()
+    await w.find('textarea').setValue('Is cv-screening hoog risico?')
+    await w.find('textarea').trigger('keydown.enter')
+    const store = useVraagStore()
+    expect(store.stel).toHaveBeenCalledWith('Is cv-screening hoog risico?')
+  })
+
+  it('laat Shift+Enter een nieuwe regel maken', async () => {
+    const w = maak()
+    await w.find('textarea').setValue('Regel een')
+    await w.find('textarea').trigger('keydown.enter', { shiftKey: true })
+    const store = useVraagStore()
+    expect(store.stel).not.toHaveBeenCalled()
+  })
+
   it('verbergt de voorbeelden tijdens het zoeken', () => {
     const w = maak({ bezig: true })
     expect(w.find('.voorbeelden').exists()).toBe(false)

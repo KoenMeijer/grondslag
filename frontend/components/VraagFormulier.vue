@@ -34,6 +34,7 @@ function stelVoorbeeld(tekst: string) {
       v-model="store.invoer"
       rows="3"
       placeholder="Beschrijf je situatie of stel je vraag"
+      @keydown.enter.exact.prevent="verstuur"
     />
     <button type="submit" :disabled="!kanVersturen">
       {{ store.bezig ? 'Bezig met zoeken in de wettekst…' : 'Stel je vraag' }}
