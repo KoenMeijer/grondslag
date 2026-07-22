@@ -80,8 +80,14 @@ RAG-context voedt, daarna vrij doorvragen. Uitgewerkte concurrentie-analyse:
 4. **Privacy van gebruikersvragen.** Bij een door ons gehoste demo: geen of minimale,
    geanonimiseerde logging, korte retentie, en dit benoemd op de transparantie-pagina.
    Vragen worden nooit trainings- of evaldata zonder dat expliciet te melden.
-5. **Licentie en kanaal.** Open source onder **MIT**; publicatie op **GitHub**
-   (vindbaarheid/portfolio), CI/deploy mag op GitLab → Hetzner blijven.
+   → Ingevuld (22 jul 2026): nginx `access_log off`, en gebruikscijfers als
+   dagtellers zonder IP, cookie of vraagtekst (`backend/app/tellen.py`). Geen
+   bewaartermijn nodig omdat er geen persoonsgegevens in zitten. Wie hier iets
+   aan wijzigt, past ook `/transparantie` aan — die pagina doet de belofte.
+5. **Licentie en kanaal.** Open source onder **MIT** (`LICENSE`); gepubliceerd op
+   **github.com/KoenMeijer/grondslag** via een push-mirror vanaf GitLab, waar CI
+   en deploy naar Hetzner blijven draaien. Privécontext hoort in het
+   niet-getrackte `CLAUDE.local.md`, niet hier.
 
 ## Scope v1 (wat er wél en níet in zit)
 
