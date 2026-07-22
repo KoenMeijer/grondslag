@@ -143,9 +143,11 @@ De code kent het domein niet: de frontend praat relatief via `/api`, er is geen
 CORS-config en geen `BASE_URL`-variabele. De overstap was dus puur infra — DNS,
 nginx, certbot — zonder deploy of rebuild.
 
-Stappen 1 t/m 3 zijn **uitgevoerd**; het certificaat draagt nu drie namen
-(`grondslag.eu`, `www.grondslag.eu`, `grondslag.almaconecta.eu`) en beide
-domeinen serveren de site. Stappen 4 t/m 6 staan nog open.
+Stappen 1 t/m 4 zijn **uitgevoerd**. Het certificaat draagt drie namen
+(`grondslag.eu`, `www.grondslag.eu`, `grondslag.almaconecta.eu`); sinds
+22 jul 2026 is `grondslag.eu` de canonieke naam en sturen de andere twee
+permanent door, met behoud van het pad. Stappen 5 en 6 (opruimen) staan open —
+doe die pas als niemand het oude subdomein meer gebruikt.
 
 1. ✅ **Geregistreerd**, zone bij Hetzner DNS, **A-records** `@` en `www` naar
    het VPS-IP. Bewust **geen AAAA**: de VPS heeft wel IPv6, maar nginx luistert
@@ -164,8 +166,12 @@ domeinen serveren de site. Stappen 4 t/m 6 staan nog open.
    pas als de DNS van het nieuwe domein daadwerkelijk het VPS-IP teruggeeft
    (`dig +short grondslag.eu`), anders faalt de HTTP-01-challenge en rolt certbot
    de hele wijziging terug.
-4. **Omzetten.** Maak het nieuwe domein de canonieke naam en laat het subdomein
-   een tijdje 301'en, zodat gedeelde links blijven werken:
+4. ✅ **Omgezet.** Het hoofdblok bedient alleen nog `grondslag.eu`; een tweede
+   443-blok vangt `www` en het subdomein af met een 301. Ook de poort-80-regels
+   van certbot wijzen nu rechtstreeks naar de canonieke naam, zodat een bezoeker
+   op `http://www...` niet twee omleidingen achter elkaar krijgt. Het script dat
+   dit deed staat op de VPS als `/root/canoniek.py`; de eindstand is
+   overgenomen in `deploy/nginx/grondslag.eu.conf`. Vorm:
 
 ```nginx
 server {

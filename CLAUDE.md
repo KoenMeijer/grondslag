@@ -14,9 +14,9 @@ publiek, dus houd die scheiding aan bij nieuwe notities.
 - **Naam:** **Grondslag** (gekozen 21 jul 2026; woordspeling juridische grondslag ↔
   RAG-grounding). Domein: **grondslag.eu** — `.eu` past bij de EU-verordening + soevereine
   stack. **Geregistreerd en live op https://grondslag.eu** (21 jul 2026; ook
-  `www.grondslag.eu`). Een subdomein van een ander project draaide als eerste livegang
-  en loopt nog mee zodat eerder gedeelde links blijven werken — omzetten naar één
-  canonieke naam is stap 4 in
+  `www.grondslag.eu`). Sinds 22 jul 2026 is `grondslag.eu` de **canonieke** naam:
+  `www` en het subdomein van de eerste livegang sturen permanent door (301), zodat
+  eerder gedeelde links blijven werken zonder dubbele vindbare versies. Zie
   `docs/deploy.md`. *AiActWijzer* was de werknaam en leunde op de Engelse term; in de
   copy hanteren we consequent "AI-verordening (AI Act)". De codebase draagt nog
   grotendeels de oude naam — hernoemen is een aparte actie.
