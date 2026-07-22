@@ -9,6 +9,7 @@ from pydantic import BaseModel
 from app.db import SessionLocal, init_db
 from app.rag import service
 from app.rag.mistral import MistralFout
+from app.rag.prompt import ABSTENTIEZIN
 from app.tellen import tel_op
 
 logger = logging.getLogger(__name__)
@@ -63,10 +64,17 @@ def ask(body: AskVraag):
         try:
             antwoord = service.beantwoord(sessie, body.vraag)
         except MistralFout as e:
+            tel_op("vraag:fout")
             raise HTTPException(status_code=502, detail=f"Modelaanroep mislukt: {e}")
-    # Pas ná een geslaagd antwoord: een mislukte modelaanroep is geen gestelde
-    # vraag in de statistiek. Alleen dát er gevraagd is, nooit wát.
+    # Alleen dát er gevraagd is, nooit wát. De drie uitkomsten worden apart
+    # geteld omdat ze om verschillende actie vragen: een modelfout is infra,
+    # een abstentie een gat in het corpus, en een antwoord zonder citaat een
+    # kwaliteitsrisico (ongegrond, terwijl grounding de belofte is).
     tel_op("vraag")
+    if ABSTENTIEZIN.lower() in antwoord.antwoord.lower():
+        tel_op("vraag:geen-bron")
+    elif not antwoord.citaten:
+        tel_op("vraag:zonder-citaat")
     return antwoord
 
 

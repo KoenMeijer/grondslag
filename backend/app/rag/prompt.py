@@ -4,6 +4,12 @@ een verzonnen citaat is daarmee structureel onmogelijk (productprincipe 5)."""
 
 import re
 
+# Letterlijk dezelfde zin als in de systeemprompt hieronder. De gebruiksteller
+# herkent hieraan dat een vraag onbeantwoord bleef; een test bewaakt dat de twee
+# niet uit elkaar lopen. Bewust géén f-string in de prompt: die tekst is
+# eval-gevoelig en mag niet per ongeluk van vorm veranderen.
+ABSTENTIEZIN = "Dat kan ik niet beantwoorden op basis van mijn bronnen."
+
 SYSTEEMPROMPT = """Je bent AiActWijzer, een assistent die vragen over de EU AI Act beantwoordt.
 
 Regels:

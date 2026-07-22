@@ -53,3 +53,10 @@ def test_vind_citaten_kiest_langste_prefix_bij_overlappende_refs():
 def test_systeemprompt_bevat_abstentie_en_geen_advies():
     assert "geen juridisch advies" in prompt.SYSTEEMPROMPT
     assert "jurist" in prompt.SYSTEEMPROMPT
+
+
+def test_abstentiezin_staat_letterlijk_in_de_systeemprompt():
+    # De teller in main.py herkent abstentie aan deze zin. Zou de prompt anders
+    # gaan luiden zonder de constante mee te wijzigen, dan telt hij stil niets
+    # meer — deze test maakt dat meteen zichtbaar.
+    assert prompt.ABSTENTIEZIN in prompt.SYSTEEMPROMPT

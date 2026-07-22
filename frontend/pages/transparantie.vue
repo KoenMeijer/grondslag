@@ -64,11 +64,12 @@
         de webserver houdt geen toegangslog met IP-adressen bij.
       </p>
       <p class="vervolg">
-        Wat we wél bijhouden is een teller: per dag het aantal bezochte pagina's
-        en het aantal gestelde vragen. Dat gebeurt zonder IP-adres, zonder cookie
-        en zonder de inhoud van de vraag — er wordt alleen een getal opgehoogd.
-        Daarmee kunnen we zien of de tool gebruikt wordt, maar niet wie hem
-        gebruikt of wat iemand heeft gevraagd.
+        Wat we wél bijhouden is een teller: per dag het aantal bezochte pagina's,
+        het aantal gestelde vragen, en hoe vaak een vraag onbeantwoord bleef of
+        misging. Dat gebeurt zonder IP-adres, zonder cookie en zonder de inhoud
+        van de vraag — er wordt alleen een getal opgehoogd. Daarmee zien we of de
+        tool gebruikt wordt en waar zij tekortschiet, maar niet wie hem gebruikt
+        of wat iemand heeft gevraagd.
       </p>
     </section>
   </article>

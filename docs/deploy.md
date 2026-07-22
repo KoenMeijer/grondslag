@@ -196,6 +196,14 @@ ssh root@<SSH_HOST> "cd aiactwijzer && docker compose -f docker-compose.prod.yml
   'select datum, sleutel, aantal from dagtellingen order by datum desc, sleutel'"
 ```
 
+Sleutels: `bezoek:<pad>` per pagina, `vraag` voor elke beantwoorde vraag, en
+drie soorten mislukking — `vraag:fout` (modelaanroep mislukt, kijk naar infra of
+API-key), `vraag:geen-bron` (de tool antwoordde dat het niet in de bronnen
+staat: een gat in corpus of retrieval) en `vraag:zonder-citaat` (wél antwoord,
+geen enkele bronverwijzing — dat hoort niet, want grounding is de belofte).
+Let op wat je hier níet uit kunt afleiden: de vraagtekst wordt niet bewaard, dus
+je ziet dát er iets misging, niet waarover.
+
 De tabel groeit met het aantal dagen, niet met het aantal bezoeken (upsert per
 dag). Wijzig je hier iets aan, pas dan ook de privacy-alinea op
 `/transparantie` aan — de tool hoort zelf te doen wat zij belooft.

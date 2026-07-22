@@ -12,19 +12,6 @@ def test_health():
     assert client.get("/health").json() == {"status": "ok"}
 
 
-def test_ask_telt_een_vraag(monkeypatch):
-    resultaat = AskResultaat(antwoord="a", citaten=[], stand_van_wetgeving="juli 2026",
-                             opgehaalde_refs=[])
-    monkeypatch.setattr(service, "beantwoord", lambda sessie, vraag: resultaat)
-    geteld = []
-    monkeypatch.setattr("app.main.tel_op", lambda sleutel: geteld.append(sleutel))
-
-    client.post("/ask", json={"vraag": "Wat is hoog risico?"})
-
-    # Alleen dát er een vraag was, niet welke
-    assert geteld == ["vraag"]
-
-
 def test_bezoek_telt_alleen_het_pad(monkeypatch):
     geteld = []
     monkeypatch.setattr("app.main.tel_op", lambda sleutel: geteld.append(sleutel))
@@ -71,3 +58,44 @@ def test_mistralfout_wordt_502(monkeypatch):
 
     r = client.post("/ask", json={"vraag": "x"})
     assert r.status_code == 502
+
+
+def _stel_vraag(monkeypatch, antwoord: str, citaten=()):
+    resultaat = AskResultaat(antwoord=antwoord, citaten=list(citaten),
+                             stand_van_wetgeving="juli 2026", opgehaalde_refs=[])
+    monkeypatch.setattr(service, "beantwoord", lambda sessie, vraag: resultaat)
+    geteld = []
+    monkeypatch.setattr("app.main.tel_op", lambda sleutel: geteld.append(sleutel))
+    client.post("/ask", json={"vraag": "v"})
+    return geteld
+
+
+CITAAT = Citaat(ref="Artikel 6, lid 2", fragment="t", bron="b", url="https://example.org")
+
+
+def test_geslaagd_antwoord_telt_alleen_de_vraag(monkeypatch):
+    assert _stel_vraag(monkeypatch, "Hoog risico [Artikel 6, lid 2].", [CITAAT]) == ["vraag"]
+
+
+def test_abstentie_wordt_apart_geteld(monkeypatch):
+    from app.rag.prompt import ABSTENTIEZIN
+
+    geteld = _stel_vraag(monkeypatch, ABSTENTIEZIN)
+    assert geteld == ["vraag", "vraag:geen-bron"]
+
+
+def test_antwoord_zonder_citaat_wordt_apart_geteld(monkeypatch):
+    geteld = _stel_vraag(monkeypatch, "Een antwoord zonder enige bronverwijzing.")
+    assert geteld == ["vraag", "vraag:zonder-citaat"]
+
+
+def test_modelfout_telt_als_fout_en_niet_als_vraag(monkeypatch):
+    def stuk(sessie, vraag):
+        raise MistralFout("time-out")
+
+    monkeypatch.setattr(service, "beantwoord", stuk)
+    geteld = []
+    monkeypatch.setattr("app.main.tel_op", lambda sleutel: geteld.append(sleutel))
+
+    assert client.post("/ask", json={"vraag": "v"}).status_code == 502
+    assert geteld == ["vraag:fout"]
