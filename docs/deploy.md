@@ -143,11 +143,19 @@ De code kent het domein niet: de frontend praat relatief via `/api`, er is geen
 CORS-config en geen `BASE_URL`-variabele. De overstap was dus puur infra — DNS,
 nginx, certbot — zonder deploy of rebuild.
 
-Stappen 1 t/m 4 zijn **uitgevoerd**. Het certificaat draagt drie namen
-(`grondslag.eu`, `www.grondslag.eu`, `grondslag.almaconecta.eu`); sinds
-22 jul 2026 is `grondslag.eu` de canonieke naam en sturen de andere twee
-permanent door, met behoud van het pad. Stappen 5 en 6 (opruimen) staan open —
-doe die pas als niemand het oude subdomein meer gebruikt.
+**Afgerond op 22 jul 2026.** `grondslag.eu` is de canonieke naam, `www` stuurt
+permanent door met behoud van het pad, en het subdomein van de eerste livegang
+is volledig opgeruimd: uit nginx, uit het certificaat en uit DNS. Het
+certificaat draagt nog twee namen (`grondslag.eu`, `www.grondslag.eu`).
+
+**Volgorde bij zo'n opruiming is niet vrijblijvend:** eerst nginx, dan het
+certificaat, dan pas DNS. Verdwijnt het DNS-record eerder, dan faalt de
+HTTP-01-challenge bij de eerstvolgende vernieuwing — en die sleept de andere
+namen op hetzelfde certificaat mee. Gebruik `certbot certonly --nginx
+--cert-name <bestaande-naam> -d ...`: `certonly` laat de serverblokken met rust
+en `--cert-name` houdt de bestandspaden gelijk, zodat de nginx-config blijft
+kloppen. Die map heet daardoor nog naar de oorspronkelijke naam; hernoemen zou
+de TLS-config breken voor niets.
 
 1. ✅ **Geregistreerd**, zone bij Hetzner DNS, **A-records** `@` en `www` naar
    het VPS-IP. Bewust **geen AAAA**: de VPS heeft wel IPv6, maar nginx luistert
