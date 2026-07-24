@@ -47,19 +47,21 @@ De eval-suite draait bij elke wijziging aan chunking, prompt of model —
 zie `docs/eval-aanpak.md`. Corpusbeheer: `corpus/` is de bron van waarheid,
 elke wijziging is een git-diff + eval-run.
 
-**Bekende stand (2026-07-24, 27 cases): retrieval 15/27, grounding 16/27,
+**Bekende stand (2026-07-24, 27 cases): retrieval 24/27, grounding 24/27,
 abstentie 27/27.** Een exit-code ≠ 0 op deze stand is dus verwacht.
-(Grounding wisselt per run op cases met kapotte retrieval — bekende API-ruis,
-zie `docs/eval-aanpak.md`.)
+(Grounding wisselt per run op enkele randcases — bekende API-ruis, zie
+`docs/eval-aanpak.md`.)
 
-De categorie **alledaags** (13 cases) is de meetlat voor de huidige
-verbeterfase: gewone-mensen-taal moet net zo goed werken als jurist-taal.
-Nulmeting 24 jul: zeven zelf bedachte jip-en-janneke-cases scoren 2/7
-retrieval, 0/7 grounding; zes échte formuleringen uit publieke bronnen
-(`evals/vragencorpus.md`) scoren 5/6 retrieval, 4/6 grounding — echte vragen
-bevatten vaker één bruikbaar anker dan de bewust wetsterm-vrije varianten.
-Abstentie blijft overal perfect: hij verzint niets, maar helpt de vrager op
-deze vragen nog niet verder.
+De categorie **alledaags** (13 cases) is de meetlat van de verbeterfase:
+gewone-mensen-taal moet net zo goed werken als jurist-taal. De nulmeting
+(24 jul, ochtend) stond op 2/7 retrieval en 0/7 grounding voor de
+jip-en-janneke-cases; na de gemeten prompt-knop (toepassings-regel) en de
+brugwijzer in het corpus (`corpus/nl-guidance/in-gewone-taal.md`, gestuurd
+door de vocabulaire-kaart in `evals/vragencorpus.md`) staat de categorie op
+**12/13 retrieval en 11/13 grounding**, en NL-doorwerking op 6/6. Resterend:
+de twee deadline-formuleringen waarvoor retrieval niets relevants vindt (de
+reranker-casus) en een wisselvallige mengvorm op "mag dat zomaar"-vragen.
+Abstentie bleef door alles heen 27/27.
 
 *Verloop op de oorspronkelijke 10 cases:* 6/6/10 → 8/7/10 via artikel
 3-splitsing en hybride zoeken (vector 1.5 : trefwoord 1, RRF — onderbouwing:

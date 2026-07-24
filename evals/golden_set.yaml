@@ -4,12 +4,14 @@
 
 - id: actualiteit-hoogrisico-deadline
   categorie: actualiteit
+  # 24-07-2026: brugwijzer-ref toegevoegd als geldige bron (gegronde eigen
+  # guidance met dezelfde inhoud; grounding bewaakt de juistheid onafhankelijk).
   vraag: "Vanaf wanneer moeten hoog-risico-AI-systemen uit bijlage III aan de verplichtingen van de AI-verordening voldoen?"
   # 19-07-2026: "Digital Omnibus" toegevoegd als geldige bron — handmatige lezing
   # toonde een correct, correct geciteerd antwoord uit het geadministreerde
   # omnibus-bestand; case actualiteit-watermerken accepteerde die bron al.
   # De case is ouder dan het omnibus-bestand; dit corrigeert een false negative.
-  retrieval_refs: ["Artikel 113", "Digital Omnibus"]
+  retrieval_refs: ["Artikel 113", "Digital Omnibus", "In gewone taal — uitgesteld of niet"]
   grounding_markers: ["2 december 2027"]
   verboden_markers: ["2 augustus 2026"]
   abstentie: false
@@ -34,14 +36,14 @@
   categorie: risicoclassificatie
   vraag: "Mag een gemeente inwoners met AI een sociale score geven op basis van hun gedrag?"
   retrieval_refs: ["Artikel 5"]
-  grounding_markers: ["verboden"]
+  grounding_markers: ["verbod|verbied|mag niet"]
   verboden_markers: []
   abstentie: false
 
 - id: rol-aanbieder-gebruiksverantwoordelijke
   categorie: rolbepaling
   vraag: "Wat is het verschil tussen een aanbieder en een gebruiksverantwoordelijke onder de AI-verordening?"
-  retrieval_refs: ["Artikel 3"]
+  retrieval_refs: ["Artikel 3", "In gewone taal — maker of gebruiker"]
   grounding_markers: ["aanbieder", "gebruiksverantwoordelijke"]
   verboden_markers: []
   abstentie: false
@@ -95,7 +97,7 @@
 - id: nl-boete-verboden-praktijk
   categorie: nl-doorwerking
   vraag: "Kan een toezichthouder in Nederland een boete opleggen aan een organisatie die een verboden AI-systeem gebruikt?"
-  retrieval_refs: ["UAIV artikel 3.7"]
+  retrieval_refs: ["UAIV artikel 3.7", "In gewone taal — welke boete"]
   grounding_markers: ["bestuurlijke boete"]
   verboden_markers: []
   abstentie: false
@@ -103,7 +105,7 @@
 - id: nl-taal-documentatie
   categorie: nl-doorwerking
   vraag: "In welke taal moet ik mijn documentatie aanleveren aan de Nederlandse toezichthouder?"
-  retrieval_refs: ["UAIV artikel 3.10"]
+  retrieval_refs: ["UAIV artikel 3.10", "In gewone taal — moet het papierwerk"]
   grounding_markers: ["Nederlands", "Engels"]
   verboden_markers: []
   abstentie: false
@@ -111,7 +113,7 @@
 - id: nl-aanspreekpunt-europa
   categorie: nl-doorwerking
   vraag: "Welke instantie is in Nederland het aanspreekpunt richting Europa voor de AI-regels?"
-  retrieval_refs: ["UAIV artikel 2.3"]
+  retrieval_refs: ["UAIV artikel 2.3", "In gewone taal — het Nederlandse loket"]
   grounding_markers: ["minister"]
   verboden_markers: ["Rijksinspectie Digitale Infrastructuur"]
   abstentie: false
@@ -119,8 +121,8 @@
 - id: nl-testomgeving-uittesten
   categorie: nl-doorwerking
   vraag: "Kan ik een AI-systeem in Nederland onder toezicht uittesten voordat ik het op de markt breng?"
-  retrieval_refs: ["UAIV artikel 4.1"]
-  grounding_markers: ["markttoezichtautoriteiten"]
+  retrieval_refs: ["UAIV artikel 4.1", "In gewone taal — AI eerst veilig uitproberen"]
+  grounding_markers: ["markttoezichtautoriteit"]
   verboden_markers: []
   abstentie: false
 
@@ -134,7 +136,7 @@
 - id: jj-hoogrisico-deadline
   categorie: alledaags
   vraag: "Ons AI-systeem valt straks in de strenge categorie van de nieuwe AI-wet. Wanneer moeten we daar echt klaar voor zijn?"
-  retrieval_refs: ["Artikel 113", "Digital Omnibus"]
+  retrieval_refs: ["Artikel 113", "Digital Omnibus", "In gewone taal — uitgesteld of niet"]
   grounding_markers: ["2 december 2027"]
   verboden_markers: ["2 augustus 2026"]
   abstentie: false
@@ -151,14 +153,14 @@
   categorie: alledaags
   vraag: "Mag de gemeente inwoners punten geven voor goed gedrag met zo'n AI-systeem?"
   retrieval_refs: ["Artikel 5"]
-  grounding_markers: ["verboden"]
+  grounding_markers: ["verbod|verbied|mag niet"]
   verboden_markers: []
   abstentie: false
 
 - id: jj-maker-of-gebruiker
   categorie: alledaags
   vraag: "We kopen een AI-tool in en zetten die in voor onze klanten. Wat zijn wij dan volgens die wet: maker of gebruiker?"
-  retrieval_refs: ["Artikel 3"]
+  retrieval_refs: ["Artikel 3", "In gewone taal — maker of gebruiker"]
   grounding_markers: ["gebruiksverantwoordelijke"]
   verboden_markers: []
   abstentie: false
@@ -166,15 +168,15 @@
 - id: jj-boete
   categorie: alledaags
   vraag: "Hoeveel kan het ons kosten als we in Nederland de AI-regels overtreden met iets dat niet mag?"
-  retrieval_refs: ["UAIV artikel 3.7"]
-  grounding_markers: ["bestuurlijke boete"]
+  retrieval_refs: ["UAIV artikel 3.7", "In gewone taal — welke boete"]
+  grounding_markers: ["35 miljoen|bestuurlijke boete"]
   verboden_markers: []
   abstentie: false
 
 - id: jj-taal-papierwerk
   categorie: alledaags
   vraag: "Moet al dat papierwerk voor de toezichthouder in het Nederlands, of mag Engels ook?"
-  retrieval_refs: ["UAIV artikel 3.10"]
+  retrieval_refs: ["UAIV artikel 3.10", "In gewone taal — moet het papierwerk"]
   grounding_markers: ["Nederlands", "Engels"]
   verboden_markers: []
   abstentie: false
@@ -182,8 +184,8 @@
 - id: jj-uitproberen
   categorie: alledaags
   vraag: "Kunnen we ons AI-systeem ergens eerst veilig uitproberen voordat we ermee de markt op gaan?"
-  retrieval_refs: ["UAIV artikel 4.1"]
-  grounding_markers: ["markttoezicht"]
+  retrieval_refs: ["UAIV artikel 4.1", "In gewone taal — AI eerst veilig uitproberen"]
+  grounding_markers: ["toezicht"]
   verboden_markers: []
   abstentie: false
 
@@ -196,7 +198,7 @@
   categorie: alledaags
   # KVK-kernzorg nr. 1: "geldt dit überhaupt voor mij?"
   vraag: "Wij zijn een klein bedrijf en gebruiken alleen ChatGPT en Copilot. Geldt die AI-wet dan ook voor ons?"
-  retrieval_refs: ["Artikel 2", "Artikel 3", "Artikel 4"]
+  retrieval_refs: ["Artikel 2", "Artikel 3", "Artikel 4", "In gewone taal — geldt de AI-verordening ook voor kleine bedrijven"]
   grounding_markers: ["gebruiksverantwoordelijke"]
   verboden_markers: []
   abstentie: false
@@ -204,7 +206,7 @@
 - id: echt-personeel-opleiden
   categorie: alledaags
   vraag: "Moet ik mijn personeel eerst opleiden voordat ze met AI mogen werken?"
-  retrieval_refs: ["Artikel 4"]
+  retrieval_refs: ["Artikel 4", "In gewone taal — moeten medewerkers eerst een AI-cursus"]
   grounding_markers: ["AI-geletterdheid"]
   verboden_markers: []
   abstentie: false
@@ -222,7 +224,7 @@
   # Géén verboden marker op "2 augustus 2026": bij deze open datumvraag mag
   # een goed antwoord de oude datum als context noemen ("stond eerst op...").
   vraag: "Ik hoorde dat de regels zijn uitgesteld. Wat zijn nu de echte data?"
-  retrieval_refs: ["Digital Omnibus", "Artikel 113"]
+  retrieval_refs: ["Digital Omnibus", "Artikel 113", "In gewone taal — uitgesteld of niet"]
   grounding_markers: ["2 december 2027"]
   verboden_markers: []
   abstentie: false
@@ -234,7 +236,7 @@
   # ontwikkelen en het systeem "in gebruik stelt onder de eigen naam". Een
   # goed antwoord moet die tak benoemen, niet alleen "in de handel brengen".
   vraag: "Ik laat een AI-systeem op maat maken voor eigen gebruik. Ben ik dan de maker volgens de wet?"
-  retrieval_refs: ["Artikel 3", "Artikel 25"]
+  retrieval_refs: ["Artikel 3", "Artikel 25", "In gewone taal — maker of gebruiker"]
   grounding_markers: ["aanbieder", "in gebruik"]
   verboden_markers: []
   abstentie: false

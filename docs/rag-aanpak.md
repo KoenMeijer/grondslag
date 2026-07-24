@@ -66,6 +66,18 @@ de hoog-risico-lijst) verdienen eigen behandeling: per punt, niet als één blok
   kandidatenlijst (top-50/100), of vraaggerichte verrijking van de
   NL-guidance-chunks zelf — met de memorisatie-waarschuwing uit
   `eval-aanpak.md` in acht genomen.
+- **Brug-vocabulaire in het corpus is de grootste gemeten knop tot nu toe**
+  (24 jul 2026). Eén guidance-bestand in gewone taal
+  (`corpus/nl-guidance/in-gewone-taal.md`, acht secties, vocabulaire gestuurd
+  door de geoogste vragenkaart in `evals/vragencorpus.md`) bracht de suite van
+  15/16/27 naar 24/24/27: de alledaags-categorie ging van grotendeels rood
+  naar 12/13 retrieval, NL-doorwerking naar 6/6. Waar query-kant-knoppen de
+  vocabulaire-kloof niet konden dichten, doet document-kant-verrijking dat
+  wél: de brug-chunks gebruiken burgerwoorden ("boete", "uitproberen",
+  "papierwerk") én verwijzen naar de artikelen. Memorisatie-regel nageleefd:
+  geen letterlijke golden-vragen in de tekst. Resterende retrieval-casus voor
+  een eventuele reranker: deadline-vragen zonder ankerwoorden ("wanneer
+  moeten we klaar zijn").
 
 ## Soevereine stack
 

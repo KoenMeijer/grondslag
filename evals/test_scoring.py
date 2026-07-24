@@ -13,6 +13,14 @@ def test_ref_prefix_matcht_maar_geen_cijferbotsing():
     assert scoring.ref_matcht("Artikel 4", "Artikel 4")
 
 
+def test_grounding_marker_met_alternatieven():
+    # "verboden|verbiedt": de juridische kern is één begrip met meerdere
+    # woordvormen — elk alternatief telt, maar één marker moet blijven matchen.
+    assert scoring.score_grounding(["verboden|verbiedt"], [], "de wet verbiedt dit")
+    assert scoring.score_grounding(["verboden|verbiedt"], [], "dit is verboden")
+    assert not scoring.score_grounding(["verboden|verbiedt"], [], "dit is toegestaan")
+
+
 def test_retrieval_een_verwachte_ref_volstaat():
     assert scoring.score_retrieval(["Artikel 6", "Bijlage III"], ["Bijlage III, punt 4"])
     assert not scoring.score_retrieval(["Artikel 6"], ["Artikel 50"])

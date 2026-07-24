@@ -17,8 +17,10 @@ def score_retrieval(verwachte_refs: list[str], opgehaalde_refs: list[str]) -> bo
 
 
 def score_grounding(markers: list[str], verboden: list[str], antwoord: str) -> bool:
+    # Een marker mag alternatieven bevatten ("verboden|verbiedt"): dezelfde
+    # juridische kern kent meerdere woordvormen. AND over markers, OR binnen één.
     laag = antwoord.lower()
-    return (all(m.lower() in laag for m in markers)
+    return (all(any(alt in laag for alt in m.lower().split("|")) for m in markers)
             and not any(v.lower() in laag for v in verboden))
 
 
