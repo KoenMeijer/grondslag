@@ -123,3 +123,66 @@
   grounding_markers: ["markttoezichtautoriteiten"]
   verboden_markers: []
   abstentie: false
+
+# --- Categorie "alledaags" (24 jul 2026) -------------------------------------
+# Jip-en-Janneke-taal moet geaccepteerd worden: dezelfde kennisvragen als
+# hierboven, maar geformuleerd zoals een niet-jurist ze intypt — zonder één
+# wetsterm ("bijlage III", "gebruiksverantwoordelijke"). Zelfde verwachte
+# bronnen en feiten als de oudercase (het antwoord mag/moet formele termen
+# bevatten; de vráág niet). Dit is de meetlat voor de vocabulaire-kloof.
+
+- id: jj-hoogrisico-deadline
+  categorie: alledaags
+  vraag: "Ons AI-systeem valt straks in de strenge categorie van de nieuwe AI-wet. Wanneer moeten we daar echt klaar voor zijn?"
+  retrieval_refs: ["Artikel 113", "Digital Omnibus"]
+  grounding_markers: ["2 december 2027"]
+  verboden_markers: ["2 augustus 2026"]
+  abstentie: false
+
+- id: jj-cv-screening
+  categorie: alledaags
+  vraag: "Wij laten de computer sollicitatiebrieven voorsorteren. Mag dat zomaar?"
+  retrieval_refs: ["Bijlage III", "Artikel 6"]
+  grounding_markers: ["hoog risico"]
+  verboden_markers: []
+  abstentie: false
+
+- id: jj-social-scoring
+  categorie: alledaags
+  vraag: "Mag de gemeente inwoners punten geven voor goed gedrag met zo'n AI-systeem?"
+  retrieval_refs: ["Artikel 5"]
+  grounding_markers: ["verboden"]
+  verboden_markers: []
+  abstentie: false
+
+- id: jj-maker-of-gebruiker
+  categorie: alledaags
+  vraag: "We kopen een AI-tool in en zetten die in voor onze klanten. Wat zijn wij dan volgens die wet: maker of gebruiker?"
+  retrieval_refs: ["Artikel 3"]
+  grounding_markers: ["gebruiksverantwoordelijke"]
+  verboden_markers: []
+  abstentie: false
+
+- id: jj-boete
+  categorie: alledaags
+  vraag: "Hoeveel kan het ons kosten als we in Nederland de AI-regels overtreden met iets dat niet mag?"
+  retrieval_refs: ["UAIV artikel 3.7"]
+  grounding_markers: ["bestuurlijke boete"]
+  verboden_markers: []
+  abstentie: false
+
+- id: jj-taal-papierwerk
+  categorie: alledaags
+  vraag: "Moet al dat papierwerk voor de toezichthouder in het Nederlands, of mag Engels ook?"
+  retrieval_refs: ["UAIV artikel 3.10"]
+  grounding_markers: ["Nederlands", "Engels"]
+  verboden_markers: []
+  abstentie: false
+
+- id: jj-uitproberen
+  categorie: alledaags
+  vraag: "Kunnen we ons AI-systeem ergens eerst veilig uitproberen voordat we ermee de markt op gaan?"
+  retrieval_refs: ["UAIV artikel 4.1"]
+  grounding_markers: ["markttoezicht"]
+  verboden_markers: []
+  abstentie: false

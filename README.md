@@ -47,10 +47,16 @@ De eval-suite draait bij elke wijziging aan chunking, prompt of model —
 zie `docs/eval-aanpak.md`. Corpusbeheer: `corpus/` is de bron van waarheid,
 elke wijziging is een git-diff + eval-run.
 
-**Bekende stand (2026-07-24, 14 cases): retrieval 8/14, grounding 10/14,
-abstentie 14/14.** Een exit-code ≠ 0 op deze stand is dus verwacht.
-(Grounding wisselt per run tussen 9 en 10 op cases met kapotte retrieval —
-bekende API-ruis, zie `docs/eval-aanpak.md`.)
+**Bekende stand (2026-07-24, 21 cases): retrieval 10/21, grounding 11/21,
+abstentie 21/21.** Een exit-code ≠ 0 op deze stand is dus verwacht.
+(Grounding wisselt per run op cases met kapotte retrieval — bekende API-ruis,
+zie `docs/eval-aanpak.md`.)
+
+De zeven nieuwe **alledaags**-cases (jip-en-janneke-formuleringen, nulmeting
+24 jul: retrieval 2/7, grounding 0/7) zijn de meetlat voor de huidige
+verbeterfase: gewone-mensen-taal moet net zo goed werken als jurist-taal.
+Abstentie blijft ook op deze vragen 7/7 — hij verzint niets, maar helpt de
+vrager nog niet verder.
 
 *Verloop op de oorspronkelijke 10 cases:* 6/6/10 → 8/7/10 via artikel
 3-splitsing en hybride zoeken (vector 1.5 : trefwoord 1, RRF — onderbouwing:

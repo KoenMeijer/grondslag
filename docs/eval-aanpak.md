@@ -35,6 +35,11 @@ De eerste oplever is ~10 cases; uitbreiden naarmate het corpus groeit. Categorie
 5. **Abstentie** — vragen buiten scope (concreet juridisch advies, niet-AI-Act-recht):
    eerlijk doorverwijzen, niet hallucineren. Voor een juridische tool is dit een
    kernfeature, geen randgeval.
+6. **Alledaagse taal** (toegevoegd 24 jul 2026) — dezelfde kennisvragen als
+   1–4, maar geformuleerd zonder één wetsterm, zoals een niet-jurist ze
+   intypt ("mag dat zomaar?", "wat kost me dat?"). Jip-en-janneke-taal moet
+   geaccepteerd worden; nulmeting: retrieval 2/7, grounding 0/7 — de
+   gemeten vocabulaire-kloof die de verbeterfase moet dichten.
 
 ## Meegenomen lessen
 
