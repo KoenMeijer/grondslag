@@ -51,6 +51,21 @@ de hoog-risico-lijst) verdienen eigen behandeling: per punt, niet als één blok
   genoemd in artikel 99, vierde lid", "AI-testomgeving voor regelgeving",
   "centraal contactpunt, bedoeld in artikel 70, tweede lid". Dát is de knop:
   query-expansie naar wetsvocabulaire (of een reranker), niet meer kandidaten.
+- **Query-herschrijving gemeten en afgevoerd** (24 jul 2026,
+  `evals/meet_herschrijven.py`). De vraag vóór het zoeken naar wetsvocabulaire
+  laten herschrijven (generiek, met corpus-terminologielijst, vervangen /
+  samenvoegen / extra RRF-pad / alleen-trefwoordpad) wint niet stabiel:
+  beste variant 7-7-6 over drie runs tegen baseline 6/12, met per run ándere
+  case-flips — dat is API-ruis, geen effect (zie de reproduceerbaarheids-les in
+  `eval-aanpak.md`). Doorslaggevend: de hardnekkige NL-cases falen ook wanneer
+  de herschrijving de juiste wetsterm létterlijk bevat. Het probleem zit dus
+  niet meer aan de vraagkant maar in de rangschikking: de NL-doelchunks
+  verliezen het óók met de goede termen van EU-chunks over hetzelfde begrip.
+  Alle query-kant-knoppen zijn nu gemeten (kandidaten, quotum, herschrijving);
+  de aangewezen volgende knop is een **reranker** over een diepe
+  kandidatenlijst (top-50/100), of vraaggerichte verrijking van de
+  NL-guidance-chunks zelf — met de memorisatie-waarschuwing uit
+  `eval-aanpak.md` in acht genomen.
 
 ## Soevereine stack
 
