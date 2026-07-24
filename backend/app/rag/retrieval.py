@@ -4,6 +4,8 @@ met Reciprocal Rank Fusion. Waarom hybride: gebruikers noemen letterlijke wetste
 vastgesteld: artikel 113 stond op rang 355 voor de deadlinevraag (zie evals/results).
 TOP_K blijft de enige externe knop; kandidaten- en dempingsconstanten staan hier.
 """
+from dataclasses import dataclass
+
 from sqlalchemy import Text, cast, func, select
 from sqlalchemy.orm import Session
 
@@ -31,13 +33,27 @@ def rrf_fuseer(*rangschikkingen: list[int], gewichten: list[float] | None = None
     return sorted(scores, key=lambda cid: -scores[cid])
 
 
-def zoek_chunks(sessie: Session, vraag: str, top_k: int | None = None) -> list[Chunk]:
+@dataclass
+class ZoekResultaat:
+    chunks: list[Chunk]
+    # Cosine-afstand van de beste vectorkandidaat (None bij leeg corpus). Dit is
+    # het absolute relevantiesignaal — RRF-scores zijn rang-gebaseerd en zeggen
+    # niets over hoe dichtbij de beste match werkelijk was. Gebruikt om bij een
+    # abstentie te onderscheiden: niets relevants gevonden (vraag buiten scope)
+    # of wél relevante chunks en tóch geweigerd (retrieval-/promptprobleem).
+    beste_afstand: float | None
+
+
+def zoek_chunks(sessie: Session, vraag: str, top_k: int | None = None) -> ZoekResultaat:
     vraagvector = mistral.embed([vraag])[0]
-    vector_ids = list(sessie.scalars(
-        select(Chunk.id)
-        .order_by(Chunk.embedding.cosine_distance(vraagvector))
+    afstand = Chunk.embedding.cosine_distance(vraagvector)
+    vector_rijen = list(sessie.execute(
+        select(Chunk.id, afstand)
+        .order_by(afstand)
         .limit(KANDIDATEN)
     ))
+    vector_ids = [rij[0] for rij in vector_rijen]
+    beste_afstand = float(vector_rijen[0][1]) if vector_rijen else None
 
     # plainto_tsquery geeft AND-semantiek: één vraagwoord dat nergens voorkomt
     # maakt het hele trefwoordpad leeg (gemeten: 0 matches op de deadlinevraag).
@@ -58,4 +74,5 @@ def zoek_chunks(sessie: Session, vraag: str, top_k: int | None = None) -> list[C
     beste = rrf_fuseer(vector_ids, trefwoord_ids,
                        gewichten=[GEWICHT_VECTOR, 1.0])[: top_k or settings.top_k]
     per_id = {c.id: c for c in sessie.scalars(select(Chunk).where(Chunk.id.in_(beste)))}
-    return [per_id[cid] for cid in beste]
+    return ZoekResultaat(chunks=[per_id[cid] for cid in beste],
+                         beste_afstand=beste_afstand)

@@ -54,3 +54,17 @@ class Dagtelling(Base):
     datum: Mapped[str]      # ISO-datum (UTC); string volstaat en leest in psql prettig
     sleutel: Mapped[str]    # "bezoek:/", "bezoek:/over", "vraag"
     aantal: Mapped[int]
+
+
+class IngezondenVraag(Base):
+    """Opt-in ingezonden vragen na een onbeantwoorde vraag. Alleen de
+    vraagtekst en de datum — bewust geen IP, sessie of user-agent, zelfde
+    principe als Dagtelling: een tabel zonder die kolommen kan de
+    transparantiebelofte niet per ongeluk breken. Retentie wordt bij elke
+    nieuwe inzending afgedwongen (zie app/inzendingen.py)."""
+
+    __tablename__ = "ingezonden_vragen"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    datum: Mapped[str]      # ISO-datum (UTC)
+    vraag: Mapped[str] = mapped_column(Text)

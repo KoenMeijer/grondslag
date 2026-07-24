@@ -20,15 +20,21 @@ class AskResultaat:
     citaten: list[Citaat]
     stand_van_wetgeving: str
     opgehaalde_refs: list[str]   # voor de retrieval-metric; niet in de API-respons
+    beste_afstand: float | None = None   # voor de signaalsplitsing van de teller; niet in de API-respons
+    # Abstentiedetectie hoort hier, niet in de client: teller (main) en
+    # inzendknop (frontend) beslissen op ditzelfde veld — één bron van waarheid.
+    geen_bron: bool = False
 
 
 def beantwoord(sessie, vraag: str) -> AskResultaat:
-    chunks = retrieval.zoek_chunks(sessie, vraag)
+    zoek = retrieval.zoek_chunks(sessie, vraag)
     antwoord = mistral.genereer(prompt.SYSTEEMPROMPT,
-                                prompt.bouw_vraagprompt(vraag, chunks))
+                                prompt.bouw_vraagprompt(vraag, zoek.chunks))
     citaten = [Citaat(ref=c.ref, fragment=c.tekst, bron=c.source.titel,
                       url=c.source.url)
-               for c in prompt.vind_citaten(antwoord, chunks)]
+               for c in prompt.vind_citaten(antwoord, zoek.chunks)]
     return AskResultaat(antwoord=antwoord, citaten=citaten,
                         stand_van_wetgeving=settings.stand_van_wetgeving,
-                        opgehaalde_refs=[c.ref for c in chunks])
+                        opgehaalde_refs=[c.ref for c in zoek.chunks],
+                        beste_afstand=zoek.beste_afstand,
+                        geen_bron=prompt.ABSTENTIEZIN.lower() in antwoord.lower())

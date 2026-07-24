@@ -65,18 +65,29 @@ useHead({
     <section>
       <h2>Privacy</h2>
       <p>
-        Er zijn geen accounts. Wij slaan vragen niet op en gebruiken ze niet als
-        trainings- of testdata; een vraag wordt alleen ter beantwoording doorgegeven
-        aan de EU-gehoste Mistral-API. Ook bezoekgegevens registreren we niet:
-        de webserver houdt geen toegangslog met IP-adressen bij.
+        Er zijn geen accounts. Wij slaan vragen niet op — behalve als je daar
+        na een onbeantwoorde vraag zelf voor kiest, zie hieronder — en
+        gebruiken ze nooit als trainingsdata; een vraag wordt alleen ter
+        beantwoording doorgegeven aan de EU-gehoste Mistral-API. Ook
+        bezoekgegevens registreren we niet: de webserver houdt geen toegangslog
+        met IP-adressen bij.
       </p>
       <p class="vervolg">
         Wat we wél bijhouden is een teller: per dag het aantal bezochte pagina's,
-        het aantal gestelde vragen, en hoe vaak een vraag onbeantwoord bleef of
-        misging. Dat gebeurt zonder IP-adres, zonder cookie en zonder de inhoud
-        van de vraag — er wordt alleen een getal opgehoogd. Daarmee zien we of de
-        tool gebruikt wordt en waar zij tekortschiet, maar niet wie hem gebruikt
-        of wat iemand heeft gevraagd.
+        het aantal gestelde vragen, hoe vaak een vraag onbeantwoord bleef of
+        misging, en hoe vaak er een vraag is ingestuurd. Dat gebeurt zonder
+        IP-adres, zonder cookie en zonder de inhoud van de vraag — er wordt
+        alleen een getal opgehoogd. Daarmee zien we of de tool gebruikt wordt en
+        waar zij tekortschiet, maar niet wie hem gebruikt of wat iemand heeft
+        gevraagd.
+      </p>
+      <p class="vervolg">
+        Eén uitzondering, en die kies je zelf: blijft je vraag onbeantwoord, dan
+        kun je hem met een knop anoniem insturen. Dan bewaren we alléén de
+        vraagtekst en de datum — geen IP-adres, geen ander gegeven — maximaal
+        90 dagen, uitsluitend om gaten in de bronnen te vinden en de
+        kwaliteitscontrole te verbeteren. Zonder die klik wordt er niets
+        bewaard.
       </p>
     </section>
   </article>

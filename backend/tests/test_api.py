@@ -47,6 +47,9 @@ def test_ask_geeft_antwoord_met_citaten(monkeypatch):
     assert data["antwoord"] == "Zie [Artikel 6, lid 2]."
     assert data["citaten"][0]["ref"] == "Artikel 6, lid 2"
     assert data["citaten"][0]["url"] == "https://example.org"
+    # De frontend beslist op dit veld of de inzendknop verschijnt — de
+    # abstentiedetectie hoort bij de backend, niet gedupliceerd in de client.
+    assert data["geen_bron"] is False
     # interne refs horen niet in de publieke respons
     assert "opgehaalde_refs" not in data
 
@@ -60,9 +63,11 @@ def test_mistralfout_wordt_502(monkeypatch):
     assert r.status_code == 502
 
 
-def _stel_vraag(monkeypatch, antwoord: str, citaten=()):
+def _stel_vraag(monkeypatch, antwoord: str, citaten=(), beste_afstand=None,
+                geen_bron=False):
     resultaat = AskResultaat(antwoord=antwoord, citaten=list(citaten),
-                             stand_van_wetgeving="juli 2026", opgehaalde_refs=[])
+                             stand_van_wetgeving="juli 2026", opgehaalde_refs=[],
+                             beste_afstand=beste_afstand, geen_bron=geen_bron)
     monkeypatch.setattr(service, "beantwoord", lambda sessie, vraag: resultaat)
     geteld = []
     monkeypatch.setattr("app.main.tel_op", lambda sleutel: geteld.append(sleutel))
@@ -80,7 +85,25 @@ def test_geslaagd_antwoord_telt_alleen_de_vraag(monkeypatch):
 def test_abstentie_wordt_apart_geteld(monkeypatch):
     from app.rag.prompt import ABSTENTIEZIN
 
-    geteld = _stel_vraag(monkeypatch, ABSTENTIEZIN)
+    geteld = _stel_vraag(monkeypatch, ABSTENTIEZIN, geen_bron=True)
+    assert geteld == ["vraag", "vraag:geen-bron"]
+
+
+def test_abstentie_met_sterk_signaal_telt_de_subsleutel(monkeypatch):
+    # Relevante chunks gevonden (kleine afstand) en tóch een weigering:
+    # dat duidt op een retrieval-/promptprobleem, niet op een vraag buiten scope.
+    from app.rag.prompt import ABSTENTIEZIN
+
+    monkeypatch.setattr("app.main.settings.signaal_grens", 0.5)
+    geteld = _stel_vraag(monkeypatch, ABSTENTIEZIN, beste_afstand=0.10, geen_bron=True)
+    assert geteld == ["vraag", "vraag:geen-bron", "vraag:geen-bron:sterk-signaal"]
+
+
+def test_abstentie_met_laag_signaal_telt_alleen_geen_bron(monkeypatch):
+    from app.rag.prompt import ABSTENTIEZIN
+
+    monkeypatch.setattr("app.main.settings.signaal_grens", 0.5)
+    geteld = _stel_vraag(monkeypatch, ABSTENTIEZIN, beste_afstand=0.95, geen_bron=True)
     assert geteld == ["vraag", "vraag:geen-bron"]
 
 
@@ -99,6 +122,33 @@ def test_modelfout_telt_als_fout_en_niet_als_vraag(monkeypatch):
 
     assert client.post("/ask", json={"vraag": "Is cv-screening hoog risico?"}).status_code == 502
     assert geteld == ["vraag:fout"]
+
+
+def test_inzending_bewaart_en_telt(monkeypatch):
+    bewaard = []
+    monkeypatch.setattr("app.main.inzendingen.bewaar",
+                        lambda vraag: bewaard.append(vraag) or True)
+    geteld = []
+    monkeypatch.setattr("app.main.tel_op", lambda sleutel: geteld.append(sleutel))
+
+    r = client.post("/inzending", json={"vraag": "Valt onze chatbot onder artikel 50?"})
+
+    assert r.status_code == 204
+    assert bewaard == ["Valt onze chatbot onder artikel 50?"]
+    assert geteld == ["inzending"]
+
+
+def test_inzending_boven_dagcap_geeft_429(monkeypatch):
+    monkeypatch.setattr("app.main.inzendingen.bewaar", lambda vraag: False)
+    geteld = []
+    monkeypatch.setattr("app.main.tel_op", lambda sleutel: geteld.append(sleutel))
+
+    assert client.post("/inzending", json={"vraag": "nog een vraag"}).status_code == 429
+    assert geteld == []
+
+
+def test_te_korte_inzending_wordt_geweigerd():
+    assert client.post("/inzending", json={"vraag": "ab"}).status_code == 422
 
 
 def test_te_lange_vraag_wordt_geweigerd():

@@ -80,4 +80,51 @@ describe('vraagStore', () => {
     expect(store.laatsteVraag).toBe('')
     expect(store.actieveRef).toBe('')
   })
+
+  it('zendIn stuurt de laatste vraag naar /api/inzending en markeert ingezonden', async () => {
+    vi.mocked($fetch).mockResolvedValue(undefined)
+    const store = useVraagStore()
+    store.laatsteVraag = 'Wat zegt de verordening over cookiebanners?'
+    await store.zendIn()
+    expect(vi.mocked($fetch)).toHaveBeenCalledWith('/api/inzending', {
+      method: 'POST',
+      body: { vraag: 'Wat zegt de verordening over cookiebanners?' },
+    })
+    expect(store.ingezonden).toBe(true)
+    expect(store.inzendFout).toBe('')
+  })
+
+  it('zendIn zonder eerdere vraag doet niets', async () => {
+    const store = useVraagStore()
+    await store.zendIn()
+    expect(vi.mocked($fetch)).not.toHaveBeenCalled()
+    expect(store.ingezonden).toBe(false)
+  })
+
+  it('zendIn vertaalt de dagcap (429) naar een kalme melding', async () => {
+    vi.mocked($fetch).mockRejectedValue({ response: { status: 429 } })
+    const store = useVraagStore()
+    store.laatsteVraag = 'x'
+    await store.zendIn()
+    expect(store.ingezonden).toBe(false)
+    expect(store.inzendFout).toContain('morgen')
+  })
+
+  it('zendIn vertaalt een storing naar een probeer-opnieuw-melding', async () => {
+    vi.mocked($fetch).mockRejectedValue(new Error('502'))
+    const store = useVraagStore()
+    store.laatsteVraag = 'x'
+    await store.zendIn()
+    expect(store.ingezonden).toBe(false)
+    expect(store.inzendFout).toContain('opnieuw')
+  })
+
+  it('wis zet ook de inzendstatus terug', () => {
+    const store = useVraagStore()
+    store.ingezonden = true
+    store.inzendFout = 'melding'
+    store.wis()
+    expect(store.ingezonden).toBe(false)
+    expect(store.inzendFout).toBe('')
+  })
 })

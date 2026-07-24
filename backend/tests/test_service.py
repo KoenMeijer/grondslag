@@ -22,7 +22,9 @@ def test_beantwoord_bundelt_antwoord_citaten_en_refs(monkeypatch):
                        source=NepSource(titel="Verordening (EU) 2024/1689")),
               NepChunk(ref="Overweging 61", tekst="Overweging 61: tekst B",
                        source=NepSource(titel="Verordening (EU) 2024/1689"))]
-    monkeypatch.setattr(service.retrieval, "zoek_chunks", lambda s, v: chunks)
+    monkeypatch.setattr(
+        service.retrieval, "zoek_chunks",
+        lambda s, v: service.retrieval.ZoekResultaat(chunks=chunks, beste_afstand=0.12))
     monkeypatch.setattr(service.mistral, "genereer",
                         lambda systeem, vraag: "Zie [Artikel 6, lid 2].")
 
@@ -33,4 +35,20 @@ def test_beantwoord_bundelt_antwoord_citaten_en_refs(monkeypatch):
     assert r.citaten[0].bron == "Verordening (EU) 2024/1689"
     assert r.citaten[0].url == "https://example.org"
     assert r.opgehaalde_refs == ["Artikel 6, lid 2", "Overweging 61"]
+    assert r.beste_afstand == 0.12
+    assert r.geen_bron is False
     assert r.stand_van_wetgeving == "juli 2026"
+
+
+def test_beantwoord_herkent_abstentie(monkeypatch):
+    # De abstentiedetectie hoort in de service: één bron van waarheid voor
+    # teller én API-veld, geen gedupliceerde stringcheck in de frontend.
+    from app.rag.prompt import ABSTENTIEZIN
+
+    monkeypatch.setattr(
+        service.retrieval, "zoek_chunks",
+        lambda s, v: service.retrieval.ZoekResultaat(chunks=[], beste_afstand=0.3))
+    monkeypatch.setattr(service.mistral, "genereer",
+                        lambda systeem, vraag: ABSTENTIEZIN)
+
+    assert service.beantwoord(None, "Wat is de cookieregelgeving?").geen_bron is True

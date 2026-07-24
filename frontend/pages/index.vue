@@ -28,6 +28,7 @@ const store = useVraagStore()
         <div v-if="store.resultaat" class="antwoordvak">
           <AntwoordWeergave />
           <p class="stempel">stand van wetgeving: {{ store.resultaat.stand_van_wetgeving }}</p>
+          <InzendVak v-if="store.resultaat.geen_bron" />
           <button type="button" class="nieuwevraag" @click="store.wis()">Stel een nieuwe vraag</button>
         </div>
       </div>

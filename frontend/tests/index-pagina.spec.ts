@@ -12,6 +12,7 @@ const STUBS = {
   BeginPaneel: { template: '<aside class="stub-beginpaneel" />' },
   AntwoordWeergave: { template: '<article class="stub-antwoord" />' },
   CitaatPaneel: { template: '<aside class="stub-citaatpaneel" />' },
+  InzendVak: { template: '<div class="stub-inzendvak" />' },
 }
 
 function maak(initialState: Record<string, unknown> = {}) {
@@ -53,6 +54,18 @@ describe('index-pagina (kolomwissel rechts)', () => {
     expect(w.find('.stub-antwoord').exists()).toBe(true)
     expect(w.find('.stub-citaatpaneel').exists()).toBe(true)
     expect(w.find('.stub-beginpaneel').exists()).toBe(false)
+  })
+
+  it('toont het inzendvak alleen bij een antwoord zonder bron', () => {
+    const met = maak({
+      resultaat: { antwoord: 'a', citaten: [], stand_van_wetgeving: 'juli 2026', geen_bron: true },
+    })
+    expect(met.find('.stub-inzendvak').exists()).toBe(true)
+
+    const zonder = maak({
+      resultaat: { antwoord: 'a', citaten: [], stand_van_wetgeving: 'juli 2026', geen_bron: false },
+    })
+    expect(zonder.find('.stub-inzendvak').exists()).toBe(false)
   })
 
   it('biedt onder het antwoord een link terug naar de begintoestand', async () => {

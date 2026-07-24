@@ -19,8 +19,13 @@ def test_dichtstbijzijnde_chunk_eerst(db, monkeypatch):
         sessie.commit()
 
         monkeypatch.setattr(mistral, "embed", lambda t: [[1.0] + [0.0] * 1023])
-        chunks = retrieval.zoek_chunks(sessie, "vraag", top_k=1)
-        assert [c.ref for c in chunks] == ["A"]
+        resultaat = retrieval.zoek_chunks(sessie, "vraag", top_k=1)
+        assert [c.ref for c in resultaat.chunks] == ["A"]
+        # De vraagvector valt exact samen met chunk A, dus de beste
+        # cosine-afstand is 0 — dit signaal voedt de sterk/laag-splitsing
+        # van de geen-bron-teller.
+        assert resultaat.beste_afstand is not None
+        assert resultaat.beste_afstand < 0.001
 
         sessie.delete(sessie.query(Source).filter_by(slug="test/retrieval").one())
         sessie.commit()
@@ -72,7 +77,7 @@ def test_trefwoord_haalt_chunk_op_die_vector_mist(db, monkeypatch):
             "draai de test tegen een lege database of verhoog KANDIDATEN")
 
         refs = [c.ref for c in retrieval.zoek_chunks(
-            sessie, "flarpicon knorvel zwiepzwap", top_k=2)]
+            sessie, "flarpicon knorvel zwiepzwap", top_k=2).chunks]
         assert "C" in refs
 
         sessie.delete(sessie.query(Source).filter_by(slug="test/hybride").one())

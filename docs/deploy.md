@@ -213,10 +213,40 @@ ssh root@<SSH_HOST> "cd aiactwijzer && docker compose -f docker-compose.prod.yml
 Sleutels: `bezoek:<pad>` per pagina, `vraag` voor elke beantwoorde vraag, en
 drie soorten mislukking — `vraag:fout` (modelaanroep mislukt, kijk naar infra of
 API-key), `vraag:geen-bron` (de tool antwoordde dat het niet in de bronnen
-staat: een gat in corpus of retrieval) en `vraag:zonder-citaat` (wél antwoord,
-geen enkele bronverwijzing — dat hoort niet, want grounding is de belofte).
-Let op wat je hier níet uit kunt afleiden: de vraagtekst wordt niet bewaard, dus
-je ziet dát er iets misging, niet waarover.
+staat) en `vraag:zonder-citaat` (wél antwoord, geen enkele bronverwijzing — dat
+hoort niet, want grounding is de belofte).
+
+Bij een abstentie telt daarnaast (dus bovenop `vraag:geen-bron`, zodat de
+historische reeks vergelijkbaar blijft) de subsleutel
+**`vraag:geen-bron:sterk-signaal`** wanneer de beste vectorkandidaat dichtbij
+lag (cosine-afstand ≤ `signaal_grens`, gekalibreerd met
+`evals/meet_afstanden.py`). Lezing: sterk signaal = de vraag lag binnen het
+onderwerp — een corpusgat, retrieval-misser of adviesvraag, uitzoeken waard;
+het verschil met `vraag:geen-bron` = off-topic-vragen waar de weigering
+simpelweg terecht was. `inzending` telt hoe vaak de opt-in-knop is gebruikt
+(zie hieronder). Let op wat je verder níet uit de tellers kunt afleiden: de
+vraagtekst wordt niet bewaard, dus je ziet dát er iets misging, niet waarover.
+
+## Ingezonden vragen uitlezen
+
+Na een onbeantwoorde vraag kan de bezoeker de vraagtekst met een expliciete
+klik anoniem insturen (alleen tekst + datum; retentie 90 dagen, afgedwongen in
+`app/inzendingen.py` bij elke nieuwe inzending — geen cron nodig). Dit is de
+enige plek waar vraagteksten bestaan; behandel de inhoud dus als
+gebruikersdata, ook al is hij anoniem. De tabel `ingezonden_vragen` ontstaat
+automatisch bij de eerstvolgende start (init_db in de lifespan), er is geen
+migratie nodig. Uitlezen:
+
+```bash
+ssh root@<SSH_HOST> "cd aiactwijzer && docker compose -f docker-compose.prod.yml \
+  exec -T db psql -U aiact -d aiact -c \
+  'select datum, vraag from ingezonden_vragen order by datum desc, id desc'"
+```
+
+Werkwijze: elke ingezonden vraag is een kandidaat-golden-set-case — herdraai
+hem lokaal, bepaal of het een corpusgat, retrieval-misser of terechte weigering
+is, en verwijder de rij als hij verwerkt is. Wijzig je iets aan wat er bewaard
+wordt of hoe lang, pas dan ook de privacy-alinea op `/transparantie` aan.
 
 De tabel groeit met het aantal dagen, niet met het aantal bezoeken (upsert per
 dag). Wijzig je hier iets aan, pas dan ook de privacy-alinea op

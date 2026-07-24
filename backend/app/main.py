@@ -6,10 +6,11 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, Response
 from pydantic import BaseModel, Field, field_validator
 
+from app import inzendingen
+from app.config import settings
 from app.db import SessionLocal, init_db
 from app.rag import service
 from app.rag.mistral import MistralFout
-from app.rag.prompt import ABSTENTIEZIN
 from app.tellen import tel_op
 
 logger = logging.getLogger(__name__)
@@ -61,6 +62,7 @@ class AskAntwoord(BaseModel):
     antwoord: str
     citaten: list[CitaatUit]
     stand_van_wetgeving: str
+    geen_bron: bool   # de frontend toont hierop de opt-in-inzendknop
 
 
 @app.get("/health")
@@ -81,11 +83,31 @@ def ask(body: AskVraag):
     # een abstentie een gat in het corpus, en een antwoord zonder citaat een
     # kwaliteitsrisico (ongegrond, terwijl grounding de belofte is).
     tel_op("vraag")
-    if ABSTENTIEZIN.lower() in antwoord.antwoord.lower():
+    if antwoord.geen_bron:
         tel_op("vraag:geen-bron")
+        # Subsleutel náást (niet in plaats van) geen-bron, zodat de historische
+        # reeks vergelijkbaar blijft. Sterk signaal = de vraag lag binnen het
+        # onderwerp (kan een corpusgat, retrieval-misser óf adviesvraag zijn:
+        # uitzoeken waard); laag signaal = ander onderwerp, weigering terecht.
+        # Grens gekalibreerd op afstandsmeting — zie signaal_grens in config.
+        if (antwoord.beste_afstand is not None
+                and antwoord.beste_afstand <= settings.signaal_grens):
+            tel_op("vraag:geen-bron:sterk-signaal")
     elif not antwoord.citaten:
         tel_op("vraag:zonder-citaat")
     return antwoord
+
+
+@app.post("/inzending", status_code=204)
+def inzending(body: AskVraag) -> Response:
+    """Opt-in na een onbeantwoorde vraag: bewaart alléén de vraagtekst (zelfde
+    grenzen als /ask), zodat corpusgaten vindbaar worden. Geen IP, geen sessie;
+    retentie en dagcap zitten in app/inzendingen.py."""
+    if not inzendingen.bewaar(body.vraag.strip()):
+        raise HTTPException(status_code=429,
+                            detail="Vandaag zijn er al veel inzendingen; probeer het morgen opnieuw.")
+    tel_op("inzending")
+    return Response(status_code=204)
 
 
 class Bezoek(BaseModel):
