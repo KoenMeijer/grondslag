@@ -229,9 +229,13 @@
 
 - id: echt-op-maat-laten-maken
   categorie: alledaags
+  # Marker aangescherpt (24 jul, "evalueer je eval"): het eerste groene
+  # antwoord miste de kern — art. 3, punt 3 maakt óók aanbieder wie laat
+  # ontwikkelen en het systeem "in gebruik stelt onder de eigen naam". Een
+  # goed antwoord moet die tak benoemen, niet alleen "in de handel brengen".
   vraag: "Ik laat een AI-systeem op maat maken voor eigen gebruik. Ben ik dan de maker volgens de wet?"
   retrieval_refs: ["Artikel 3", "Artikel 25"]
-  grounding_markers: ["aanbieder"]
+  grounding_markers: ["aanbieder", "in gebruik"]
   verboden_markers: []
   abstentie: false
 

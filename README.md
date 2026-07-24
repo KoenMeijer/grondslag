@@ -47,7 +47,7 @@ De eval-suite draait bij elke wijziging aan chunking, prompt of model —
 zie `docs/eval-aanpak.md`. Corpusbeheer: `corpus/` is de bron van waarheid,
 elke wijziging is een git-diff + eval-run.
 
-**Bekende stand (2026-07-24, 27 cases): retrieval 15/27, grounding 14/27,
+**Bekende stand (2026-07-24, 27 cases): retrieval 15/27, grounding 16/27,
 abstentie 27/27.** Een exit-code ≠ 0 op deze stand is dus verwacht.
 (Grounding wisselt per run op cases met kapotte retrieval — bekende API-ruis,
 zie `docs/eval-aanpak.md`.)

@@ -33,8 +33,13 @@ def beantwoord(sessie, vraag: str) -> AskResultaat:
     citaten = [Citaat(ref=c.ref, fragment=c.tekst, bron=c.source.titel,
                       url=c.source.url)
                for c in prompt.vind_citaten(antwoord, zoek.chunks)]
+    # Geen-bron = weigerzin zónder citaten. Een mengvorm (weigerzin gevolgd
+    # door een gegrond antwoord mét citaat — gemeten gedrag) ís een antwoord;
+    # anders telt de statistiek een vals gat en toont de frontend onterecht
+    # de inzendknop naast een inhoudelijk antwoord.
     return AskResultaat(antwoord=antwoord, citaten=citaten,
                         stand_van_wetgeving=settings.stand_van_wetgeving,
                         opgehaalde_refs=[c.ref for c in zoek.chunks],
                         beste_afstand=zoek.beste_afstand,
-                        geen_bron=prompt.ABSTENTIEZIN.lower() in antwoord.lower())
+                        geen_bron=(prompt.ABSTENTIEZIN.lower() in antwoord.lower()
+                                   and not citaten))

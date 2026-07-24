@@ -52,3 +52,24 @@ def test_beantwoord_herkent_abstentie(monkeypatch):
                         lambda systeem, vraag: ABSTENTIEZIN)
 
     assert service.beantwoord(None, "Wat is de cookieregelgeving?").geen_bron is True
+
+
+def test_mengvorm_met_citaat_telt_als_beantwoord(monkeypatch):
+    # Gemeten mengvorm (24 jul): weigerzin gevolgd door een gegrond antwoord
+    # mét citaat. Dat ís een antwoord — de weigerzin alléén mag niet als
+    # geen-bron tellen zodra er een citaat staat, anders toont de frontend
+    # onterecht de inzendknop en telt de statistiek een vals gat.
+    from app.rag.prompt import ABSTENTIEZIN
+
+    chunks = [NepChunk(ref="Bijlage III, punt 4",
+                       tekst="Bijlage III, punt 4: werving en selectie",
+                       source=NepSource(titel="Verordening (EU) 2024/1689"))]
+    monkeypatch.setattr(
+        service.retrieval, "zoek_chunks",
+        lambda s, v: service.retrieval.ZoekResultaat(chunks=chunks, beste_afstand=0.1))
+    monkeypatch.setattr(
+        service.mistral, "genereer",
+        lambda systeem, vraag: ABSTENTIEZIN + " Wel valt dit onder hoog risico [Bijlage III, punt 4].")
+
+    r = service.beantwoord(None, "Mag cv-screening met AI?")
+    assert r.citaten and r.geen_bron is False

@@ -53,7 +53,17 @@ De eerste oplever is ~10 cases; uitbreiden naarmate het corpus groeit. Categorie
   case echt-op-maat-laten-maken: definitie-chunk "aanbieder" in de top-5 en
   tóch abstentie). Prompt-voorzichtigheid is dus een éigen knop naast
   retrieval — precies wat de teller `vraag:geen-bron:sterk-signaal` in
-  productie zichtbaar maakt.
+  productie zichtbaar maakt. Vervolg (zelfde dag, met seed gemeten): een
+  expliciete toepassings-regel ("definities mogen op de situatie worden
+  toegepast, elke stap gegrond") leverde +2 grounding en hield abstentie
+  op 27/27 → gehouden. Een mengvorm-verbod in de prompt werkte averechts
+  (een case koos kale weigering boven zijn eerdere antwoord) → afgevoerd;
+  de mengvorm (weigerzin + gegrond antwoord) is in code opgelost:
+  `geen_bron` = weigerzin zónder citaten.
+- **Een groene case kan inhoudelijk fout zijn** (zelfde dag): het eerste
+  groene op-maat-antwoord miste de "in gebruik stelt"-tak van art. 3, punt 3
+  — de marker was te zwak en is aangescherpt. Markers horen de júridische
+  kern af te dwingen, niet slechts een themawoord.
 - **Corpus-herformulering mag nooit de letterlijke golden-vraag bevatten** (les
   19 jul 2026): vraaggericht schrijven van eigen guidance is legitieme
   IR-techniek, maar met de evalvraag woordelijk in het corpus meet de eval
