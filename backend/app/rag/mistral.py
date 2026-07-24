@@ -33,6 +33,10 @@ def genereer(systeem: str, vraag: str) -> str:
         resp = _klant().chat.complete(
             model=settings.chat_model,
             temperature=0,   # juridische antwoorden mogen niet per run variëren
+            # Vaste seed: temperatuur 0 alleen bleek via de API niet
+            # bit-reproduceerbaar (gemeten, zie docs/eval-aanpak.md); de seed
+            # dempt run-ruis zodat eval-verschillen echte effecten zijn.
+            random_seed=settings.random_seed,
             messages=[
                 {"role": "system", "content": systeem},
                 {"role": "user", "content": vraag},

@@ -11,8 +11,11 @@ class NepEmbeddings:
 
 
 class NepChat:
-    def complete(self, model, temperature, messages):
-        assert temperature == 0  # reproduceerbaarheid is een harde eis
+    def complete(self, model, temperature, random_seed, messages):
+        # Reproduceerbaarheid is een harde eis: temperatuur 0 én een vaste
+        # seed (temperatuur alleen bleek via de API niet bit-reproduceerbaar).
+        assert temperature == 0
+        assert isinstance(random_seed, int)
         return SimpleNamespace(choices=[SimpleNamespace(
             message=SimpleNamespace(content="antwoord"))])
 
