@@ -22,6 +22,7 @@
 stages:
   - test
   - deploy
+  - verify
 
 variables:
   APP_DIR: "aiactwijzer"   # relatief t.o.v. $HOME van SSH_USER op de VPS
@@ -30,7 +31,8 @@ backend_tests:
   stage: test
   image: python:3.12-slim
   script:
-    - pip install --no-cache-dir -r requirements.txt
+    # -c constraints.txt: exact dezelfde versies als de productie-image bouwt.
+    - pip install --no-cache-dir -r requirements.txt -c constraints.txt
     # Geen Postgres in deze job: de db-fixture skipt die tests netjes
     # (bestaand gedrag); parser/scoring/prompt/API-tests draaien wél.
     - pytest
@@ -125,3 +127,16 @@ index_corpus:
       cd $APP_DIR &&
       docker compose -f docker-compose.prod.yml exec -T backend python -m app.ingest
       "
+
+rooktest:
+  stage: verify
+  image: alpine:3.20
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
+  needs: ["deploy_hetzner"]
+  script:
+    # Laatste woord van de pipeline: staat de site écht, inclusief de
+    # RAG-keten (één echte /ask, kost centen)? Een kapotte deploy kleurt zo
+    # de pipeline rood in plaats van stil live te staan.
+    - apk add --no-cache curl
+    - sh scripts/rooktest.sh

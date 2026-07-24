@@ -37,6 +37,16 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    # Zelfde /health als de rooktest; python-urllib omdat de slim-image geen
+    # curl heeft. Vangt de koude-start-502 af (restart bij een hangende start)
+    # en maakt de status zichtbaar in `docker compose ps`.
+    healthcheck:
+      test: ["CMD", "python", "-c",
+             "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 
   frontend:
     build:

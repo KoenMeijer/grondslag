@@ -3,8 +3,11 @@ FROM python:3.12-slim
 WORKDIR /app
 ENV PYTHONUNBUFFERED=1
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# constraints.txt pint elke (transitieve) dependency exact (pip freeze van de
+# geteste omgeving): de VPS bouwt zo aantoonbaar dezelfde app als lokaal is
+# getest, en een deploy kan nooit stilletjes een major-versie meenemen.
+COPY requirements.txt constraints.txt ./
+RUN pip install --no-cache-dir -r requirements.txt -c constraints.txt
 
 COPY backend/app ./app
 

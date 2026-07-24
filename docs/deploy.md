@@ -198,6 +198,18 @@ server {
    `CLAUDE.md`, dit bestand, de transparantie-pagina en de LinkedIn/README-links.
    `grep -rn "almaconecta" .` vóór je afsluit.
 
+## Security-headers — eenmalig ter plekke zetten (nog te doen)
+
+Het repo-bestand `deploy/nginx/grondslag.eu.conf` bevat sinds 24 jul 2026 een
+blok security-headers, maar het live 443-blok op de VPS wordt door certbot
+beheerd en mag niet overschreven worden. Eenmalig ter plekke: open het live
+bestand, plak het `add_header`-blok uit het repo-bestand in het
+`server_name grondslag.eu`-blok (onder `access_log off;`), dan
+`nginx -t && systemctl reload nginx`. Controle daarna:
+`curl -sI https://grondslag.eu | grep -iE 'strict|frame|referrer|content-type-o'`
+(of securityheaders.com). Volledige CSP bewust niet — Nuxt hydrateert met
+inline scripts; dat afdekken vergt nonces en is een aparte klus.
+
 ## Gebruikscijfers uitlezen
 
 Per dag wordt geteld: het aantal bezoeken per pagina en het aantal gestelde
@@ -277,6 +289,14 @@ push → deploy → handmatig `index_corpus` draaien.
 - **`APP_DIR` is relatief** (`aiactwijzer` t.o.v. de home-dir van `SSH_USER`),
   waar mijn oudere projecten een absoluut pad hardcoden — zo blijft de pipeline werken
   als de VPS-gebruiker ooit anders heet.
-- **Geen backend-healthcheck in compose**: bij een koude start kunnen de
-  eerste `/api`-requests kort een 502 geven totdat uvicorn luistert
-  (zelfherstellend; acceptabel voor een low-traffic demo op één VPS).
+- **Backend-healthcheck in compose** (toegevoegd 24 jul 2026, verving de
+  eerdere bewuste afwezigheid): dezelfde `/health` als de rooktest, zodat een
+  hangende start een restart krijgt en `docker compose ps` de status toont.
+  De koude-start-502 direct na een deploy blijft kort mogelijk; de rooktest
+  in CI wacht daarop met retries.
+- **Rooktest als laatste pipeline-stap** (`scripts/rooktest.sh`, ook los
+  bruikbaar): health, redirect, pagina's én één echte `/ask` met citaten —
+  een kapotte deploy kleurt de pipeline rood in plaats van stil live te staan.
+- **Dependencies exact gepind** via `constraints.txt` (pip freeze van de
+  geteste omgeving; Dockerfile en CI installeren met `-c`). Bewust bijwerken:
+  lokaal upgraden → tests + evals → `pip freeze > constraints.txt` → commit.
