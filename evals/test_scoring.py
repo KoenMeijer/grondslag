@@ -6,6 +6,11 @@ def test_ref_prefix_matcht_maar_geen_cijferbotsing():
     assert scoring.ref_matcht("UAIV", "UAIV — beoogde toezichthouders in Nederland")
     # "Artikel 6" mag niet stiekem "Artikel 60" goedkeuren
     assert not scoring.ref_matcht("Artikel 6", "Artikel 60")
+    # EU-"Artikel 4" mag niet stiekem "UAIV artikel 4.1" goedkeuren (de punt
+    # is geen woordteken); de UAIV-vorm zelf moet zijn leden blijven matchen
+    assert not scoring.ref_matcht("Artikel 4", "UAIV artikel 4.1, lid 2")
+    assert scoring.ref_matcht("UAIV artikel 4.1", "UAIV artikel 4.1, lid 2")
+    assert scoring.ref_matcht("Artikel 4", "Artikel 4")
 
 
 def test_retrieval_een_verwachte_ref_volstaat():

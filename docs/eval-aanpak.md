@@ -49,6 +49,11 @@ De eerste oplever is ~10 cases; uitbreiden naarmate het corpus groeit. Categorie
 - **Temperatuur 0**, anders varieert grounding per run en meet je ruis.
 - **Regressie is het doel.** De set draait bij elke wijziging (chunking, model, prompt);
   een knop die één metric verbetert mag geen andere stilletjes slopen.
+- **Ook met perfecte retrieval kan het model weigeren** (les 24 jul 2026,
+  case echt-op-maat-laten-maken: definitie-chunk "aanbieder" in de top-5 en
+  tóch abstentie). Prompt-voorzichtigheid is dus een éigen knop naast
+  retrieval — precies wat de teller `vraag:geen-bron:sterk-signaal` in
+  productie zichtbaar maakt.
 - **Corpus-herformulering mag nooit de letterlijke golden-vraag bevatten** (les
   19 jul 2026): vraaggericht schrijven van eigen guidance is legitieme
   IR-techniek, maar met de evalvraag woordelijk in het corpus meet de eval

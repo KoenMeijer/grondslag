@@ -4,8 +4,10 @@ import re
 
 
 def ref_matcht(verwacht: str, ref: str) -> bool:
-    # Woordgrens-check: "Artikel 6" matcht "Artikel 6, lid 2" maar niet "Artikel 60"
-    return re.search(rf"(?<!\w){re.escape(verwacht)}(?!\w)", ref, re.IGNORECASE) is not None
+    # Woordgrens-check: "Artikel 6" matcht "Artikel 6, lid 2" maar niet "Artikel 60".
+    # De punt telt mee als grens-teken: anders keurt "Artikel 4" (EU) stiekem
+    # "UAIV artikel 4.1" goed — subnummers zijn een ánder artikel.
+    return re.search(rf"(?<!\w){re.escape(verwacht)}(?![\w.])", ref, re.IGNORECASE) is not None
 
 
 def score_retrieval(verwachte_refs: list[str], opgehaalde_refs: list[str]) -> bool:

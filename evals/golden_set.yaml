@@ -186,3 +186,59 @@
   grounding_markers: ["markttoezicht"]
   verboden_markers: []
   abstentie: false
+
+# --- Echte formuleringen uit het vragencorpus (24 jul 2026) ------------------
+# Geoogst uit publieke bronnen (zie vragencorpus.md): dit is hoe ondernemers
+# en burgers het écht vragen. Twee cases dekken kennisgebieden die tot nu toe
+# ontbraken: AI-geletterdheid (art. 4) en chatbot-transparantie (art. 50).
+
+- id: echt-klein-bedrijf-chatgpt
+  categorie: alledaags
+  # KVK-kernzorg nr. 1: "geldt dit überhaupt voor mij?"
+  vraag: "Wij zijn een klein bedrijf en gebruiken alleen ChatGPT en Copilot. Geldt die AI-wet dan ook voor ons?"
+  retrieval_refs: ["Artikel 2", "Artikel 3", "Artikel 4"]
+  grounding_markers: ["gebruiksverantwoordelijke"]
+  verboden_markers: []
+  abstentie: false
+
+- id: echt-personeel-opleiden
+  categorie: alledaags
+  vraag: "Moet ik mijn personeel eerst opleiden voordat ze met AI mogen werken?"
+  retrieval_refs: ["Artikel 4"]
+  grounding_markers: ["AI-geletterdheid"]
+  verboden_markers: []
+  abstentie: false
+
+- id: echt-chatbot-melden
+  categorie: alledaags
+  vraag: "Onze chatbot praat met klanten. Moeten we erbij zeggen dat het AI is?"
+  retrieval_refs: ["Artikel 50"]
+  grounding_markers: ["Artikel 50"]
+  verboden_markers: []
+  abstentie: false
+
+- id: echt-uitgestelde-data
+  categorie: alledaags
+  # Géén verboden marker op "2 augustus 2026": bij deze open datumvraag mag
+  # een goed antwoord de oude datum als context noemen ("stond eerst op...").
+  vraag: "Ik hoorde dat de regels zijn uitgesteld. Wat zijn nu de echte data?"
+  retrieval_refs: ["Digital Omnibus", "Artikel 113"]
+  grounding_markers: ["2 december 2027"]
+  verboden_markers: []
+  abstentie: false
+
+- id: echt-op-maat-laten-maken
+  categorie: alledaags
+  vraag: "Ik laat een AI-systeem op maat maken voor eigen gebruik. Ben ik dan de maker volgens de wet?"
+  retrieval_refs: ["Artikel 3", "Artikel 25"]
+  grounding_markers: ["aanbieder"]
+  verboden_markers: []
+  abstentie: false
+
+- id: echt-wie-controleert
+  categorie: alledaags
+  vraag: "Wie controleert in Nederland eigenlijk of bedrijven zich aan de AI-regels houden?"
+  retrieval_refs: ["UAIV"]
+  grounding_markers: ["Autoriteit Persoonsgegevens"]
+  verboden_markers: []
+  abstentie: false
