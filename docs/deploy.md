@@ -264,6 +264,24 @@ De tabel groeit met het aantal dagen, niet met het aantal bezoeken (upsert per
 dag). Wijzig je hier iets aan, pas dan ook de privacy-alinea op
 `/transparantie` aan — de tool hoort zelf te doen wat zij belooft.
 
+## Dagelijkse bronnencheck
+
+De backend controleert dagelijks (achtergrondtaak, `app/bronnen.py`) of de
+bron-pagina's uit de corpus-administratie zijn gewijzigd: van elke bron-URL
+wordt de zichtbare tekst gehasht en vergeleken met de nulmeting. Detectie,
+geen automatische opname — een corpuswijziging blijft een bewuste stap.
+
+- **Stand opvragen:** `curl -s https://grondslag.eu/api/bronnen/status` —
+  200 = alles gelijk aan de nulmeting; **409** = een bron is gewijzigd (met de
+  URLs in de body). De AI-OS-watchdog (persoonlijk repo, `os/sites.conf`)
+  bevraagt dit endpoint dagelijks en alarmeert bij alles behalve 200.
+- **Alarm gezien?** Bron bekijken, corpus bijwerken (met versie/datum in de
+  frontmatter), eval-suite draaien, push + `index_corpus`. De herindexering
+  reset de nulmeting, waarmee het alarm dooft.
+- **Vals alarm** (cosmetische paginawijziging zonder inhoudelijk gevolg):
+  ook dan is `index_corpus` draaien de weg — dat legt een verse nulmeting
+  vast; het corpus zelf is dan ongewijzigd, dus verder geen gevolgen.
+
 ## Corpus- of RAG-wijziging
 
 Werkafspraak: eval-suite lokaal draaien vóór de push (zie README — exit ≠ 0 is

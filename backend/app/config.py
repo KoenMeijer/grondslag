@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     embed_dim: int = 1024          # dimensie van mistral-embed
     top_k: int = 5                 # startwaarde; verhogen is een gemeten knop, geen reflex
     random_seed: int = 42          # vaste seed voor generatie: dempt API-run-ruis in de evals
+    broncheck_interval_uren: int = 24   # dagelijkse bronnencheck (zie app/bronnen.py)
     stand_van_wetgeving: str = "juli 2026"
     # Cosine-afstandsgrens voor de geen-bron-splitsing: abstentie mét een
     # vectorkandidaat op afstand <= grens telt als "sterk signaal". Gemeten

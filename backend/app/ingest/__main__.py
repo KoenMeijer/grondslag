@@ -9,6 +9,7 @@ from pathlib import Path
 
 from sqlalchemy import select
 
+from app import bronnen
 from app.db import SessionLocal, init_db
 from app.ingest.parser import parse_document
 from app.models import Chunk, Source
@@ -49,6 +50,10 @@ def main() -> None:
         for pad in sorted(corpus_root.rglob("*.md")):
             n = indexeer_bestand(sessie, pad, corpus_root)
             print(f"{pad}: {n} chunks")
+        # Nieuwe corpusversie = nieuwe nulmeting voor de bronnencheck: de
+        # eerstvolgende dagcheck legt verse vingerafdrukken vast en een
+        # openstaand bronnen-alarm dooft — het corpus is immers net bijgewerkt.
+        bronnen.reset(sessie)
         sessie.commit()
 
 

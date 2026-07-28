@@ -1,12 +1,14 @@
 """FastAPI-laag: dun schilletje om de RAG-service. Geen fallback-antwoorden bij
 een modelfout — liever een eerlijke 502 dan een half juridisch antwoord."""
+import asyncio
 import logging
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException, Response
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field, field_validator
 
-from app import inzendingen
+from app import bronnen, inzendingen
 from app.config import settings
 from app.db import SessionLocal, init_db
 from app.rag import service
@@ -14,6 +16,22 @@ from app.rag.mistral import MistralFout
 from app.tellen import tel_op
 
 logger = logging.getLogger(__name__)
+
+
+async def _bronnenwacht() -> None:
+    """Dagelijkse bronnencheck als achtergrondtaak. Draait per worker (bij
+    twee uvicorn-workers dus dubbel) — dat is bewust geaccepteerd: de check is
+    idempotent en vier extra fetches per dag kosten niets, terwijl een aparte
+    scheduler-container wél beheer kost. Eerste run kort na de start, zodat
+    een verse deploy meteen een nulmeting heeft."""
+    await asyncio.sleep(120)
+    while True:
+        try:
+            with SessionLocal() as sessie:
+                await asyncio.to_thread(bronnen.controleer, sessie)
+        except Exception:   # noqa: BLE001 — de wacht mag nooit de app breken
+            logger.warning("bronnencheck-run mislukt", exc_info=True)
+        await asyncio.sleep(settings.broncheck_interval_uren * 3600)
 
 
 @asynccontextmanager
@@ -27,7 +45,9 @@ async def levensduur(app: FastAPI):
         init_db()
     except Exception:   # noqa: BLE001
         logger.warning("init_db bij opstarten mislukt", exc_info=True)
+    wacht = asyncio.create_task(_bronnenwacht())
     yield
+    wacht.cancel()
 
 
 app = FastAPI(title="Grondslag", lifespan=levensduur)
@@ -96,6 +116,17 @@ def ask(body: AskVraag):
     elif not antwoord.citaten:
         tel_op("vraag:zonder-citaat")
     return antwoord
+
+
+@app.get("/bronnen/status")
+def bronnen_status() -> JSONResponse:
+    """Stand van de dagelijkse bronnencheck. Niet-200 bij een gedetecteerde
+    wijziging is bewust: de AI-OS-watchdog ziet alles behalve 200 als alarm,
+    dus de melding loopt via de bestaande route zonder extra integratie."""
+    with SessionLocal() as sessie:
+        stand = bronnen.status(sessie)
+    code = 200 if stand["status"] == "ok" else 409
+    return JSONResponse(status_code=code, content=stand)
 
 
 @app.post("/inzending", status_code=204)

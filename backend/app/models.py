@@ -56,6 +56,21 @@ class Dagtelling(Base):
     aantal: Mapped[int]
 
 
+class Broncheck(Base):
+    """Nulmeting per bron-URL voor de dagelijkse bronnencheck. De vingerafdruk
+    is een hash van de zichtbare tekst van de pagina; wijkt de dagelijkse
+    ophaling af, dan wordt gewijzigd_sinds gezet en blijft staan tot het corpus
+    is bijgewerkt (herindexering reset deze tabel — zie app/bronnen.py)."""
+
+    __tablename__ = "bronchecks"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    url: Mapped[str] = mapped_column(unique=True)
+    vingerafdruk: Mapped[str]
+    laatst_gecontroleerd: Mapped[str]           # ISO-datum (UTC)
+    gewijzigd_sinds: Mapped[str | None] = mapped_column(default=None)
+
+
 class IngezondenVraag(Base):
     """Opt-in ingezonden vragen na een onbeantwoorde vraag. Alleen de
     vraagtekst en de datum — bewust geen IP, sessie of user-agent, zelfde

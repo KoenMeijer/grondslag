@@ -151,6 +151,26 @@ def test_te_korte_inzending_wordt_geweigerd():
     assert client.post("/inzending", json={"vraag": "ab"}).status_code == 422
 
 
+def test_bronnenstatus_ok_geeft_200(monkeypatch):
+    monkeypatch.setattr("app.main.bronnen.status", lambda sessie: {
+        "status": "ok", "gewijzigd": [], "laatst_gecontroleerd": "2026-07-25"})
+    r = client.get("/bronnen/status")
+    assert r.status_code == 200
+    assert r.json()["status"] == "ok"
+
+
+def test_bronnenstatus_gewijzigde_bron_geeft_409(monkeypatch):
+    # Niet-200 is bewust: de bestaande AI-OS-watchdog (os/sites.conf) ziet
+    # alles behalve 200 als alarm — geen extra integratie nodig.
+    monkeypatch.setattr("app.main.bronnen.status", lambda sessie: {
+        "status": "bronnen-gewijzigd",
+        "gewijzigd": ["https://eur-lex.europa.eu/..."],
+        "laatst_gecontroleerd": "2026-07-25"})
+    r = client.get("/bronnen/status")
+    assert r.status_code == 409
+    assert "eur-lex" in r.json()["gewijzigd"][0]
+
+
 def test_te_lange_vraag_wordt_geweigerd():
     # Zonder bovengrens betaalt elke lange vraag zich uit in embedding- en
     # generatietokens; 422 is goedkoper dan een rekening.
