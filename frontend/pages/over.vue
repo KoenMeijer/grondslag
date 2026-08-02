@@ -24,6 +24,42 @@ useSeoMeta({
   ogImage: 'https://grondslag.eu/og/over.png',
   ogImageAlt: 'Grondslag — Over de AI-verordening',
 })
+
+// Veelgestelde vragen: één bron voor de zichtbare tekst én de FAQPage-JSON-LD,
+// zodat schema en pagina niet uiteenlopen (Google eist dat de FAQ ook echt op
+// de pagina staat). Redactioneel gegrond; artikel-/bijlageverwijzing in elk
+// antwoord. Informatie, geen juridisch advies (zie de disclaimer in de footer).
+const faq = [
+  {
+    v: 'Valt mijn AI-systeem onder de AI-verordening?',
+    a: 'De verordening werkt risicogebaseerd: elk systeem valt in één van vier categorieën — verboden, hoog-risico, beperkt risico met een transparantieplicht, of minimaal risico. De meeste systemen zijn beperkt of minimaal en kennen alleen lichte verplichtingen; de zware eisen gelden bij hoog-risico. De classificatie loopt via artikel 6 en bijlage III.',
+  },
+  {
+    v: 'Wanneer gaan de verplichtingen in — klopt 2 augustus 2026 nog?',
+    a: 'Deels gelden ze al: verboden praktijken sinds 2 februari 2025 en de regels voor AI voor algemene doeleinden (GPAI) sinds 2 augustus 2025. De hoog-risico-verplichtingen zijn na de Digital Omnibus verschoven van 2 augustus 2026 naar 2 december 2027 en 2 augustus 2028 — veel bronnen noemen nog de oude datum.',
+  },
+  {
+    v: 'Welke AI-praktijken zijn verboden?',
+    a: 'Artikel 5 verbiedt onder meer social scoring door overheden, manipulatie die schade veroorzaakt, emotieherkenning op de werkvloer en in het onderwijs, en real-time biometrische identificatie in de openbare ruimte, met beperkte uitzonderingen.',
+  },
+  {
+    v: 'Wanneer is een AI-systeem "hoog-risico"?',
+    a: 'Er zijn twee routes: het systeem is een veiligheidscomponent van een gereguleerd product (bijlage I), of het valt onder een gebruik uit bijlage III — zoals werving en cv-screening, onderwijs, kritieke infrastructuur of rechtshandhaving. De regel staat in artikel 6.',
+  },
+  {
+    v: 'Welke verplichtingen gelden bij een hoog-risico-systeem?',
+    a: 'Onder andere een risicomanagementsysteem, eisen aan datakwaliteit, technische documentatie, logging, betekenisvol menselijk toezicht en een conformiteitsbeoordeling met CE-markering vóór ingebruikname. Deze eisen staan in de artikelen 8 tot en met 17.',
+  },
+  {
+    v: 'Moet ik gebruikers vertellen dat ze met AI praten?',
+    a: 'Ja. Voor systemen die met mensen interacteren, zoals chatbots, en voor AI-gegenereerde of gemanipuleerde content zoals deepfakes geldt een transparantieplicht: de gebruiker moet weten dat het om AI gaat. Dat staat in artikel 50.',
+  },
+]
+
+useSchemaOrg([
+  defineWebPage({ '@type': 'FAQPage' }),
+  ...faq.map(f => defineQuestion({ name: f.v, acceptedAnswer: f.a })),
+])
 </script>
 
 <template>
@@ -77,6 +113,14 @@ useSeoMeta({
       </p>
     </section>
 
+    <section class="faq">
+      <h2>Veelgestelde vragen</h2>
+      <div v-for="item in faq" :key="item.v" class="vraag">
+        <h3>{{ item.v }}</h3>
+        <p>{{ item.a }}</p>
+      </div>
+    </section>
+
     <p class="slot">
       Wat dit voor jouw organisatie betekent, hangt af van wat je bouwt of
       gebruikt. <NuxtLink to="/">Stel je vraag</NuxtLink> — het antwoord komt
@@ -93,5 +137,7 @@ useSeoMeta({
 }
 .over h2 { font-size: 17px; margin: 28px 0 6px; }
 .over p { margin: 0 0 12px; }
+.faq .vraag { padding: 14px 0; border-top: 1px solid var(--lijn); }
+.faq h3 { font-size: 15px; font-weight: 600; margin: 0 0 4px; }
 .slot { margin-top: 28px; }
 </style>

@@ -46,6 +46,9 @@ useSeoMeta({
       bronnen en door de redactie in gewone taal samengevat. Elk bericht
       linkt naar de oorspronkelijke bron.
     </p>
+    <p class="volg">
+      <a href="/api/nieuws.xml">Volg via RSS</a>
+    </p>
 
     <p v-if="fout" class="leeg">Het nieuws kon niet worden geladen. Probeer het later opnieuw.</p>
     <p v-else-if="items && items.length === 0" class="leeg">Nog geen berichten.</p>
@@ -64,7 +67,8 @@ useSeoMeta({
 <style scoped>
 .nieuws { max-width: 68ch; }
 .nieuws h1 { font-size: 26px; margin: 0 0 12px; }
-.intro { margin: 0 0 24px; opacity: 0.85; }
+.intro { margin: 0 0 8px; opacity: 0.85; }
+.volg { margin: 0 0 24px; font-size: 14px; }
 .leeg { opacity: 0.75; }
 .bericht { padding: 16px 0; border-top: 1px solid var(--lijn); }
 .bericht h2 { font-size: 17px; margin: 4px 0 6px; }

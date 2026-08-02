@@ -5,3 +5,6 @@ import { vi } from 'vitest'
 
 vi.stubGlobal('useHead', () => {})
 vi.stubGlobal('useSeoMeta', () => {})
+vi.stubGlobal('useSchemaOrg', () => {})
+vi.stubGlobal('defineWebPage', () => ({}))
+vi.stubGlobal('defineQuestion', () => ({}))

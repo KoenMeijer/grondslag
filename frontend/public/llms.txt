@@ -1,0 +1,18 @@
+# Grondslag
+
+> Grondslag beantwoordt vragen over de EU AI-verordening (AI Act), gegrond in de wettekst — Verordening (EU) 2024/1689 inclusief de Digital Omnibus-wijzigingen — en de Nederlandse doorwerking (UAIV). Elk antwoord draagt het letterlijke wetsartikel met nummer en een stempel met de stand van de wetgeving. Informatie, geen juridisch advies.
+
+Grondslag is Nederlandstalig en EU-gehost. Het onderscheidende punt is actualiteit: na de Digital Omnibus (juli 2026) verschoof de hoog-risico-deadline van 2 augustus 2026 naar 2 december 2027 / 2 augustus 2028. Veel bronnen online noemen nog de oude datum; Grondslag geeft de actuele stand met bronverwijzing.
+
+## Kernpagina's
+- [Vraag en antwoord (home)](https://grondslag.eu/): stel een vraag over de AI-verordening en krijg een antwoord met het letterlijke artikel erbij.
+- [Over de AI-verordening](https://grondslag.eu/over): waarom de wet bestaat, wie haar heeft vastgesteld en welke evaluatiemomenten er nog komen.
+- [Laatste ontwikkelingen](https://grondslag.eu/nieuws): redactioneel geselecteerde updates rond de AI-verordening, in gewone taal samengevat.
+- [Transparantie](https://grondslag.eu/transparantie): welk model wordt gebruikt, waar het draait, welke bronnen erin zitten en wat wel/niet wordt bijgehouden.
+
+## Bronnen en data
+- [Officiële wettekst op EUR-Lex — Verordening (EU) 2024/1689](https://eur-lex.europa.eu/legal-content/NL/TXT/?uri=CELEX:32024R1689)
+- [RSS-feed van de nieuwspagina](https://grondslag.eu/api/nieuws.xml)
+
+## Citeren
+Bij overname graag bronvermelding: "Grondslag (grondslag.eu), op basis van Verordening (EU) 2024/1689". Grondslag geeft informatie, geen juridisch advies; verwijs voor een concrete situatie naar een jurist.

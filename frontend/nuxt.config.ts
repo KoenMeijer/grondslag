@@ -53,6 +53,8 @@ export default defineNuxtConfig({
       ],
       link: [
         { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+        // Feed-autodiscovery: nieuwslezers/aggregators vinden de RSS zo vanzelf.
+        { rel: 'alternate', type: 'application/rss+xml', title: 'Grondslag — Laatste ontwikkelingen', href: `${SITE_URL}/api/nieuws.xml` },
       ],
     },
   },

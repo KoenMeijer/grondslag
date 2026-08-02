@@ -11,7 +11,7 @@ from fastapi import FastAPI, Header, HTTPException, Response
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field, field_validator
 
-from app import bronnen, inzendingen, nieuws
+from app import bronnen, feed, inzendingen, nieuws
 from app.config import settings
 from app.db import SessionLocal, init_db
 from app.rag import service
@@ -208,6 +208,20 @@ def nieuws_lijst():
         return [NieuwsUit(id=n.id, bron=n.bron, url=n.url, titel=n.titel,
                           datum=n.datum, samenvatting=n.samenvatting)
                 for n in nieuws.gepubliceerd(sessie)]
+
+
+@app.get("/nieuws.xml")
+def nieuws_feed():
+    """RSS 2.0 van de gepubliceerde nieuwsitems, zodat nieuwsbrieven en
+    aggregators de AI-Act-updates automatisch oppikken. Publiek bereikbaar via
+    /api/nieuws.xml (zelfde /api-mapping als /api/nieuws)."""
+    with SessionLocal() as sessie:
+        items = [NieuwsUit(id=n.id, bron=n.bron, url=n.url, titel=n.titel,
+                           datum=n.datum, samenvatting=n.samenvatting)
+                 for n in nieuws.gepubliceerd(sessie)]
+    xml = feed.rss(items, site_url="https://grondslag.eu",
+                   feed_url="https://grondslag.eu/api/nieuws.xml")
+    return Response(content=xml, media_type="application/rss+xml; charset=utf-8")
 
 
 @app.get("/nieuws/concepten", response_model=list[NieuwsUit])
