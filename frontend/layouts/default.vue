@@ -56,6 +56,8 @@ onBeforeUnmount(() => {
         <span aria-hidden="true">·</span>
         <NuxtLink to="/transparantie">Transparantie</NuxtLink>
         <span aria-hidden="true">·</span>
+        <NuxtLink to="/developers">Voor ontwikkelaars</NuxtLink>
+        <span aria-hidden="true">·</span>
         <a href="https://eur-lex.europa.eu/legal-content/NL/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener">Bron: Verordening (EU) 2024/1689 op EUR-Lex</a>
         <span aria-hidden="true">·</span>
         <a href="https://www.linkedin.com/in/koen-meijer-5b47239/" target="_blank" rel="noopener">Gemaakt door Koen Meijer</a>

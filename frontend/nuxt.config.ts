@@ -60,7 +60,8 @@ export default defineNuxtConfig({
   },
   // Alleen het beheerscherm hoort niet in Google; de rest is publiek.
   robots: {
-    disallow: ['/beheer'],
+    // /beheer = admin; /embed = widget-doel (hoort niet los in Google).
+    disallow: ['/beheer', '/embed'],
     // De sitemap genereren we zelf (zie hooks onderaan); verwijs er expliciet
     // naar zodat de regel in robots.txt blijft nu de sitemap-module uit is.
     sitemap: `${SITE_URL}/sitemap.xml`,
@@ -91,7 +92,8 @@ export default defineNuxtConfig({
     'pages:extend'(pages) {
       const verzamel = (lijst: { path?: string, children?: unknown[] }[]) => {
         for (const p of lijst) {
-          if (p.path && !p.path.includes(':') && !p.path.startsWith('/beheer')) {
+          if (p.path && !p.path.includes(':')
+            && !p.path.startsWith('/beheer') && p.path !== '/embed') {
             sitemapRoutes.push(p.path)
           }
           if (Array.isArray(p.children)) verzamel(p.children as { path?: string }[])

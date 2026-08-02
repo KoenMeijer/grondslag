@@ -17,6 +17,10 @@ class Settings(BaseSettings):
     # Leeg = beheer-endpoints staan uit (403) — veilige standaard.
     admin_token: str = ""
     stand_van_wetgeving: str = "juli 2026"
+    # Per-IP kostenrem op /ask nu die publiek/embed breder gebruikt wordt. Ruim
+    # voor een mens, te krap om de Mistral-rekening op te stoken. Per uvicorn-
+    # worker een eigen venster (zie app/ratelimit.py).
+    ask_limiet_per_minuut: int = 20
     # Cosine-afstandsgrens voor de geen-bron-splitsing: abstentie mét een
     # vectorkandidaat op afstand <= grens telt als "sterk signaal". Gemeten
     # (evals/meet_afstanden.py, 24 jul 2026): on-topic-vragen — ook de terechte

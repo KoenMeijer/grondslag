@@ -4,15 +4,17 @@ import asyncio
 import datetime
 import logging
 import secrets
+import time
 from contextlib import asynccontextmanager
 from typing import Literal
 
-from fastapi import FastAPI, Header, HTTPException, Response
+from fastapi import FastAPI, Header, HTTPException, Request, Response
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field, field_validator
 
 from app import bronnen, feed, inzendingen, nieuws
 from app.config import settings
+from app.ratelimit import RateLimiter
 from app.db import SessionLocal, init_db
 from app.rag import service
 from app.rag.mistral import MistralFout
@@ -70,7 +72,32 @@ async def levensduur(app: FastAPI):
         wacht.cancel()
 
 
-app = FastAPI(title="Grondslag", lifespan=levensduur)
+app = FastAPI(
+    title="Grondslag API",
+    version="1.0.0",
+    description=(
+        "Publieke API van Grondslag. Stel via /ask een vraag over de EU "
+        "AI-verordening (AI Act) en krijg een gegrond antwoord met citaat en "
+        "artikelnummer, plus een stempel met de stand van de wetgeving. "
+        "Informatie, geen juridisch advies. Vrij te gebruiken met "
+        "bronvermelding (CC BY 4.0). Per IP gerate-limit."
+    ),
+    license_info={"name": "CC BY 4.0", "url": "https://creativecommons.org/licenses/by/4.0/"},
+    servers=[{"url": "https://grondslag.eu/api", "description": "Productie"}],
+    lifespan=levensduur,
+)
+
+# Per-IP kostenrem op /ask (embed-widget + publieke API). Zie app/ratelimit.py.
+_ask_limiter = RateLimiter(max_per_window=settings.ask_limiet_per_minuut, window_seconds=60.0)
+
+
+def _client_ip(request: Request) -> str:
+    """Echt client-IP achter de nginx-proxy: eerste in X-Forwarded-For, anders
+    de directe verbinding."""
+    fwd = request.headers.get("x-forwarded-for")
+    if fwd:
+        return fwd.split(",")[0].strip()
+    return request.client.host if request.client else "onbekend"
 
 # Witte lijst voor de bezoekteller: alleen bestaande pagina's. Zonder deze lijst
 # kan iedereen de tabel volschrijven met verzonnen paden.
@@ -110,8 +137,23 @@ def health() -> dict:
     return {"status": "ok"}
 
 
-@app.post("/ask", response_model=AskAntwoord)
-def ask(body: AskVraag):
+@app.post(
+    "/ask",
+    response_model=AskAntwoord,
+    summary="Stel een vraag over de AI-verordening",
+    description=(
+        "Geeft een gegrond antwoord met citaten (artikelnummer + fragment + "
+        "bron-URL) en de stand van de wetgeving. `geen_bron` is waar als er "
+        "geen passende grondslag is gevonden. Per IP gerate-limit; bij "
+        "overschrijding volgt HTTP 429."
+    ),
+)
+def ask(body: AskVraag, request: Request):
+    if not _ask_limiter.toegestaan(_client_ip(request), time.monotonic()):
+        raise HTTPException(
+            status_code=429,
+            detail="Te veel vragen in korte tijd. Probeer het zo opnieuw.",
+        )
     with SessionLocal() as sessie:
         try:
             antwoord = service.beantwoord(sessie, body.vraag)
