@@ -102,8 +102,9 @@ export default defineNuxtConfig({
     // Schrijf de sitemap als statisch bestand in de public-output. Vervangt de
     // kapotte runtime-module; blijft in sync omdat de routes uit pages komen.
     async 'nitro:build:public-assets'(nitro) {
-      const { writeFile, readdir } = await import('node:fs/promises')
+      const { writeFile, readdir, readFile } = await import('node:fs/promises')
       const { join } = await import('node:path')
+      const pub = nitro.options.output.publicDir
       // Kennisbank-slugs toevoegen: de dynamische /vraag/[slug]-routes pikt
       // pages:extend niet op, dus lezen we de bronbestanden zelf.
       let vraagRoutes: string[] = []
@@ -115,7 +116,24 @@ export default defineNuxtConfig({
       const routes = [...new Set([...sitemapRoutes, ...vraagRoutes])].sort()
       const urls = routes.map(r => `  <url><loc>${SITE_URL}${r}</loc></url>`).join('\n')
       const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`
-      await writeFile(join(nitro.options.output.publicDir, 'sitemap.xml'), xml, 'utf8')
+      await writeFile(join(pub, 'sitemap.xml'), xml, 'utf8')
+
+      // Deadline-dataset als machine-leesbare downloads (JSON + CSV) naast de
+      // /deadlines-pagina. Bron van waarheid: data/deadlines.json.
+      try {
+        const data = JSON.parse(await readFile(join(process.cwd(), 'data', 'deadlines.json'), 'utf8'))
+        await writeFile(join(pub, 'deadlines.json'), `${JSON.stringify(data, null, 2)}\n`, 'utf8')
+        const kolommen = ['fase', 'artikel', 'verplichting', 'datum', 'was', 'status']
+        const esc = (v: unknown) => {
+          const s = v == null ? '' : String(v)
+          return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s
+        }
+        const csv = [
+          kolommen.join(','),
+          ...data.mijlpalen.map((m: Record<string, unknown>) => kolommen.map(k => esc(m[k])).join(',')),
+        ].join('\n') + '\n'
+        await writeFile(join(pub, 'deadlines.csv'), csv, 'utf8')
+      } catch { /* geen dataset → overslaan */ }
     },
   },
   nitro: {

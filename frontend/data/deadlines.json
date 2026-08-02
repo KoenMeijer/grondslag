@@ -1,0 +1,50 @@
+{
+  "naam": "AI-verordening: verplichtingen en deadlines",
+  "beschrijving": "Wanneer welke verplichting uit de EU AI-verordening (AI Act) van kracht wordt, met de actuele data na de Digital Omnibus.",
+  "bron": "https://eur-lex.europa.eu/legal-content/NL/TXT/?uri=CELEX:32024R1689",
+  "standWetgeving": "juli 2026",
+  "bijgewerkt": "2026-08-02",
+  "licentie": "https://creativecommons.org/licenses/by/4.0/",
+  "mijlpalen": [
+    {
+      "fase": "Verboden praktijken van kracht",
+      "artikel": "Artikel 5",
+      "verplichting": "Verboden AI-praktijken (zoals social scoring en schadelijke manipulatie) zijn niet langer toegestaan.",
+      "datum": "2025-02-02",
+      "was": null,
+      "status": "van kracht"
+    },
+    {
+      "fase": "AI voor algemene doeleinden (GPAI)",
+      "artikel": "Artikelen 53 tot en met 55",
+      "verplichting": "Transparantie- en documentatieplichten voor aanbieders van GPAI-modellen.",
+      "datum": "2025-08-02",
+      "was": null,
+      "status": "van kracht"
+    },
+    {
+      "fase": "Hoog-risico (bijlage III)",
+      "artikel": "Artikel 6, lid 2 en bijlage III",
+      "verplichting": "Volledige verplichtingen voor hoog-risico-systemen uit bijlage III (zoals werving, onderwijs en rechtshandhaving).",
+      "datum": "2027-12-02",
+      "was": "2026-08-02",
+      "status": "komt"
+    },
+    {
+      "fase": "Hoog-risico (bijlage I, producten)",
+      "artikel": "Artikel 6, lid 1 en bijlage I",
+      "verplichting": "Verplichtingen voor hoog-risico-systemen die een veiligheidscomponent van een gereguleerd product zijn.",
+      "datum": "2028-08-02",
+      "was": null,
+      "status": "komt"
+    },
+    {
+      "fase": "Eerste evaluatie door de Commissie",
+      "artikel": "Artikel 112",
+      "verplichting": "De Commissie evalueert de verordening en brengt verslag uit aan het Europees Parlement en de Raad.",
+      "datum": "2028-08-02",
+      "was": null,
+      "status": "komt"
+    }
+  ]
+}

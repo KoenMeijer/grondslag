@@ -115,7 +115,8 @@ useSchemaOrg([
         Dat het kader beweegt is geen theorie: de Digital Omnibus verschoof in
         2026 al deadlines die online nog volop in hun oude vorm rondzingen.
         Daarom draagt elk antwoord hier een stempel met de stand van de
-        wetgeving.
+        wetgeving. Een overzicht van alle verplichtingen met hun actuele data
+        staat op de pagina <NuxtLink to="/deadlines">deadlines</NuxtLink>.
       </p>
     </section>
 
