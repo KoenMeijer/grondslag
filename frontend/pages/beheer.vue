@@ -55,7 +55,7 @@ async function werkBij(item: Concept, status: 'gepubliceerd' | 'afgewezen') {
 }
 
 useHead({
-  title: 'Beheer · Grondslag',
+  title: 'Beheer',
   // Redactiescherm: niet voor zoekmachines.
   meta: [{ name: 'robots', content: 'noindex, nofollow' }],
 })

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- Statisch: drie pagina's, geen generator nodig. Nieuwe pagina = regel erbij. -->
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://grondslag.eu/</loc></url>
-  <url><loc>https://grondslag.eu/over</loc></url>
-  <url><loc>https://grondslag.eu/transparantie</loc></url>
-</urlset>

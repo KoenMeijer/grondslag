@@ -2,6 +2,15 @@
 import { useVraagStore } from '~/stores/vraag'
 
 const store = useVraagStore()
+
+// Eigen homepage-titel; @nuxtjs/seo plakt er "· Grondslag" achter. Zonder deze
+// zou de titel "Grondslag · Grondslag" worden (sitenaam dubbel). De homepage
+// houdt de echte-schermafdruk als deelkaart; contentpagina's hebben hun eigen.
+useSeoMeta({
+  title: 'Antwoorden over de AI-verordening',
+  ogImage: 'https://grondslag.eu/og-grondslag.png',
+  ogImageAlt: 'Een vraag over cv-screening met daarnaast het letterlijke wetsartikel uit bijlage III.',
+})
 </script>
 
 <template>

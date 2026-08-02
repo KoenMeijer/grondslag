@@ -18,9 +18,11 @@ const ART112 =
   'Uiterlijk op 2 augustus 2028 en vervolgens om de vier jaar verricht de ' +
   'Commissie een evaluatie en brengt zij verslag uit bij het Europees ' +
   'Parlement en de Raad […]'
-useHead({
-  title: 'Over de AI-verordening · Grondslag',
-  meta: [{ name: 'description', content: 'Waarom de AI-verordening bestaat, wie haar heeft vastgesteld en welke evaluatiemomenten er nog komen — met citaten uit de wettekst.' }],
+useSeoMeta({
+  title: 'Over de AI-verordening',
+  description: 'Waarom de AI-verordening bestaat, wie haar heeft vastgesteld en welke evaluatiemomenten er nog komen — met citaten uit de wettekst.',
+  ogImage: 'https://grondslag.eu/og/over.png',
+  ogImageAlt: 'Grondslag — Over de AI-verordening',
 })
 </script>
 

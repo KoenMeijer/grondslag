@@ -30,9 +30,11 @@ function datumTekst(iso: string): string {
   })
 }
 
-useHead({
-  title: 'Laatste ontwikkelingen · Grondslag',
-  meta: [{ name: 'description', content: 'Ontwikkelingen rond de AI-verordening (EU AI Act), door de redactie geselecteerd en in gewone taal samengevat, met link naar de oorspronkelijke bron.' }],
+useSeoMeta({
+  title: 'Laatste ontwikkelingen',
+  description: 'Ontwikkelingen rond de AI-verordening (EU AI Act), door de redactie geselecteerd en in gewone taal samengevat, met link naar de oorspronkelijke bron.',
+  ogImage: 'https://grondslag.eu/og/nieuws.png',
+  ogImageAlt: 'Grondslag — Laatste ontwikkelingen rond de AI-verordening',
 })
 </script>
 

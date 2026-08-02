@@ -4,3 +4,4 @@
 import { vi } from 'vitest'
 
 vi.stubGlobal('useHead', () => {})
+vi.stubGlobal('useSeoMeta', () => {})

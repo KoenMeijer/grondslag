@@ -1,7 +1,9 @@
 <script setup lang="ts">
-useHead({
-  title: 'Transparantie · Grondslag',
-  meta: [{ name: 'description', content: 'Welk model Grondslag gebruikt, waar het draait, welke bronnen erin zitten en wat er wel en niet wordt bijgehouden.' }],
+useSeoMeta({
+  title: 'Transparantie',
+  description: 'Welk model Grondslag gebruikt, waar het draait, welke bronnen erin zitten en wat er wel en niet wordt bijgehouden.',
+  ogImage: 'https://grondslag.eu/og/transparantie.png',
+  ogImageAlt: 'Grondslag — Transparantie over model, bronnen en hosting',
 })
 </script>
 

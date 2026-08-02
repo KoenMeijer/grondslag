@@ -11,8 +11,10 @@
   "dependencies": {
     "@fontsource/literata": "^5",
     "@fontsource/public-sans": "^5",
+    "@nuxtjs/seo": "^5.3.6",
     "@pinia/nuxt": "^1.0.1",
     "nuxt": "^3.17",
+    "nuxt-seo-utils": "^8.3.3",
     "ofetch": "^1",
     "pinia": "^4.0.2"
   },
