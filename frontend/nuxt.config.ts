@@ -139,6 +139,24 @@ export default defineNuxtConfig({
     },
   },
   nitro: {
+    routeRules: {
+      // Standaard niet insluitbaar (clickjacking-bescherming).
+      '/**': {
+        headers: {
+          'X-Frame-Options': 'DENY',
+          'Content-Security-Policy': "frame-ancestors 'none'",
+        },
+      },
+      // Uitzondering: de embed-widget mág door iedereen ingesloten worden.
+      // X-Frame-Options kent geen "sta toe"-waarde, dus die zetten we leeg
+      // (browsers negeren 'm dan) en laten CSP frame-ancestors het toestaan.
+      '/embed': {
+        headers: {
+          'X-Frame-Options': '',
+          'Content-Security-Policy': 'frame-ancestors *',
+        },
+      },
+    },
     // Overschrijfbaar zodat je zonder lokale backend tegen de live API kunt
     // testen: NUXT_DEV_API_PROXY=https://grondslag.almaconecta.eu/api npm run dev
     devProxy: {
