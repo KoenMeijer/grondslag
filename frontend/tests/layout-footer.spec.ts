@@ -22,8 +22,8 @@ describe('footer', () => {
     const footer = w.find('.sitefooter')
     expect(footer.text()).toContain('geen juridisch advies')
     expect(footer.find('a[href="/transparantie"]').exists()).toBe(true)
-    // Op mobiel is de footer de enige navigatie (header-nav is dan verborgen),
-    // dus beide pagina's moeten hier bereikbaar zijn.
+    // De footer draagt alle links (ook op mobiel bereikbaar naast de
+    // bottom-tabbalk), dus beide pagina's moeten hier staan.
     expect(footer.find('a[href="/over"]').exists()).toBe(true)
     const eurlex = footer.find('a[href*="eur-lex.europa.eu"]')
     expect(eurlex.text()).toContain('EUR-Lex')
@@ -33,5 +33,16 @@ describe('footer', () => {
     const broncode = footer.find('a[href*="github.com/KoenMeijer/grondslag"]')
     expect(broncode.text()).toBe('Broncode op GitHub')
     expect(broncode.attributes('rel')).toContain('noopener')
+  })
+})
+
+describe('mobiele bottom-tabbalk', () => {
+  it('draagt de drie hoofdpagina-links', () => {
+    const menu = maak().find('.mobielmenu')
+    expect(menu.exists()).toBe(true)
+    expect(menu.attributes('aria-label')).toBe('Hoofdmenu')
+    expect(menu.find('a[href="/nieuws"]').exists()).toBe(true)
+    expect(menu.find('a[href="/over"]').exists()).toBe(true)
+    expect(menu.find('a[href="/transparantie"]').exists()).toBe(true)
   })
 })
