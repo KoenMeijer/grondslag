@@ -12,6 +12,10 @@ class Settings(BaseSettings):
     top_k: int = 5                 # startwaarde; verhogen is een gemeten knop, geen reflex
     random_seed: int = 42          # vaste seed voor generatie: dempt API-run-ruis in de evals
     broncheck_interval_uren: int = 24   # dagelijkse bronnencheck (zie app/bronnen.py)
+    nieuws_interval_uren: int = 24      # dagelijkse nieuwsaanvoer (zie app/nieuws.py)
+    # Geheim token voor het nieuws-beheerscherm; alleen in .env op de server.
+    # Leeg = beheer-endpoints staan uit (403) — veilige standaard.
+    admin_token: str = ""
     stand_van_wetgeving: str = "juli 2026"
     # Cosine-afstandsgrens voor de geen-bron-splitsing: abstentie mét een
     # vectorkandidaat op afstand <= grens telt als "sterk signaal". Gemeten

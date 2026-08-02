@@ -282,6 +282,26 @@ geen automatische opname — een corpuswijziging blijft een bewuste stap.
   ook dan is `index_corpus` draaien de weg — dat legt een verse nulmeting
   vast; het corpus zelf is dan ongewijzigd, dus verder geen gevolgen.
 
+## Nieuwsredactie (Laatste ontwikkelingen)
+
+De backend volgt dagelijks (achtergrondtaak, `app/nieuws.py`) een paar
+RSS-feeds (starterset: Europese Commissie digital-strategy en de Autoriteit
+Persoonsgegevens, gefilterd op AI-onderwerpen) en zet nieuwe berichten als
+concept klaar, met een door Mistral geschreven concept-samenvatting.
+Publiceren is bewust mensenwerk: half-automatisch, nooit rechtstreeks.
+
+- **Eenmalig instellen:** zet `ADMIN_TOKEN=<lang willekeurig geheim>` in de
+  `.env` op de VPS (bijv. `openssl rand -hex 32`) en herstart de backend.
+  Zonder token staan de beheer-endpoints uit (403) — veilige standaard.
+- **Redigeren:** ga naar `https://grondslag.eu/beheer`, plak het token en
+  laad de concepten. Per item: samenvatting herschrijven waar nodig, dan
+  **Publiceren** of **Afwijzen**. Niet elk item hoeft gepubliceerd; afgewezen
+  items komen niet terug (de URL blijft als dedupe bewaard).
+- **Eerste run:** maximaal 5 items per feed per run (`MAX_NIEUW_PER_FEED`),
+  zodat de allereerste run niet de hele feed-historie samenvat.
+- **Bron toevoegen:** regel toevoegen aan `FEEDS` in `app/nieuws.py`
+  (naam, feed-URL, trefwoordfilter) — de redactieflow vangt de rest op.
+
 ## Corpus- of RAG-wijziging
 
 Werkafspraak: eval-suite lokaal draaien vóór de push (zie README — exit ≠ 0 is

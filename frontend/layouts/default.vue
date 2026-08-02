@@ -12,6 +12,7 @@ const store = useVraagStore()
     <header class="siteheader">
       <NuxtLink to="/" class="merk" @click="store.wis()">Grondslag</NuxtLink>
       <nav>
+        <NuxtLink to="/nieuws">Laatste ontwikkelingen</NuxtLink>
         <NuxtLink to="/over">Over de verordening</NuxtLink>
         <NuxtLink to="/transparantie">Transparantie</NuxtLink>
       </nav>
@@ -22,6 +23,8 @@ const store = useVraagStore()
     <footer class="sitefooter">
       <p>Grondslag geeft informatie, geen juridisch advies. Raadpleeg voor je eigen situatie een jurist.</p>
       <p class="footerlinks">
+        <NuxtLink to="/nieuws">Laatste ontwikkelingen</NuxtLink>
+        <span aria-hidden="true">·</span>
         <NuxtLink to="/over">Over de verordening</NuxtLink>
         <span aria-hidden="true">·</span>
         <NuxtLink to="/transparantie">Transparantie</NuxtLink>

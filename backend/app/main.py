@@ -1,14 +1,17 @@
 """FastAPI-laag: dun schilletje om de RAG-service. Geen fallback-antwoorden bij
 een modelfout — liever een eerlijke 502 dan een half juridisch antwoord."""
 import asyncio
+import datetime
 import logging
+import secrets
 from contextlib import asynccontextmanager
+from typing import Literal
 
-from fastapi import FastAPI, HTTPException, Response
+from fastapi import FastAPI, Header, HTTPException, Response
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field, field_validator
 
-from app import bronnen, inzendingen
+from app import bronnen, inzendingen, nieuws
 from app.config import settings
 from app.db import SessionLocal, init_db
 from app.rag import service
@@ -34,6 +37,21 @@ async def _bronnenwacht() -> None:
         await asyncio.sleep(settings.broncheck_interval_uren * 3600)
 
 
+async def _nieuwswacht() -> None:
+    """Dagelijkse nieuwsaanvoer als achtergrondtaak, zelfde patroon (en
+    dezelfde bewust geaccepteerde per-worker-duplicatie) als _bronnenwacht:
+    verwerk() is idempotent door de unieke URL. Start later dan de
+    bronnencheck zodat de twee niet tegelijk naar buiten bellen."""
+    await asyncio.sleep(300)
+    while True:
+        try:
+            with SessionLocal() as sessie:
+                await asyncio.to_thread(nieuws.verwerk, sessie)
+        except Exception:   # noqa: BLE001 — de wacht mag nooit de app breken
+            logger.warning("nieuwsaanvoer-run mislukt", exc_info=True)
+        await asyncio.sleep(settings.nieuws_interval_uren * 3600)
+
+
 @asynccontextmanager
 async def levensduur(app: FastAPI):
     # Ontbrekende tabellen aanmaken bij het opstarten (create_all is idempotent
@@ -45,16 +63,18 @@ async def levensduur(app: FastAPI):
         init_db()
     except Exception:   # noqa: BLE001
         logger.warning("init_db bij opstarten mislukt", exc_info=True)
-    wacht = asyncio.create_task(_bronnenwacht())
+    wachten = [asyncio.create_task(_bronnenwacht()),
+               asyncio.create_task(_nieuwswacht())]
     yield
-    wacht.cancel()
+    for wacht in wachten:
+        wacht.cancel()
 
 
 app = FastAPI(title="Grondslag", lifespan=levensduur)
 
 # Witte lijst voor de bezoekteller: alleen bestaande pagina's. Zonder deze lijst
 # kan iedereen de tabel volschrijven met verzonnen paden.
-PAGINAS = {"/", "/over", "/transparantie"}
+PAGINAS = {"/", "/over", "/transparantie", "/nieuws"}
 
 
 class AskVraag(BaseModel):
@@ -152,3 +172,71 @@ def bezoek(body: Bezoek) -> Response:
     if body.pad in PAGINAS:
         tel_op(f"bezoek:{body.pad}")
     return Response(status_code=204)
+
+
+class NieuwsUit(BaseModel):
+    id: int
+    bron: str
+    url: str
+    titel: str
+    datum: str
+    samenvatting: str
+
+
+class NieuwsWijziging(BaseModel):
+    # Beide velden optioneel: samenvatting bijwerken en publiceren mag in één
+    # aanroep, maar ook los van elkaar.
+    samenvatting: str | None = Field(default=None, min_length=3, max_length=2000)
+    status: Literal["gepubliceerd", "afgewezen"] | None = None
+
+
+def _eis_beheer(token: str | None) -> None:
+    """Beheer is één redacteur met één geheim token uit .env — bewust geen
+    loginsysteem. Zonder geconfigureerd token staat beheer uit (403), en de
+    vergelijking is timing-veilig (compare_digest)."""
+    if not settings.admin_token:
+        raise HTTPException(status_code=403, detail="Beheer is niet geconfigureerd.")
+    if not (token and secrets.compare_digest(token, settings.admin_token)):
+        raise HTTPException(status_code=401, detail="Ongeldig beheertoken.")
+
+
+@app.get("/nieuws", response_model=list[NieuwsUit])
+def nieuws_lijst():
+    """Gepubliceerde nieuwsitems, nieuwste eerst. Alleen wat de redacteur
+    expliciet heeft goedgekeurd — concepten zijn hier onzichtbaar."""
+    with SessionLocal() as sessie:
+        return [NieuwsUit(id=n.id, bron=n.bron, url=n.url, titel=n.titel,
+                          datum=n.datum, samenvatting=n.samenvatting)
+                for n in nieuws.gepubliceerd(sessie)]
+
+
+@app.get("/nieuws/concepten", response_model=list[NieuwsUit])
+def nieuws_concepten(x_admin_token: str | None = Header(default=None)):
+    _eis_beheer(x_admin_token)
+    with SessionLocal() as sessie:
+        return [NieuwsUit(id=n.id, bron=n.bron, url=n.url, titel=n.titel,
+                          datum=n.datum, samenvatting=n.samenvatting)
+                for n in nieuws.concepten(sessie)]
+
+
+@app.patch("/nieuws/{item_id}", response_model=NieuwsUit)
+def nieuws_bijwerken(item_id: int, body: NieuwsWijziging,
+                     x_admin_token: str | None = Header(default=None)):
+    """Redactieslag: samenvatting bijwerken en/of publiceren/afwijzen.
+    Afgewezen items blijven bestaan (de URL is de dedupe), maar verdwijnen
+    uit de conceptenlijst en komen nooit op de site."""
+    _eis_beheer(x_admin_token)
+    with SessionLocal() as sessie:
+        item = sessie.get(nieuws.NieuwsItem, item_id)
+        if item is None:
+            raise HTTPException(status_code=404, detail="Onbekend nieuwsitem.")
+        if body.samenvatting is not None:
+            item.samenvatting = body.samenvatting.strip()
+        if body.status is not None:
+            item.status = body.status
+            if body.status == "gepubliceerd":
+                item.gepubliceerd_op = datetime.datetime.now(datetime.UTC).date().isoformat()
+        sessie.commit()
+        return NieuwsUit(id=item.id, bron=item.bron, url=item.url,
+                         titel=item.titel, datum=item.datum,
+                         samenvatting=item.samenvatting)

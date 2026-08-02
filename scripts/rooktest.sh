@@ -32,13 +32,21 @@ case "$doel" in
 esac
 
 # 3. Frontend-pagina's bereikbaar.
-for pad in / /transparantie; do
+for pad in / /transparantie /nieuws; do
   if curl -sf -m 10 -o /dev/null "$BASIS$pad"; then
     echo "ok: pagina $pad"
   else
     echo "FOUT: pagina $pad niet bereikbaar" >&2; fouten=1
   fi
 done
+
+# 3b. Nieuws-API: moet een JSON-lijst geven (leeg mag — er is dan gewoon
+#     nog niets gepubliceerd; kapot is iets anders dan leeg).
+if curl -sf -m 10 "$BASIS/api/nieuws" | grep -q '^\['; then
+  echo "ok: /nieuws"
+else
+  echo "FOUT: /api/nieuws geeft geen JSON-lijst" >&2; fouten=1
+fi
 
 # 4. De RAG-keten: één echte vraag, antwoord mét citaten. Eén herkansing —
 #    een enkele model-hik mag de pipeline niet rood kleuren, twee wel.

@@ -71,6 +71,26 @@ class Broncheck(Base):
     gewijzigd_sinds: Mapped[str | None] = mapped_column(default=None)
 
 
+class NieuwsItem(Base):
+    """Half-automatische nieuwsaanvoer voor de pagina "Laatste ontwikkelingen":
+    het dagelijkse proces (app/nieuws.py) zet concepten klaar, de redacteur
+    publiceert of wijst af via het beheerscherm. De URL is uniek en blijft ook
+    na afwijzen bewaard — dat ís de dedupe: een afgewezen bericht duikt de
+    volgende dag niet opnieuw op als concept."""
+
+    __tablename__ = "nieuws_items"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    bron: Mapped[str]       # naam van de nieuwsbron (zie app/nieuws.py FEEDS)
+    url: Mapped[str] = mapped_column(unique=True)
+    titel: Mapped[str]
+    datum: Mapped[str]      # publicatiedatum bij de bron (ISO)
+    # Concept van het model; de redacteur herschrijft vóór publicatie.
+    samenvatting: Mapped[str] = mapped_column(Text)
+    status: Mapped[str] = mapped_column(default="concept")   # concept | gepubliceerd | afgewezen
+    gepubliceerd_op: Mapped[str | None] = mapped_column(default=None)
+
+
 class IngezondenVraag(Base):
     """Opt-in ingezonden vragen na een onbeantwoorde vraag. Alleen de
     vraagtekst en de datum — bewust geen IP, sessie of user-agent, zelfde
