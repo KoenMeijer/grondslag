@@ -31,26 +31,32 @@ useSeoMeta({
 // antwoord. Informatie, geen juridisch advies (zie de disclaimer in de footer).
 const faq = [
   {
+    slug: 'valt-mijn-ai-systeem-onder-de-ai-verordening',
     v: 'Valt mijn AI-systeem onder de AI-verordening?',
     a: 'De verordening werkt risicogebaseerd: elk systeem valt in één van vier categorieën — verboden, hoog-risico, beperkt risico met een transparantieplicht, of minimaal risico. De meeste systemen zijn beperkt of minimaal en kennen alleen lichte verplichtingen; de zware eisen gelden bij hoog-risico. De classificatie loopt via artikel 6 en bijlage III.',
   },
   {
+    slug: 'wanneer-gaan-de-verplichtingen-in',
     v: 'Wanneer gaan de verplichtingen in — klopt 2 augustus 2026 nog?',
     a: 'Deels gelden ze al: verboden praktijken sinds 2 februari 2025 en de regels voor AI voor algemene doeleinden (GPAI) sinds 2 augustus 2025. De hoog-risico-verplichtingen zijn na de Digital Omnibus verschoven van 2 augustus 2026 naar 2 december 2027 en 2 augustus 2028 — veel bronnen noemen nog de oude datum.',
   },
   {
+    slug: 'welke-ai-praktijken-zijn-verboden',
     v: 'Welke AI-praktijken zijn verboden?',
     a: 'Artikel 5 verbiedt onder meer social scoring door overheden, manipulatie die schade veroorzaakt, emotieherkenning op de werkvloer en in het onderwijs, en real-time biometrische identificatie in de openbare ruimte, met beperkte uitzonderingen.',
   },
   {
+    slug: 'wanneer-is-een-ai-systeem-hoog-risico',
     v: 'Wanneer is een AI-systeem "hoog-risico"?',
     a: 'Er zijn twee routes: het systeem is een veiligheidscomponent van een gereguleerd product (bijlage I), of het valt onder een gebruik uit bijlage III — zoals werving en cv-screening, onderwijs, kritieke infrastructuur of rechtshandhaving. De regel staat in artikel 6.',
   },
   {
+    slug: 'verplichtingen-hoog-risico-systeem',
     v: 'Welke verplichtingen gelden bij een hoog-risico-systeem?',
     a: 'Onder andere een risicomanagementsysteem, eisen aan datakwaliteit, technische documentatie, logging, betekenisvol menselijk toezicht en een conformiteitsbeoordeling met CE-markering vóór ingebruikname. Deze eisen staan in de artikelen 8 tot en met 17.',
   },
   {
+    slug: 'moet-ik-vertellen-dat-het-ai-is',
     v: 'Moet ik gebruikers vertellen dat ze met AI praten?',
     a: 'Ja. Voor systemen die met mensen interacteren, zoals chatbots, en voor AI-gegenereerde of gemanipuleerde content zoals deepfakes geldt een transparantieplicht: de gebruiker moet weten dat het om AI gaat. Dat staat in artikel 50.',
   },
@@ -115,10 +121,11 @@ useSchemaOrg([
 
     <section class="faq">
       <h2>Veelgestelde vragen</h2>
-      <div v-for="item in faq" :key="item.v" class="vraag">
-        <h3>{{ item.v }}</h3>
+      <div v-for="item in faq" :key="item.slug" class="vraag">
+        <h3><NuxtLink :to="`/vraag/${item.slug}`">{{ item.v }}</NuxtLink></h3>
         <p>{{ item.a }}</p>
       </div>
+      <p class="alle"><NuxtLink to="/vraag">Alle vragen over de AI-verordening →</NuxtLink></p>
     </section>
 
     <p class="slot">

@@ -102,9 +102,17 @@ export default defineNuxtConfig({
     // Schrijf de sitemap als statisch bestand in de public-output. Vervangt de
     // kapotte runtime-module; blijft in sync omdat de routes uit pages komen.
     async 'nitro:build:public-assets'(nitro) {
-      const { writeFile } = await import('node:fs/promises')
+      const { writeFile, readdir } = await import('node:fs/promises')
       const { join } = await import('node:path')
-      const routes = [...new Set(sitemapRoutes)].sort()
+      // Kennisbank-slugs toevoegen: de dynamische /vraag/[slug]-routes pikt
+      // pages:extend niet op, dus lezen we de bronbestanden zelf.
+      let vraagRoutes: string[] = []
+      try {
+        const files = await readdir(join(process.cwd(), 'content', 'vragen'))
+        vraagRoutes = files.filter(f => f.endsWith('.md'))
+          .map(f => `/vraag/${f.replace(/\.md$/, '')}`)
+      } catch { /* geen kennisbank → niets toevoegen */ }
+      const routes = [...new Set([...sitemapRoutes, ...vraagRoutes])].sort()
       const urls = routes.map(r => `  <url><loc>${SITE_URL}${r}</loc></url>`).join('\n')
       const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`
       await writeFile(join(nitro.options.output.publicDir, 'sitemap.xml'), xml, 'utf8')
