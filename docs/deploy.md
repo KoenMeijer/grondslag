@@ -290,8 +290,10 @@ Persoonsgegevens, gefilterd op AI-onderwerpen) en zet nieuwe berichten als
 concept klaar, met een door Mistral geschreven concept-samenvatting.
 Publiceren is bewust mensenwerk: half-automatisch, nooit rechtstreeks.
 
-- **Eenmalig instellen:** zet `ADMIN_TOKEN=<lang willekeurig geheim>` in de
-  `.env` op de VPS (bijv. `openssl rand -hex 32`) en herstart de backend.
+- **Eenmalig instellen:** voeg in GitLab (Settings → CI/CD → Variables) de
+  variabele `ADMIN_TOKEN` toe (Masked; waarde bijv. `openssl rand -hex 32`)
+  en draai daarna een deploy. Níét handmatig in de `.env` op de VPS zetten:
+  die wordt bij elke deploy opnieuw gegenereerd uit de CI/CD-variabelen.
   Zonder token staan de beheer-endpoints uit (403) — veilige standaard.
 - **Redigeren:** ga naar `https://grondslag.eu/beheer`, plak het token en
   laad de concepten. Per item: samenvatting herschrijven waar nodig, dan

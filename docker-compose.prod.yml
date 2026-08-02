@@ -27,6 +27,9 @@ services:
     environment:
       DATABASE_URL: postgresql+psycopg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
       MISTRAL_API_KEY: ${MISTRAL_API_KEY:?MISTRAL_API_KEY ontbreekt in .env}
+      # Leeg laten mag: dan staan de beheer-endpoints uit (403) — de deploy
+      # breekt dus niet zolang de CI/CD-variabele nog niet gezet is.
+      ADMIN_TOKEN: ${ADMIN_TOKEN:-}
       UVICORN_WORKERS: ${UVICORN_WORKERS:-2}
     ports:
       - "127.0.0.1:8094:8000"   # 8094: vrij naast alma (8080) en wkpoule (8092)
