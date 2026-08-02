@@ -23,6 +23,14 @@
       "status": "van kracht"
     },
     {
+      "fase": "Transparantie voor bestaande systemen (art. 50)",
+      "artikel": "Artikel 50",
+      "verplichting": "Reeds in gebruik zijnde AI-systemen moeten voldoen aan de transparantie- en watermerkverplichtingen (bijv. labelen van AI-gegenereerde content).",
+      "datum": "2026-12-02",
+      "was": "2026-08-02",
+      "status": "komt"
+    },
+    {
       "fase": "Hoog-risico (bijlage III)",
       "artikel": "Artikel 6, lid 2 en bijlage III",
       "verplichting": "Volledige verplichtingen voor hoog-risico-systemen uit bijlage III (zoals werving, onderwijs en rechtshandhaving).",

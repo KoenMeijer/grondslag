@@ -4,6 +4,11 @@ const BESCHRIJVING = 'Stel een vraag over de AI-verordening (AI Act) en krijg ee
 
 const SITE_URL = 'https://grondslag.eu'
 
+// Wie de embed-widget (/embed) mag insluiten. Standaard iedereen (*), zodat
+// de publieke widget werkt. Zet NUXT_PUBLIC_EMBED_ANCESTORS in productie om te
+// beperken tot partnerdomeinen, bv. "https://partner1.nl https://partner2.nl".
+const EMBED_ANCESTORS = process.env.NUXT_PUBLIC_EMBED_ANCESTORS || '*'
+
 // Verzameld tijdens `pages:extend`; de build-hook onderaan schrijft hieruit de
 // sitemap. Zo blijft 'ie automatisch in sync met de file-based routes zonder de
 // (op Nuxt 3.21 kapotte) runtime-sitemap-module.
@@ -147,13 +152,14 @@ export default defineNuxtConfig({
           'Content-Security-Policy': "frame-ancestors 'none'",
         },
       },
-      // Uitzondering: de embed-widget mág door iedereen ingesloten worden.
-      // X-Frame-Options kent geen "sta toe"-waarde, dus die zetten we leeg
-      // (browsers negeren 'm dan) en laten CSP frame-ancestors het toestaan.
+      // Uitzondering: de embed-widget mág ingesloten worden — door iedereen, of
+      // door de partnerdomeinen uit EMBED_ANCESTORS. X-Frame-Options kent geen
+      // allowlist-waarde, dus die zetten we leeg (browsers negeren 'm dan) en
+      // laten CSP frame-ancestors de toegang regelen.
       '/embed': {
         headers: {
           'X-Frame-Options': '',
-          'Content-Security-Policy': 'frame-ancestors *',
+          'Content-Security-Policy': `frame-ancestors ${EMBED_ANCESTORS}`,
         },
       },
     },
