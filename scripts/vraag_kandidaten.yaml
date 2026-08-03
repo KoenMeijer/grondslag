@@ -56,3 +56,38 @@
   sector: financieel
 - vraag: "Is AI-kredietscoring hoog risico?"
   sector: financieel
+
+# --- Ronde 2 (2026-08-03): sectorverdieping + onderwijs + operatieve clusters ---
+- vraag: "Is medische diagnose-AI zowel een medisch hulpmiddel als een hoog-risico-AI-systeem?"
+  sector: zorg
+- vraag: "Moet een zorginstelling het gebruik van een hoog-risico-AI-systeem registreren in de EU-databank?"
+  sector: zorg
+- vraag: "Moet de overheid een algoritmeregister bijhouden onder de AI-verordening?"
+  sector: overheid
+- vraag: "Is AI voor het beoordelen van vergunningaanvragen hoog risico?"
+  sector: overheid
+- vraag: "Mag een werkgever AI gebruiken om werknemers te monitoren?"
+  sector: hr
+- vraag: "Is AI voor promotie- of ontslagbeslissingen een hoog-risico-systeem?"
+  sector: hr
+- vraag: "Geldt er een uitzondering voor fraudedetectie bij AI-kredietscoring?"
+  sector: financieel
+- vraag: "Is AI voor het bepalen van verzekeringspremies hoog risico?"
+  sector: financieel
+- vraag: "Is AI die studenten beoordeelt een hoog-risico-systeem?"
+  sector: onderwijs
+- vraag: "Mag een school of universiteit AI gebruiken bij de toelating van studenten?"
+  sector: onderwijs
+- vraag: "Is AI-examensurveillance (proctoring) toegestaan onder de AI-verordening?"
+  sector: onderwijs
+- vraag: "Wat is een grondrechten-effectbeoordeling (FRIA) en wie moet die maken?"
+- vraag: "Wat betekent menselijk toezicht bij een hoog-risico-AI-systeem?"
+- vraag: "Welke eisen stelt de AI-verordening aan trainingsdata?"
+- vraag: "Wat is een conformiteitsbeoordeling en CE-markering voor AI?"
+- vraag: "Moet ik mijn AI-systeem registreren in de EU-databank?"
+- vraag: "Welke transparantieplichten gelden bij AI die met mensen communiceert?"
+- vraag: "Hoe verhoudt de AI-verordening zich tot de AVG?"
+- vraag: "Geldt de AI-verordening ook voor open-source AI?"
+- vraag: "Wat is AI-geletterdheid en moet mijn personeel dat hebben?"
+- vraag: "Kan ik een klacht indienen over een AI-systeem?"
+- vraag: "Wat is het verschil tussen minimaal, beperkt en hoog risico bij AI?"
