@@ -48,3 +48,10 @@ def test_bestaat_al():
 
 def test_corpusgat_regel():
     assert cd.corpusgat_regel("Mag ik X?", "2026-08-03") == "- 2026-08-03 — Mag ik X?"
+
+
+def test_render_concept_accepts_dict_citations():
+    md = cd.render_concept(vraag="X?", artikel="Artikel 2", stand="juli 2026",
+                           bijgewerkt="2026-08-03", sector=None, antwoord="...",
+                           citaten=[{"ref": "artikel 2", "url": "https://eur-lex.europa.eu/y"}])
+    assert "artikel 2" in md and "https://eur-lex.europa.eu/y" in md

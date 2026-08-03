@@ -24,6 +24,13 @@ def corpusgat_regel(vraag: str, bijgewerkt: str) -> str:
     return f"- {bijgewerkt} — {vraag}"
 
 
+def _veld(c, naam: str) -> str:
+    """Lees een citaat-veld uit een object (.ref/.url) of een dict (['ref']/['url'])."""
+    if isinstance(c, dict):
+        return str(c.get(naam, ""))
+    return str(getattr(c, naam, ""))
+
+
 def render_concept(*, vraag: str, artikel: str, stand: str, bijgewerkt: str,
                    sector: str | None, antwoord: str, citaten) -> str:
     """Render een concept-vraagpagina: frontmatter (zoals content/vragen/*.md) +
@@ -44,7 +51,7 @@ def render_concept(*, vraag: str, artikel: str, stand: str, bijgewerkt: str,
                "Concept via de eigen RAG-engine; controleer tegen de wettekst.",
                "Citaten:"]
     for c in citaten:
-        notitie.append(f"- {getattr(c, 'ref', '')} — {getattr(c, 'url', '')}")
+        notitie.append(f"- {_veld(c, 'ref')} — {_veld(c, 'url')}")
     notitie.append("-->")
 
     return "\n".join(fm) + "\n\n" + antwoord.strip() + "\n" + "\n".join(notitie) + "\n"
