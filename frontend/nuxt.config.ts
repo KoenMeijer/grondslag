@@ -137,7 +137,14 @@ export default defineNuxtConfig({
         vraagRoutes = files.filter(f => f.endsWith('.md'))
           .map(f => `/vraag/${f.replace(/\.md$/, '')}`)
       } catch { /* geen kennisbank → niets toevoegen */ }
-      const routes = [...new Set([...sitemapRoutes, ...vraagRoutes])].sort()
+      // Sectorhubs: zelfde aanpak, `_`-bestanden (concept/redactioneel) overslaan.
+      let sectorRoutes: string[] = []
+      try {
+        const files = await readdir(join(process.cwd(), 'content', 'sectoren'))
+        sectorRoutes = files.filter(f => f.endsWith('.md') && !f.startsWith('_'))
+          .map(f => `/sector/${f.replace(/\.md$/, '')}`)
+      } catch { /* geen sectoren → niets toevoegen */ }
+      const routes = [...new Set([...sitemapRoutes, ...vraagRoutes, ...sectorRoutes])].sort()
       const urls = routes.map(r => `  <url><loc>${SITE_URL}${r}</loc></url>`).join('\n')
       const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`
       await writeFile(join(pub, 'sitemap.xml'), xml, 'utf8')

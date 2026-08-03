@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { vindVraag } from '~/utils/vragen'
+import { vindVraag, gerelateerde } from '~/utils/vragen'
+import { vindSector } from '~/utils/sectoren'
 
 const route = useRoute()
 const gevonden = vindVraag(String(route.params.slug))
@@ -8,6 +9,10 @@ if (!gevonden) {
   throw createError({ statusCode: 404, statusMessage: 'Onbekende vraag', fatal: true })
 }
 const vraag = gevonden
+// Hub-and-spoke: terug naar de sectorhub (indien getagd) en verwante vragen
+// op gedeelde sector/artikel — interne links, geen nieuwe schema.
+const sectorNaam = vraag.sector ? vindSector(vraag.sector)?.naam : undefined
+const verwant = gerelateerde(vraag)
 
 useSeoMeta({
   title: vraag.vraag,
@@ -33,6 +38,19 @@ useSchemaOrg([
       Gegrond op {{ vraag.artikel }}<span v-if="vraag.standWetgeving"> · stand van wetgeving: {{ vraag.standWetgeving }}</span>
     </p>
     <p v-if="vraag.bijgewerkt" class="meta">Bijgewerkt: {{ vraag.bijgewerkt }}</p>
+    <p v-if="vraag.sector" class="terug">
+      <NuxtLink :to="`/sector/${vraag.sector}`">← AI-verordening voor {{ sectorNaam }}</NuxtLink>
+    </p>
+
+    <section v-if="verwant.length" class="gerelateerd">
+      <h2>Gerelateerde vragen</h2>
+      <ul>
+        <li v-for="v in verwant" :key="v.slug">
+          <NuxtLink :to="`/vraag/${v.slug}`">{{ v.vraag }}</NuxtLink>
+        </li>
+      </ul>
+    </section>
+
     <p class="slot">
       <NuxtLink to="/">Stel je eigen vraag</NuxtLink> — het antwoord komt met het
       artikel erbij. Informatie, geen juridisch advies.
@@ -53,5 +71,10 @@ useSchemaOrg([
   color: var(--oker-donker); font-weight: 600;
 }
 .meta { margin: 0 0 20px; font-size: 13px; opacity: 0.75; }
+.terug { margin: 0 0 20px; font-size: 14px; }
+.gerelateerd { margin: 0 0 24px; }
+.gerelateerd h2 { font-size: 16px; margin: 0 0 8px; }
+.gerelateerd ul { margin: 0; padding: 0; list-style: none; }
+.gerelateerd li { padding: 10px 0; border-top: 1px solid var(--lijn); }
 .slot { margin-top: 24px; }
 </style>
