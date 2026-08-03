@@ -52,7 +52,11 @@ export function vragenPerSector(sector: string): Vraag[] {
   return alleVragen.filter(v => v.sector === sector)
 }
 
-export function alleSectoren(): string[] {
+// Waarom een eigen naam i.p.v. alleSectoren: utils/sectoren.ts exporteert al
+// alleSectoren() (de volledige Sector[]-lijst met intro-content). Zelfde naam
+// op twee plekken botst in Nuxt's auto-import (die stil één ervan negeert) —
+// dus hier expliciet gebruikte sector-SLUGS (string[]), niet de hub-objecten.
+export function gebruikteSectoren(): string[] {
   return [...new Set(alleVragen.map(v => v.sector).filter(Boolean) as string[])].sort()
 }
 

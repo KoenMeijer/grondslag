@@ -30,7 +30,7 @@ function parse(pad: string, ruw: string): Sector {
 }
 
 const _sectoren = Object.entries(bestanden).map(([p, r]) => parse(p, r))
-  .sort((a, b) => a.naam.localeCompare(b.naam))
+  .sort((a, b) => a.naam.localeCompare(b.naam, 'nl'))
 
 export function alleSectoren(): Sector[] { return _sectoren }
 export function vindSector(slug: string): Sector | undefined {
