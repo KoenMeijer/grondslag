@@ -13,6 +13,7 @@ export interface Vraag {
   bijgewerkt: string
   antwoordHtml: string
   antwoordTekst: string
+  sector?: string
 }
 
 const bestanden = import.meta.glob('../content/vragen/*.md', {
@@ -35,6 +36,7 @@ function parse(pad: string, ruw: string): Vraag {
     bijgewerkt: String(fm.bijgewerkt ?? ''),
     antwoordHtml: marked.parse(body) as string,
     antwoordTekst: body,
+    sector: fm.sector ? String(fm.sector) : undefined,
   }
 }
 
@@ -44,4 +46,28 @@ export const alleVragen: Vraag[] = Object.entries(bestanden)
 
 export function vindVraag(slug: string): Vraag | undefined {
   return alleVragen.find(v => v.slug === slug)
+}
+
+export function vragenPerSector(sector: string): Vraag[] {
+  return alleVragen.filter(v => v.sector === sector)
+}
+
+export function alleSectoren(): string[] {
+  return [...new Set(alleVragen.map(v => v.sector).filter(Boolean) as string[])].sort()
+}
+
+// Hub-and-spoke: verwante vragen op gedeelde sector (zwaar) en gedeeld artikel
+// (licht). Zo ziet Google (en de lezer) de samenhang binnen het onderwerp.
+export function gerelateerde(vraag: Vraag, max = 4): Vraag[] {
+  return alleVragen
+    .filter(v => v.slug !== vraag.slug)
+    .map(v => ({
+      v,
+      score: (v.sector && v.sector === vraag.sector ? 2 : 0)
+           + (v.artikel && v.artikel === vraag.artikel ? 1 : 0),
+    }))
+    .filter(x => x.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, max)
+    .map(x => x.v)
 }
