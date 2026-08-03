@@ -1,0 +1,58 @@
+# Kandidaat-vragen voor de scaffolding. Het script draait deze door de eigen
+# engine; alleen gegronde antwoorden worden concept (mens publiceert).
+#
+# Clusters: risicoclassificatie, verboden praktijken, GPAI, transparantie,
+# deadlines, boetes/handhaving, scope. Sectoren: zorg, overheid, hr, financieel.
+
+# -- risicoclassificatie --
+- vraag: "Hoe bepaal ik of mijn AI-systeem hoog risico is?"
+- vraag: "Wat is een beperkt-risico AI-systeem?"
+- vraag: "Wat is het verschil tussen minimaal, beperkt en hoog risico bij AI?"
+
+# -- verboden praktijken --
+- vraag: "Welke AI-praktijken zijn verboden onder de AI-verordening?"
+- vraag: "Mag een bedrijf AI gebruiken om emoties van werknemers te herkennen?"
+- vraag: "Is social scoring met AI toegestaan in de EU?"
+
+# -- GPAI --
+- vraag: "Wat is AI voor algemene doeleinden (GPAI)?"
+- vraag: "Welke verplichtingen gelden voor aanbieders van GPAI-modellen?"
+- vraag: "Val ik onder de GPAI-regels als ik ChatGPT gebruik in mijn bedrijf?"
+
+# -- transparantie --
+- vraag: "Moet ik een chatbot labelen als AI?"
+- vraag: "Wat zijn de transparantieverplichtingen onder de AI-verordening?"
+- vraag: "Moet AI-gegenereerde content herkenbaar gemaakt worden?"
+
+# -- deadlines --
+- vraag: "Wanneer gaan de verplichtingen van de AI-verordening in?"
+- vraag: "Wat is de deadline voor hoog-risico AI-systemen?"
+- vraag: "Gaat de AI-verordening in op 2 augustus 2026?"
+
+# -- boetes/handhaving --
+- vraag: "Welke boetes staan er op overtreding van de AI-verordening?"
+- vraag: "Wie handhaaft de AI-verordening in Nederland?"
+- vraag: "Wat is de maximale boete voor een verboden AI-praktijk?"
+
+# -- scope --
+- vraag: "Val ik onder de AI-verordening als ik alleen een AI-tool gebruik?"
+- vraag: "Geldt de AI-verordening ook voor bedrijven buiten de EU?"
+- vraag: "Wat is het verschil tussen een aanbieder en een gebruiksverantwoordelijke?"
+
+# -- sectoren --
+- vraag: "Wat betekent de AI-verordening voor een ziekenhuis?"
+  sector: zorg
+- vraag: "Is een AI-triagesysteem in de zorg hoog risico?"
+  sector: zorg
+- vraag: "Mag de overheid AI gebruiken voor fraudedetectie?"
+  sector: overheid
+- vraag: "Wat moet een gemeente regelen voor de AI-verordening?"
+  sector: overheid
+- vraag: "Is AI-gebaseerde cv-selectie toegestaan onder de AI-verordening?"
+  sector: hr
+- vraag: "Mag ik AI gebruiken om sollicitanten te beoordelen?"
+  sector: hr
+- vraag: "Wat betekent de AI-verordening voor een bank of verzekeraar?"
+  sector: financieel
+- vraag: "Is AI-kredietscoring hoog risico?"
+  sector: financieel
