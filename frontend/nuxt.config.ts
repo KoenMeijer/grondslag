@@ -70,6 +70,23 @@ export default defineNuxtConfig({
     // De sitemap genereren we zelf (zie hooks onderaan); verwijs er expliciet
     // naar zodat de regel in robots.txt blijft nu de sitemap-module uit is.
     sitemap: `${SITE_URL}/sitemap.xml`,
+    // Bewust welkom voor de answer-engine-crawlers (ChatGPT, Perplexity, Claude,
+    // Gemini/Google-AI, Apple). De wildcard staat ze al toe; dit maakt het een
+    // expliciete keuze én toekomstvast als we de wildcard ooit aanscherpen —
+    // gegrond-met-bron geciteerd worden dóór AI is juist ons distributiekanaal.
+    // Zelfde uitzonderingen als de wildcard (/beheer, /embed niet).
+    groups: [
+      {
+        userAgent: [
+          'GPTBot', 'OAI-SearchBot', 'ChatGPT-User',
+          'PerplexityBot', 'Perplexity-User',
+          'ClaudeBot', 'Claude-SearchBot', 'Claude-User', 'anthropic-ai',
+          'Google-Extended', 'Applebot-Extended',
+        ],
+        allow: ['/'],
+        disallow: ['/beheer', '/embed'],
+      },
+    ],
   },
   // @nuxtjs/sitemap 8 gaat uit van h3 v2 (event.url); Nuxt 3.21 draait h3 v1,
   // waardoor de runtime /sitemap.xml-handler `new URL('/sitemap.xml')` doet en

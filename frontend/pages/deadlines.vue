@@ -39,6 +39,11 @@ function toonDatum(d: string) {
     <p class="intro">
       {{ dataset.beschrijving }} Stand van wetgeving: {{ dataset.standWetgeving }}.
     </p>
+    <p class="ombuiging">
+      Zoek je de datum <strong>2 augustus 2026</strong>? Die is achterhaald:
+      <NuxtLink to="/vraag/gaat-de-ai-verordening-in-op-2-augustus-2026">lees wat er
+      door de Digital Omnibus verschoof en wat nu geldt</NuxtLink>.
+    </p>
     <p class="download">
       Download de data: <a href="/deadlines.json">JSON</a> · <a href="/deadlines.csv">CSV</a>
       <span class="licentie"> · vrij te gebruiken met bronvermelding (CC&nbsp;BY&nbsp;4.0)</span>
