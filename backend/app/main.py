@@ -18,7 +18,7 @@ from app.ratelimit import RateLimiter
 from app.db import SessionLocal, init_db
 from app.rag import service
 from app.rag.mistral import MistralFout
-from app.tellen import tel_op
+from app.tellen import overzicht, tel_op
 
 logger = logging.getLogger(__name__)
 
@@ -296,3 +296,29 @@ def nieuws_bijwerken(item_id: int, body: NieuwsWijziging,
         return NieuwsUit(id=item.id, bron=item.bron, url=item.url,
                          titel=item.titel, datum=item.datum,
                          samenvatting=item.samenvatting)
+
+
+class DagCijfer(BaseModel):
+    datum: str
+    bezoeken: int
+    vragen: int
+
+
+class CijfersUit(BaseModel):
+    dagen: int
+    reeks: list[DagCijfer]
+    totaal_bezoeken: int
+    totaal_vragen: int
+
+
+@app.get("/cijfers", response_model=CijfersUit)
+def cijfers(dagen: int = 30, x_admin_token: str | None = Header(default=None)):
+    """Geaggregeerde gebruikscijfers voor het beheerscherm: bezoeken en vragen
+    per dag. Achter het beheertoken — de tabel bevat geen persoonsgegeven (zie
+    app/tellen.py), maar de cijfers zijn geen publiek dashboard. Voor 'wordt de
+    site beter gevonden?' is dit het binnenperspectief (verkeer); Search Console
+    meet de vindbaarheid vóór de klik."""
+    _eis_beheer(x_admin_token)
+    dagen = max(1, min(dagen, 365))
+    with SessionLocal() as sessie:
+        return overzicht(sessie, dagen)
